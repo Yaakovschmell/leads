@@ -22,8 +22,8 @@
     .fa-plus::before { content: "+"; font-family: system-ui; font-weight: bold; }
     .fa-search::before { content: "🔍"; font-family: system-ui; }
     .fa-phone::before { content: "📞"; font-family: system-ui; }
-    .fa-envelope::before { content: "📧"; font-family: system-ui; } /* Added for email */
-    .fa-birthday-cake::before { content: "🎂"; font-family: system-ui; } /* Added for DOB */
+    .fa-envelope::before { content: "📧"; font-family: system-ui; }
+    .fa-birthday-cake::before { content: "🎂"; font-family: system-ui; }
     .fa-clock::before { content: "🕐"; font-family: system-ui; }
     .fa-calendar-plus::before { content: "📅"; font-family: system-ui; }
     .fa-times::before { content: "×"; font-family: system-ui; font-weight: bold; }
@@ -89,24 +89,24 @@
 
     .header-content {
       display: flex;
-      flex-direction: column; /* Stack logo and stats vertically */
-      align-items: center; /* Center horizontally */
-      justify-content: center; /* Center vertically */
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       max-width: 1200px;
       margin: 0 auto;
-      text-align: center; /* Ensure text is centered */
+      text-align: center;
     }
 
     .logo {
       display: flex;
       align-items: center;
-      justify-content: center; /* Center content horizontally */
+      justify-content: center;
       gap: 0.75rem;
-      font-size: 2rem; /* Enlarged text */
+      font-size: 2rem;
       font-weight: 700;
       letter-spacing: -0.025em;
-      margin: 0 auto; /* Center block */
-      width: 100%; /* Span header */
+      margin: 0 auto;
+      width: 100%;
     }
 
     .logo img {
@@ -115,7 +115,7 @@
       image-rendering: auto;
       border-radius: 50%;
       object-fit: contain;
-      margin-right: 0.75rem; /* Ensure spacing */
+      margin-right: 0.75rem;
     }
 
     .header-stats {
@@ -123,8 +123,8 @@
       gap: 2rem;
       font-size: 0.875rem;
       opacity: 0.9;
-      margin-top: 1rem; /* Space below logo */
-      justify-content: center; /* Center stats */
+      margin-top: 1rem;
+      justify-content: center;
     }
 
     .stat-item {
@@ -336,7 +336,7 @@
       margin-bottom: 0.25rem;
     }
 
-    .lead-phone, .lead-email, .lead-dob { /* Added email and dob */
+    .lead-phone, .lead-email, .lead-dob {
       color: var(--text-secondary);
       font-size: 0.875rem;
       display: flex;
@@ -345,7 +345,7 @@
       margin-top: 0.25rem;
     }
 
-    .lead-phone i, .lead-email i, .lead-dob i { /* Added email and dob */
+    .lead-phone i, .lead-email i, .lead-dob i {
       color: var(--primary);
     }
 
@@ -1204,7 +1204,8 @@
         console.log(`Rendered ${sortedLeads.length} leads, sorted by time`);
       } catch (error) {
         console.error('Error rendering leads:', error);
-        showNotification('warning', 'Error', 'Failed to load leads.');
+        showNotification('warning', 'Error', 'Failed to render leads.');
+        document.getElementById('emptyState').style.display = 'block';
       }
     }
 
@@ -1240,7 +1241,8 @@
         console.log(`Rendered ${templates.length} templates`);
       } catch (error) {
         console.error('Error rendering templates:', error);
-        showNotification('warning', 'Error', 'Failed to load templates.');
+        showNotification('warning', 'Error', 'Failed to render templates.');
+        document.getElementById('templateEmptyState').style.display = 'block';
       }
     }
 
@@ -1267,10 +1269,10 @@
           if (!a.time && !b.time) return 0;
           if (!a.time) return 1;
           if (!b.time) return -1;
-          return new Date(a.time).getTime() - new Date(b.time).getTime();
+          return new Date(a.time) - new Date(b.time);
         });
 
-        sortedFiltered.forEach((lead) => {
+        sortedFiltered.forEach(lead => {
           const originalIndex = leads.indexOf(lead);
           const card = document.createElement('div');
           card.className = 'lead-card';
@@ -1294,7 +1296,7 @@
             </div>
           `;
           grid.appendChild(card);
-        }) lead);
+        });
       } catch (error) {
         console.error('Error filtering leads:', error);
         showNotification('warning', 'Error', 'Failed to filter leads.');
