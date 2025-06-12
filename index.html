@@ -202,12 +202,12 @@
     <div id="leads" class="content" style="display: block;">
       <div class="search-bar">
         <input type="text" class="form-control" id="searchInput" placeholder="Search leads..." oninput="filterLeads()">
-        <button class="btn btn-primary mt-2" onclick="showPopup('lead')">Add Lead</button>
+        <button class="btn btn-primary mt-2" onclick="showPopup('lead')">Create a New Lead</button>
       </div>
       <div id="emptyState" class="empty-state" style="display: none;">
         <h4>No leads found</h4>
         <p>Add a new lead to get started!</p>
-        <button class="btn btn-primary" onclick="showPopup('lead')">Add Lead</button>
+        <button class="btn btn-primary" onclick="showPopup('lead')">Create a New Lead</button>
       </div>
       <div id="leadGrid" class="lead-grid"></div>
     </div>
@@ -317,6 +317,9 @@
         updateStats();
         initCalendar();
         startReminderSystem();
+        // Ensure popup is closed on load
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('popup').style.display = 'none';
       } catch (error) {
         console.error('Initialization error:', error);
         showNotification('warning', 'Error', 'Failed to initialize app. Please refresh.');
