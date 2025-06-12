@@ -4,204 +4,224 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Allstate CRM</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <script defer>
-    let leads = [];
-
-    function addLead() {
-      const name = document.getElementById('name').value;
-      const phone = document.getElementById('phone').value;
-      const notes = document.getElementById('notes').value;
-      const appointment = document.getElementById('appointment').value;
-
-      if (!name || !phone) {
-        alert('Please fill out name and phone.');
-        return;
-      }
-
-      const lead = {
-        name,
-        phone,
-        notes,
-        appointment,
-        id: Date.now()
-      };
-
-      leads.push(lead);
-      renderLeads();
-      showReminderPopup(lead);
-      clearForm();
-    }
-
-    function clearForm() {
-      document.getElementById('name').value = '';
-      document.getElementById('phone').value = '';
-      document.getElementById('notes').value = '';
-      document.getElementById('appointment').value = '';
-    }
-
-    function deleteLead(id) {
-      leads = leads.filter(lead => lead.id !== id);
-      renderLeads();
-    }
-
-    function showReminderPopup(lead) {
-      const popup = document.getElementById('reminderPopup');
-      popup.innerHTML = `<strong>Reminder:</strong> Follow up with ${lead.name} at ${lead.phone} on ${lead.appointment}`;
-      popup.style.display = 'block';
-      setTimeout(() => popup.style.display = 'none', 5000);
-    }
-
-    function showLeadPopup(id) {
-      const lead = leads.find(l => l.id === id);
-      const modal = document.getElementById('leadModal');
-      const content = document.getElementById('leadModalContent');
-      content.innerHTML = `
-        <h3>${lead.name}</h3>
-        <p><strong>Phone:</strong> ${lead.phone}</p>
-        <p><strong>Appointment:</strong> ${lead.appointment || 'None'}</p>
-        <p><strong>Notes:</strong> ${lead.notes}</p>
-        <button onclick="deleteLead(${lead.id}); closeModal()">Delete Lead</button>
-        <button onclick="closeModal()">Close</button>
-      `;
-      modal.style.display = 'flex';
-    }
-
-    function closeModal() {
-      document.getElementById('leadModal').style.display = 'none';
-    }
-
-    function renderLeads() {
-      const container = document.getElementById('leadList');
-      container.innerHTML = '';
-      leads.forEach(lead => {
-        const div = document.createElement('div');
-        div.className = 'leadButton';
-        div.innerText = lead.name;
-        div.onclick = () => showLeadPopup(lead.id);
-        container.appendChild(div);
-      });
-    }
-  </script>
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
   <style>
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f4f8;
+      color: #00338D;
       margin: 0;
-      background: linear-gradient(to right, #003399, #0079c1);
-      color: #fff;
+      padding: 0;
     }
     header {
-      background: #001f5f;
+      background-color: #00338D;
+      color: white;
       padding: 1rem;
       text-align: center;
       font-size: 1.5rem;
     }
-    nav {
-      background: #0047ab;
+    .tabs {
       display: flex;
       justify-content: space-around;
-      padding: 0.5rem;
-    }
-    nav a {
+      background-color: #0072CE;
       color: white;
-      text-decoration: none;
-      font-weight: bold;
     }
-    .container {
+    .tab {
       padding: 1rem;
-    }
-    .form {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-    }
-    .form input, .form textarea {
-      padding: 0.5rem;
-      border: none;
-      border-radius: 8px;
-    }
-    .form button {
-      background: #ffcc00;
-      color: #003399;
-      padding: 0.5rem;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-    }
-    .leadButton {
-      background: white;
-      color: #003399;
-      padding: 1rem;
-      border-radius: 1rem;
-      margin-bottom: 0.5rem;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
       cursor: pointer;
-      font-weight: bold;
+      flex: 1;
       text-align: center;
     }
-    #reminderPopup {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #fff;
-      color: #003399;
-      padding: 1rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      display: none;
-      z-index: 9999;
+    .tab:hover, .active {
+      background-color: #0055A4;
     }
-    #leadModal {
+    .content {
+      padding: 1rem;
+    }
+    .lead-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .lead-item {
+      background: #e6eff7;
+      border: 1px solid #00338D;
+      border-radius: 8px;
+      padding: 0.5rem;
+      cursor: pointer;
+    }
+    .popup, .reminder-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 1rem;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      border-radius: 8px;
+      display: none;
+      z-index: 10;
+      max-width: 90%;
+    }
+    .popup input, .popup textarea {
+      display: block;
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+    .overlay {
       display: none;
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0,0,0,0.6);
-      justify-content: center;
-      align-items: center;
-      z-index: 10000;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 5;
     }
-    #leadModalContent {
-      background: white;
-      color: #003399;
-      padding: 2rem;
-      border-radius: 1rem;
+    button {
+      background-color: #0072CE;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      margin-right: 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0055A4;
+    }
+    #calendar {
       max-width: 90%;
-      text-align: center;
-    }
-    @media (max-width: 600px) {
-      nav {
-        flex-direction: column;
-      }
+      margin: 0 auto;
     }
   </style>
 </head>
 <body>
   <header>Allstate CRM</header>
-  <nav>
-    <a href="#leads">Leads</a>
-    <a href="#schedule">Schedule</a>
-  </nav>
-  <div class="container" id="leads">
-    <div class="form">
-      <input type="text" id="name" placeholder="Lead Name" />
-      <input type="text" id="phone" placeholder="Phone Number" />
-      <input type="datetime-local" id="appointment" placeholder="Appointment Time" />
-      <textarea id="notes" placeholder="Notes"></textarea>
-      <button onclick="addLead()">Add Lead</button>
-    </div>
-    <div id="leadList"></div>
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('leads')">Leads</div>
+    <div class="tab" onclick="showTab('calendar')">Schedule</div>
   </div>
-  <div class="container" id="schedule">
-    <h2>Schedule</h2>
-    <p>Appointments will appear when added to leads.</p>
+  <div class="content" id="leads">
+    <button onclick="showPopup()">Add Lead</button>
+    <div class="lead-list" id="leadList"></div>
   </div>
-  <div id="reminderPopup"></div>
-  <div id="leadModal">
-    <div id="leadModalContent"></div>
+  <div class="content" id="calendar" style="display:none;">
+    <div id="calendarView"></div>
   </div>
+
+  <div class="overlay" id="overlay" onclick="closePopup()"></div>
+  <div class="popup" id="popup">
+    <input id="leadName" placeholder="Name" />
+    <input id="leadPhone" placeholder="Phone" />
+    <textarea id="leadNotes" placeholder="Notes"></textarea>
+    <input id="leadTime" type="datetime-local" />
+    <button onclick="saveLead()">Save</button>
+    <button onclick="closePopup()">Close</button>
+  </div>
+  <div class="reminder-popup" id="reminderPopup"></div>
+
+  <script>
+    let leads = [];
+
+    function showTab(tab) {
+      document.getElementById('leads').style.display = tab === 'leads' ? 'block' : 'none';
+      document.getElementById('calendar').style.display = tab === 'calendar' ? 'block' : 'none';
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelector(`.tab:contains(${tab.charAt(0).toUpperCase() + tab.slice(1)})`).classList.add('active');
+    }
+
+    function showPopup(lead = null, index = null) {
+      document.getElementById('overlay').style.display = 'block';
+      const popup = document.getElementById('popup');
+      popup.style.display = 'block';
+      if (lead) {
+        document.getElementById('leadName').value = lead.name;
+        document.getElementById('leadPhone').value = lead.phone;
+        document.getElementById('leadNotes').value = lead.notes;
+        document.getElementById('leadTime').value = lead.time;
+        popup.dataset.index = index;
+      } else {
+        popup.dataset.index = '';
+        document.querySelectorAll('#popup input, #popup textarea').forEach(el => el.value = '');
+      }
+    }
+
+    function closePopup() {
+      document.getElementById('overlay').style.display = 'none';
+      document.getElementById('popup').style.display = 'none';
+    }
+
+    function saveLead() {
+      const name = document.getElementById('leadName').value;
+      const phone = document.getElementById('leadPhone').value;
+      const notes = document.getElementById('leadNotes').value;
+      const time = document.getElementById('leadTime').value;
+      const index = document.getElementById('popup').dataset.index;
+
+      const lead = { name, phone, notes, time };
+
+      if (index) leads[index] = lead;
+      else leads.push(lead);
+
+      renderLeads();
+      closePopup();
+    }
+
+    function renderLeads() {
+      const list = document.getElementById('leadList');
+      list.innerHTML = '';
+      leads.forEach((lead, i) => {
+        const item = document.createElement('div');
+        item.className = 'lead-item';
+        item.textContent = lead.name;
+        item.onclick = () => showLeadDetails(lead, i);
+        list.appendChild(item);
+      });
+      renderCalendar();
+    }
+
+    function showLeadDetails(lead, index) {
+      showPopup(lead, index);
+      const popup = document.getElementById('popup');
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = 'Delete';
+      deleteBtn.onclick = () => {
+        leads.splice(index, 1);
+        closePopup();
+        renderLeads();
+      };
+      popup.appendChild(deleteBtn);
+    }
+
+    function renderCalendar() {
+      const calendarEl = document.getElementById('calendarView');
+      calendarEl.innerHTML = '';
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        events: leads.filter(lead => lead.time).map(lead => ({
+          title: lead.name,
+          start: lead.time
+        }))
+      });
+      calendar.render();
+    }
+
+    setInterval(() => {
+      const now = new Date().toISOString();
+      leads.forEach(lead => {
+        if (lead.time && now >= lead.time && !lead.reminded) {
+          const popup = document.getElementById('reminderPopup');
+          popup.innerText = `Reminder: ${lead.name} at ${lead.time}`;
+          popup.style.display = 'block';
+          setTimeout(() => popup.style.display = 'none', 5000);
+          lead.reminded = true;
+        }
+      });
+    }, 60000);
+
+    renderLeads();
+  </script>
 </body>
 </html>
