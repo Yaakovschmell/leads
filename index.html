@@ -22,15 +22,13 @@
     .fa-search::before { content: "🔍"; font-family: system-ui; }
     .fa-phone::before { content: "📞"; font-family: system-ui; }
     .fa-clock::before { content: "🕐"; font-family: system-ui; }
-    .fa-calendar-plus::before { content: "📅"; font-family: system-ui; }
     .fa-times::before { content: "×"; font-family: system-ui; font-weight: bold; }
     .fa-save::before { content: "💾"; font-family: system-ui; }
     .fa-trash::before { content: "🗑️"; font-family: system-ui; }
     .fa-check-circle::before { content: "✅"; font-family: system-ui; }
     .fa-exclamation-triangle::before { content: "⚠️"; font-family: system-ui; }
-    .fa-times-circle::before { content: "❌"; font-family: system-ui; }
-    .fa-user-plus::before { content: "👤"; font-family: system-ui; }
     .fa-copy::before { content: "📋"; font-family: system-ui; }
+    .fa-edit::before { content: "✏️"; font-family: system-ui; }
   </style>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -269,26 +267,26 @@
       color: var(--text-secondary);
     }
 
-    .lead-grid {
+    .lead-grid, .template-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 1.5rem;
       margin-top: 1.5rem;
     }
 
-    .lead-card {
+    .lead-card, .template-card {
       background: var(--bg-primary);
       border-radius: var(--radius);
       padding: 1.5rem;
       box-shadow: var(--shadow-md);
-      cursor: pointer;
+      cursor boek: pointer;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       border: 1px solid var(--border);
       position: relative;
       overflow: hidden;
     }
 
-    .lead-card::before {
+    .lead-card::before, .template-card::before {
       content: '';
       position: absolute;
       top: 0;
@@ -298,20 +296,20 @@
       background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
     }
 
-    .lead-card:hover {
+    .lead-card:hover, .template-card:hover {
       transform: translateY(-4px);
       box-shadow: var(--shadow-xl);
       border-color: var(--primary);
     }
 
-    .lead-header {
+    .lead-header, .template-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       margin-bottom: 1rem;
     }
 
-    .lead-name {
+    .lead-name, .template-name {
       font-size: 1.125rem;
       font-weight: 600;
       color: var(--text-primary);
@@ -335,7 +333,7 @@
       color: var(--success);
     }
 
-    .lead-notes {
+    .lead-notes, .template-content {
       color: var(--text-secondary);
       font-size: 0.875rem;
       line-height: 1.5;
@@ -346,7 +344,7 @@
       overflow: hidden;
     }
 
-    .lead-footer {
+    .lead-footer, .template-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -510,6 +508,7 @@
     .fc-event {
       border-radius: 6px !important;
       font-weight: 500 !important;
+      cursor: pointer;
     }
 
     .notification {
@@ -576,74 +575,6 @@
     .notification-message {
       font-size: 0.875rem;
       color: var(--text-secondary);
-    }
-
-    .template-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.5rem;
-      margin-top: 1.5rem;
-    }
-
-    .template-card {
-      background: var(--bg-primary);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      box-shadow: var(--shadow-md);
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      border: 1px solid var(--border);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .template-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
-    }
-
-    .template-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-xl);
-      border-color: var(--primary);
-    }
-
-    .template-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 1rem;
-    }
-
-    .template-name {
-      font-size: 1.125rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 0.25rem;
-    }
-
-    .template-content {
-      color: var(--text-secondary);
-      font-size: 0.875rem;
-      line-height: 1.5;
-      margin-bottom: 1rem;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .template-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 1rem;
-      border-top: 1px solid var(--border);
     }
 
     @media (max-width: 768px) {
@@ -777,7 +708,7 @@
       <div class="lead-grid" id="leadGrid"></div>
       
       <div class="empty-state" id="emptyLeadsState" style="display: none;">
-        <i class="fas fa-user-plus"></i>
+        <i class="fas fa-users"></i>
         <h3>No leads yet</h3>
         <p>Start by adding your first lead to get organized!</p>
       </div>
@@ -811,4 +742,46 @@
   <div class="popup" id="leadPopup">
     <div class="popup-header">
       <h2 class="popup-title" id="leadPopupTitle">Add New Lead</h2>
-      <button class="close-btn" onclick="closePopup()
+      <button class="close-btn" onclick="closePopup()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <form id="leadForm">
+      <div class="form-group">
+        <label class="form-label" for="leadName">Full Name *</label>
+        <input class="form-input" id="leadName" type="text" placeholder="Enter full name" required>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="leadPhone">Phone Number</label>
+        <input class="form-input" id="leadPhone" type="tel" placeholder="(555) 123-4567" pattern="[0-9]{10}">
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="leadNotes">Notes</label>
+        <textarea class="form-textarea" id="leadNotes" placeholder="Add any relevant information..."></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="leadTime">Appointment Date & Time</label>
+        <input class="form-input" id="leadTime" type="datetime-local">
+      </div>
+    </form>
+    
+    <div class="popup-actions">
+      <button class="btn btn-secondary" onclick="closePopup()">Cancel</button>
+      <button class="btn btn-danger" id="deleteLeadBtn" style="display: none;" onclick="confirmDelete('lead')">
+        <i class="fas fa-trash"></i>
+        Delete
+      </button>
+      <button class="btn btn-primary" onclick="saveLead()">
+        <i class="fas fa-save"></i>
+        Save Lead
+      </button>
+    </div>
+  </div>
+
+  <div class="popup" id="templatePopup">
+    <div class="popup-header">
+      <h2 class="popup-title" id="templatePopupTitle">Add New Template</h
