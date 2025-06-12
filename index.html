@@ -64,7 +64,7 @@
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: linear-gradient(145deg, #f8fafc 0%, #e2e8f0 100%); /* Reverted to original gradient */
+      background: linear-gradient(145deg, #f8fafc 0%, #e2e8f0 100%);
       color: var(--text-primary);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
@@ -102,9 +102,11 @@
     }
 
     .logo img {
-      height: 64px; /* Larger logo */
-      width: auto;
-      image-rendering: auto; /* Ensure clarity */
+      height: 64px;
+      width: 64px;
+      image-rendering: auto;
+      border-radius: 50%;
+      object-fit: contain;
     }
 
     .header-stats {
@@ -168,6 +170,9 @@
       max-width: 1200px;
       margin: 0 auto;
       min-height: calc(100vh - 200px);
+      background: var(--bg-primary);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-md);
     }
 
     .btn {
@@ -343,675 +348,808 @@
       line-height: 1.5;
       margin-bottom: 1rem;
       display: -webkit-box;
-      -webkit-line-clamp: 2; -
-      -webkit-box-orientwebkit-box-orient: vertical;
-      overflow: vertical;
-      overflow: hidden;: hidden;
-    }
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
-
-
-    .lead-footer    .lead-footer {
+    .lead-footer {
       display: flex;
- {
-      display: flex;
-      justify-content: space      justify-content: space-between;
-      align-between;
-      align-items: center-items: center;
-;
-           padding padding-top: 1-top: 1rem;
-      borderrem;
-      border-top:-top: 1px 1px solid var solid var(--border);
-    }
-
-   (--border);
-    }
-
-    .lead-time .lead-time {
-      {
-      color: var color: var(--text-secondary(--text-secondary);
-);
-      font      font-size: 0-size: 0.75rem;
-      display.75rem;
-      display: flex;
-      align: flex;
+      justify-content: space-between;
       align-items: center;
--items: center;
-      gap:      gap: 0. 0.375rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
     }
 
-   375rem;
+    .lead-time {
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
     }
 
     .overlay {
-      position .overlay {
       position: fixed;
-     : fixed;
       inset: 0;
- inset: 0;
-      background:      background: rgba rgba(0, 0(0, 0, 0,, 0, 0.6 0.6);
-      backdrop);
-      backdrop-filter: blur-filter: blur(8(8px);
-     px);
-      z z-index: 100-index: 1000;
-0;
-      display: none      display:;
-      none;
- animation: fadeIn 0      animation: fadeIn 0..33s ease;s ease;
-   
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      animation: fadeIn 0.3s ease;
     }
-
-    @keyframes fade }
 
     @keyframes fadeIn {
-      from {In {
       from { opacity: 0; }
- opacity: 0; }
-      to { opacity      to { opacity: 1;: 1; }
- }
+      to { opacity: 1; }
     }
-
-    .popup    }
 
     .popup {
- {
-           position position: fixed;: fixed;
-      top
-      top: 50: 50%;
+      position: fixed;
+      top: 50%;
       left: 50%;
-      left: 50%;
-      transform%;
-      transform: translate(-50: translate(-%, -5050%, -50%);
-      background%);
-      background: var: var(--bg-primary(--bg-primary);
-      width);
-      width: 500: 500px;
-px;
-      max      max-width: 95-width: 95vw;
-      border-radiusvw;
-      border-radius: 16: 16px;
-      boxpx;
-      box-shadow: var-shadow: var(--shadow(--shadow-xl);
--xl);
-      padding      padding: 2rem;
-     : 2rem;
-      z-index: z-index: 100 1001;
-      display: none1;
+      transform: translate(-50%, -50%);
+      background: var(--bg-primary);
+      width: 500px;
+      max-width: 95vw;
+      border-radius: 16px;
+      box-shadow: var(--shadow-xl);
+      padding: 2rem;
+      z-index: 1001;
       display: none;
-      animation;
-      animation: slideIn 0: slideIn 0.3s cubic-bezier(.3s cubic-bezier(0.4, 00.4, 0, 0.2,, 0.2, 1);
- 1);
-    }
+      animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-   
-    @keyframes slide @keyframes slideIn {
+    @keyframes slideIn {
       from {
-In {
-      from {
-        opacity:        opacity: 0;
-        transform 0;
-        transform: translate: translate(-50%, -60(-50%, -60%);
-      }
-%);
+        opacity: 0;
+        transform: translate(-50%, -60%);
       }
       to {
-        opacity      to {
-        opacity:: 1;
-        transform: translate 1;
-        transform: translate(-50%,(-50%, -50 -50%);
+        opacity: 1;
+        transform: translate(-50%, -50%);
       }
-%);
     }
 
-         }
-    }
-
-    .popup-header .popup-header {
+    .popup-header {
       display: flex;
- {
-      display: flex;
-      justify-content: space      justify-content: space-between;
-      align-between;
-      align-items: center-items: center;
-;
-      margin-bottom: 1      margin-bottom: 1.5rem;
-     .5rem;
-      padding padding-bottom: 1-bottom: 1rem;
-      borderrem;
-      border-bottom:-bottom: 1px solid var 1px solid var(--border);
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
     }
 
-   (--border);
+    .popup-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
     }
-
-    .popup-title .popup-title {
-      {
-      font-size: font-size: 1.25rem;
-      1.25rem;
-      font-weight: font-weight: 700 700;
-      color;
-      color: var: var(--text-primary);
-(--text-primary   );
-    }
-
-    .close }
 
     .close-btn {
--btn {
-      background:      background: none none;
-      border;
+      background: none;
       border: none;
-      font: none;
-      font-size: 1.25-size: 1.25rem;
-      colorrem;
-      color: var: var(--text-secondary);
-      cursor(--text-secondary);
-      cursor: pointer;: pointer;
-      padding
-      padding: 0.: 0.25rem25rem;
-      border;
-      border-radius: 50-radius: 50%;
-      transition%;
-      transition: all: all 0 0.2s.2s;
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 0.25rem;
+      border-radius: 50%;
+      transition: all 0.2s;
     }
 
-;
+    .close-btn:hover {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
     }
-
-    .close-btn:hover    .close-btn:hover {
-      background: var {
-      background: var(--bg(--bg-secondary);
-      color:-secondary);
-      color: var(--text-primary var(--text-primary);
-   );
-    }
-
-    .form }
 
     .form-group {
-      margin-group {
-      margin-bottom: 1.-bottom: 1.5rem;
-   5rem;
+      margin-bottom: 1.5rem;
     }
-
-    .form-label }
 
     .form-label {
-      display {
       display: block;
-      font: block;
-      font-weight:-weight: 600;
-      color 600;
-      color: var: var(--text-primary);
-      margin(--text-primary);
-      margin-bottom:-bottom: 0. 0.5rem;
-      font5rem;
-      font-size: 0.875-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
     }
 
-    .rem;
-    }
-
-    .form-input,form-input,
-
+    .form-input,
     .form-textarea {
-    .form-textarea {
-      width      width: 100%;
-      padding: 0.75rem: 100%;
+      width: 100%;
       padding: 0.75rem 1rem;
-      border 1rem;
-      border: 1px: 1px solid solid var(-- var(--border);
-      border-radiusborder);
-      border-radius: var(--: var(--radius);
-      font-size:radius);
-      font-size: 0.875 hinted 0.875 hinted at rem at rem 0; 0; }
-      }
-      transition: all transition: all 0.2 0.2s;
-      font-familys;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      transition: all 0.2s;
       font-family: inherit;
-   : inherit; }
-
     }
-   
 
-    .form-input .form-input:focus,
-:focus,
-    .form-textarea:focus    .form-textarea:focus {
-      outline {
+    .form-input:focus,
+    .form-textarea:focus {
       outline: none;
-      border-color: none;
-      border-color: var: var(--primary);
-      box-shadow: 0 0(--primary);
-      box-shadow: 0 0 0 3 0 3px rgba(px rgba(0,0, 85 85,, 164 164, 0., 0.11);
-);
-    }    }
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 85, 164, 0.1);
+    }
 
-    .form
-
-    .form-textarea {-textarea {
-      resize
+    .form-textarea {
       resize: vertical;
-      min-height: vertical;
-      min-height: 100px: 100px;
+      min-height: 100px;
     }
 
-    .popup;
-    }
-
-    .popup-actions {-actions {
-      display: flex
+    .popup-actions {
       display: flex;
-      gap:;
-      gap: 1rem; 1rem;
-      justify-content
-      justify-content: flex-end: flex-end;
-     ;
-      margin-top: 2 margin-top: 2rem;
+      gap: 1rem;
+      justify-content: flex-end;
+      margin-top: 2rem;
     }
 
-    #rem;
+    #calendarView {
+      background: var(--bg-primary);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border);
     }
 
-    #calendarViewcalendarView {
-      {
-      background: var background: var(--bg(--bg-primary);
--primary);
-      border-radius: var      border-radius: var(--radius);
-      padding(--radius);
-      padding: 1: 1.5rem;
-      box.5rem;
-      box-shadow: var-shadow: var(--shadow-md);
-      border(--shadow-md);
-      border: 1px solid var: 1px solid var(--border);(--border);
-    }
+    .fc {
+      --fc-border-color: var(--border);
+      --fc-button-bg-color: var(--primary);
+      --fc-button-border-color: var(--primary);
+      --fc-button-hover-bg-color: var(--primary-dark);
+      --fc-button-hover-border-color: var(--primary-dark);
+      --fc-button-active-bg-color: var(--primary-dark);
+      --fc-button-active-border-color: var(--primary-dark);
+      --fc-event-bg-color: var(--primary-light);
+      --fc-event-border-color: var(--primary);
     }
 
-
-
-    .fc    .fc {
-      {
-      -- --fc-borderfc-border-color: var(--border-color: var(--border);
-      --);
-      --fc-buttonfc-button-bg-color: var(--primary-bg-color: var(--primary);
-      --fc-button);
-      --fc-button-border-border-color: var(--primary-color: var(--primary);
-     );
-      --fc-button --fc-button-hover-bg-hover-bg-color: var(---color: var(--primary-dark);
-primary-dark);
-      --fc      --fc-button-hover-button-hover-border-color: var(--primary-border-color: var(--primary-dark);
-      --fc-button-dark);
-      --fc-button-active-bg-active-bg-color: var(--primary-dark-color: var(--primary-dark);
-      --fc-button);
-      --fc-button-active-border-color:-active-border-color: var(--primary-dark);
-      var(--primary-dark);
-      --fc-event --fc-event-bg-color: var(--primary-bg-color: var(--primary-light);
-      --fc-event-light);
-      --fc-event-border-border-color: var(--primary-color: var(--primary);
+    .fc-header-toolbar {
+      margin-bottom: 1.5rem !important;
     }
-
-    .fc);
-    }
-
-    .fc-header-toolbar-header-toolbar {
-      margin {
-      margin-bottom: 1-bottom: 1.5rem.5rem !important;
- !important;
-    }
-
-    .fc-button    }
 
     .fc-button {
-      border {
-      border-radius: var(---radius: var(--radius) !important;
-      fontradius) !important;
-      font-weight: 600-weight: 600 !important; !important;
-      padding
-      padding:: 0. 0.55remrem 1rem ! 1rem !important;
-   important;
-    }
- }
-
-    .
-    .fc-eventfc-event {
-      border {
-      border-radius:-radius: 6 6px !importantpx !important;
-     ;
-      font font-weight: 500-weight: 500 !important; !important;
-      cursor
-      cursor: move;: move;
-   
-    }
- }
-
-    .
-    .notificationnotification {
-      {
-      position position: fixed;
-      top:: fixed;
-      top: 2rem; 2rem;
-      right
-      right: 2: 2rem;
-      backgroundrem;
-      background: var(--: var(--bgbg-primary);
--primary);
-      border:      border: 1px solid 1px solid var(-- var(--border);
-border);
-      border-radius      border-radius: var(--: var(--radius);
-radius);
-      padding      padding:: 1 1rem 1.rem 1.5rem5rem;
-     ;
-      box box-shadow: var-shadow: var(--shadow-lg(--shadow-lg);
-     );
-      z z-index: 200-index: 2000;
-0;
-      display: none      display: none;
-      animation;
-      animation: slideIn: slideInRight 0.3Right 0.3s ease;
-      maxs ease;
-      max-width: 400-width: 400px;
+      border-radius: var(--radius) !important;
+      font-weight: 600 !important;
+      padding: 0.5rem 1rem !important;
     }
 
-    @px;
+    .fc-event {
+      border-radius: 6px !important;
+      font-weight: 500 !important;
+      cursor: move;
+    }
+
+    .notification {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.5rem;
+      box-shadow: var(--shadow-lg);
+      z-index: 2000;
+      display: none;
+      animation: slideInRight 0.3s ease;
+      max-width: 400px;
     }
 
     @keyframes slideInRight {
-     keyframes slideInRight {
       from {
-        opacity from {
-:        opacity: 0;
-        transform: 0;
-        transform: translateX( translateX(100%);
-100%);
+        opacity: 0;
+        transform: translateX(100%);
       }
-      }
-      to {      to {
-        opacity
-        opacity: 1;: 1;
-        transform
+      to {
+        opacity: 1;
         transform: translateX(0);
-: translateX(0);
-      }
       }
     }
 
-    .    }
-
-    .notification.success {notification.success {
-      border
-      border-left: 4-left: 4px solid var(--successpx solid var(--success);
-   );
+    .notification.success {
+      border-left: 4px solid var(--success);
     }
- }
 
-    .notification
     .notification.warning {
-      border.warning {
-      border-left: 4-left: 4pxpx solid var(--warning solid var(--warning);
+      border-left: 4px solid var(--warning);
     }
-
-);
-       .notification }
 
     .notification-content {
-     -content {
-      display: flex display: flex;
-      align;
-      align-items: flex-items: flex-start;
-      gap:-start;
-      gap: 0.75 0.75rem;
-rem;
-       }
- }
-
-    .notification
-    .notification-icon-icon {
-      font {
-      font-size: 1.25-size: 1.25rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
     }
 
-    .rem;
+    .notification-icon {
+      font-size: 1.25rem;
     }
 
-    .notification.success .notification.success .notification-icon {
-      color:notification-icon {
-      color: var(--success var(--success);
-   );
+    .notification.success .notification-icon {
+      color: var(--success);
     }
 
- }
-
-    .notification.warning    .notification.warning .notification .notification-icon {
-      color: var-icon {
+    .notification.warning .notification-icon {
       color: var(--warning);
     }
 
-   (--warning);
-    }
-
-    .notification-text .notification-text {
-      flex {
+    .notification-text {
       flex: 1;
     }
 
-: 1;
+    .notification-title {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
     }
 
-    .notification-title    .notification-title {
-      font {
-      font-weight:-weight: 600;
- 600;
-      margin-bottom      margin-bottom:: 0. 0.2525rem;rem;
-
-    }
+    .notification-message {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
     }
 
-    .notification
-    .notification-message-message {
-      font-size {
-      font-size: 0.875: 0.875rem;
-rem;
-      color      color: var(--: var(--text-secondary);text-secondary);
-
-    }
-    }
-
-    @
-    @media (max-width:media (max-width: 768px) 768px) {
-      . {
-      .headerheader-content {
-       -content {
-        flex-direction flex-direction: column;
-        gap: column;
-        gap: 1rem: 1rem;
-       ;
-        text text-align: center-align: center;
-     ;
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
       }
- }
 
-
-      .header-stats      .header-stats {
-        justify {
+      .header-stats {
         justify-content: center;
       }
 
--content: center;
-      }
-
       .tabs {
-        padding      .tabs {
-        padding: 0: 0 1rem;
-      } 1rem;
+        padding: 0 1rem;
       }
-
-     
 
       .content {
-        padding .content {
-        padding: 1rem: 1rem;
-     ;
+        padding: 1rem;
       }
-
-      .leads }
 
       .leads-header {
--header {
-        flex        flex-direction: column-direction: column;
-        gap;
-        gap:: 1rem;
-        1rem;
-        align-items: stretch align-items: stretch;
-     ;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
       }
 
- }
-      .search
-      .-box {
-search-box {        max-width
-        max: none;-width: none
-      };
-     
-
- }
+      .search-box {
+        max-width: none;
+      }
 
       .lead-grid {
-             .lead grid-template-columns-grid {
-: 1        grid-template-columns: 1fr;
-fr;
-      }
+        grid-template-columns: 1fr;
       }
 
-     
-      .popup { .popup {
-        width
-        width: 95: 95vw;
-       vw;
-        padding: padding: 1.5 1.5rem;
-rem;
-           }
-
-      .popup }
+      .popup {
+        width: 95vw;
+        padding: 1.5rem;
+      }
 
       .popup-actions {
-        flex-direction-actions {
-        flex-direction: column: column;
-      }
-   ;
+        flex-direction: column;
       }
     }
 
     .loading {
-      }
-
-    .loading {
       display: inline-block;
-      display: inline-block;
-      width: 20 width: 20px;
-      height:px;
+      width: 20px;
       height: 20px;
-      border 20px;
-      border: 3px: 3px solid solid rgba(255 rgba(255,, 255, 255, 255, 255, 0.3 0.3);
-      border);
-      border-radius: 50-radius: 50%;
-      border%;
-      border-top-color: white-top-color: white;
-      animation;
-      animation: spin 1: spin 1s ease-in-out infinites ease-in-out infinite;
-   ;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
     }
 
-    @ }
-
-    @keyframes spinkeyframes spin {
-      to {
-      to { transform: rotate( { transform: rotate(360deg); }
-    }
-
-360deg); }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
     .empty-state {
-         .empty-state {
-      text-align: center text-align: center;
-     ;
-      padding: 3 padding: 3rem 1remrem 1rem;
-      color;
-      color: var(--: var(--text-secondarytext-secondary);
-   );
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-secondary);
     }
 
-    .empty }
-
-    .empty-state i-state i {
-      {
-      font font-size: 3rem;
--size: 3rem;
-      margin-bottom      margin-bottom: 1: 1rem;
-      opacityrem;
-      opacity: 0.: 0.5;
-5;
-    }
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
     }
 
-   
-    .empty .empty-state h-state h3 {
-      font3 {
-      font-size: 1.25-size: 1.25rem;
-      font-weight:rem;
+    .empty-state h3 {
+      font-size: 1.25rem;
       font-weight: 600;
-      margin 600;
-      margin-bottom-bottom: 0: 0.5rem;
-      color.5rem;
+      margin-bottom: 0.5rem;
       color: var(--text-primary);
-: var(--text-primary);
     }
-    }
-  </  </style>
-</head>
-<bodystyle>
+  </style>
 </head>
 <body>
   <header>
-  <header>
-    <div class=">
     <div class="header-content">
-      <divheader-content">
-      <div class="logo class="logo">
-        <img src="">
-        <img src="image.png" alt="Allimage.png" alt="Allstate Logo">
-        Allstate Logo">
+      <div class="logo">
+        <img src="image.png" alt="Allstate Logo">
         Allstate CRM
-state CRM
-      </div      </div>
-     >
-      <div class=" <div class="header-statsheader-stats">
-        <div class">
-        <div class="="stat-itemstat-item">
-          <i class="">
-          <i class="fas fa-users"></fas fa-users"></i>
-          <span idi>
-          <span id="total="totalLeads">0 LeadsLeads">0 Leads</span>
-       </span>
-        </div> </div>
-        <div
-        <div class="stat class="stat-item">
-          <i class-item">
-          <i class="fas fa-calendar="fas fa-calendar-check"></i-check"></i>
->
-          <span id          <span id="="upupcomingApcomingAppts">0pts">0 Appointments</span>
-        </ Appointments</span>
+      </div>
+      <div class="header-stats">
+        <div class="stat-item">
+          <i class="fas fa-users"></i>
+          <span id="totalLeads">0 Leads</span>
+        </div>
+        <div class="stat-item">
+          <i class="fas fa-calendar-check"></i>
+          <span id="upcomingAppts">0 Appointments</span>
         </div>
       </div>
-div>
-      </div    </div>
-   >
- </div>
-  </header  </header>>
+    </div>
+  </header>
 
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('leads')">
+      <i class="fas fa-users"></i>
+      Leads
+    </div>
+    <div class="tab" onclick="showTab('calendar')">
+      <i class="fas fa-calendar-alt"></i>
+      Schedule
+    </div>
+  </div>
 
+  <main>
+    <section id="leads" class="content">
+      <div class="leads-header">
+        <h1 class="leads-title">Lead Management</h1>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search leads..." oninput="filterLeads()">
+          </div>
+          <button class="btn btn-primary" onclick="showPopup()">
+            <i class="fas fa-plus"></i>
+            Add Lead
+          </button>
+        </div>
+      </div>
+      
+      <div class="lead-grid" id="leadGrid"></div>
+      
+      <div class="empty-state" id="emptyState" style="display: none;">
+        <i class="fas fa-user-plus"></i>
+        <h3>No leads yet</h3>
+        <p>Start by adding your first lead to get organized!</p>
+      </div>
+    </section>
 
-  <div  <div class="tabs class="tabs">
-   ">
-    <div class=" <div class="tabtab active" onclick="showTab active" onclick="showTab
+    <section id="calendar" class="content" style="display: none;">
+      <div id="calendarView"></div>
+    </section>
+  </main>
+
+  <div class="overlay" id="overlay" onclick="closePopup()"></div>
+
+  <div class="popup" id="popup">
+    <div class="popup-header">
+      <h2 class="popup-title" id="popupTitle">Add New Lead</h2>
+      <button class="close-btn" onclick="closePopup()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <form id="leadForm">
+      <div class="form-group">
+        <label class="form-label" for="leadName">Full Name *</label>
+        <input class="form-input" id="leadName" type="text" placeholder="Enter full name" required>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="leadPhone">Phone Number</label>
+        <input class="form-input" id="leadPhone" type="tel" placeholder="(555) 123-4567">
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="leadNotes">Notes</label>
+        <textarea class="form-textarea" id="leadNotes" placeholder="Add any relevant information..."></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="leadTime">Appointment Date & Time</label>
+        <input class="form-input" id="leadTime" type="datetime-local">
+      </div>
+    </form>
+    
+    <div class="popup-actions">
+      <button class="btn btn-secondary" onclick="closePopup()">Cancel</button>
+      <button class="btn btn-danger" id="deleteBtn" style="display: none;" onclick="deleteLead()">
+        <i class="fas fa-trash"></i>
+        Delete
+      </button>
+      <button class="btn btn-primary" onclick="saveLead()">
+        <i class="fas fa-save"></i>
+        Save Lead
+      </button>
+    </div>
+  </div>
+
+  <div class="notification" id="notification">
+    <div class="notification-content">
+      <div class="notification-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <div class="notification-text">
+        <div class="notification-title">Success!</div>
+        <div class="notification-message">Lead has been saved successfully.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let leads = [];
+    let currentEditIndex = null;
+    let calendar = null;
+
+    function init() {
+      console.log('Initializing app...');
+      loadLeads();
+      renderLeads();
+      updateStats();
+      initCalendar();
+      startReminderSystem();
+    }
+
+    function loadLeads() {
+      try {
+        const savedLeads = localStorage.getItem('leads');
+        leads = savedLeads ? JSON.parse(savedLeads) : [];
+        if (!Array.isArray(leads)) leads = [];
+        // Validate leads
+        leads = leads.filter(lead => {
+          if (!lead.name || typeof lead.name !== 'string') return false;
+          if (lead.time && isNaN(new Date(lead.time).getTime())) return false;
+          return true;
+        });
+        localStorage.setItem('leads', JSON.stringify(leads));
+        console.log('Loaded leads:', leads.length);
+      } catch (error) {
+        console.error('Error loading leads:', error);
+        leads = [];
+        localStorage.setItem('leads', JSON.stringify(leads));
+        showNotification('warning', 'Error', 'Failed to load leads.');
+      }
+    }
+
+    function saveLeads() {
+      try {
+        localStorage.setItem('leads', JSON.stringify(leads));
+        console.log('Saved leads:', leads.length);
+      } catch (error) {
+        console.error('Error saving leads:', error);
+        showNotification('warning', 'Error', 'Failed to save leads.');
+      }
+    }
+
+    function showTab(tab) {
+      try {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.content').forEach(c => c.style.display = 'none');
+        document.querySelector(`[onclick="showTab('${tab}')"]`).classList.add('active');
+        document.getElementById(tab).style.display = 'block';
+        if (tab === 'calendar' && calendar) calendar.render();
+      } catch (error) {
+        console.error('Error switching tab:', error);
+        showNotification('warning', 'Error', 'Failed to switch tab.');
+      }
+    }
+
+    function showPopup() {
+      try {
+        currentEditIndex = null;
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('popup').style.display = 'block';
+        document.getElementById('leadForm').reset();
+        document.getElementById('popupTitle').textContent = 'Add New Lead';
+        document.getElementById('deleteBtn').style.display = 'none';
+      } catch (error) {
+        console.error('Error showing popup:', error);
+        showNotification('warning', 'Error', 'Failed to show popup.');
+      }
+    }
+
+    function closePopup() {
+      try {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('popup').style.display = 'none';
+        currentEditIndex = null;
+      } catch (error) {
+        console.error('Error closing popup:', error);
+      }
+    }
+
+    function validatePhone(phone) {
+      const pattern = /^[0-9]{10}$/;
+      return !phone || pattern.test(phone.replace(/\D/g, ''));
+    }
+
+    function saveLead() {
+      try {
+        const name = document.getElementById('leadName').value.trim();
+        const phone = document.getElementById('leadPhone').value.trim();
+        const notes = document.getElementById('leadNotes').value.trim();
+        const time = document.getElementById('leadTime').value;
+
+        if (!name) {
+          showNotification('warning', 'Error', 'Name is required.');
+          return;
+        }
+
+        if (!validatePhone(phone)) {
+          showNotification('warning', 'Error', 'Invalid phone number. Use 10 digits.');
+          return;
+        }
+
+        const lead = {
+          name,
+          phone,
+          notes,
+          time: time ? new Date(time).toISOString() : null,
+          status: 'New'
+        };
+
+        if (currentEditIndex !== null) {
+          leads[currentEditIndex] = lead;
+        } else {
+          leads.push(lead);
+        }
+
+        saveLeads();
+        renderLeads();
+        updateStats();
+        if (calendar) calendar.refetchEvents();
+        closePopup();
+        showNotification('success', 'Success', 'Lead saved successfully.');
+      } catch (error) {
+        console.error('Error saving lead:', error);
+        showNotification('warning', 'Error', 'Failed to save lead.');
+      }
+    }
+
+    function deleteLead() {
+      try {
+        if (currentEditIndex !== null) {
+          leads.splice(currentEditIndex, 1);
+          saveLeads();
+          renderLeads();
+          updateStats();
+          if (calendar) calendar.refetchEvents();
+          closePopup();
+          showNotification('success', 'Success', 'Lead deleted successfully.');
+        }
+      } catch (error) {
+        console.error('Error deleting lead:', error);
+        showNotification('warning', 'Error', 'Failed to delete lead.');
+      }
+    }
+
+    function editLead(index) {
+      try {
+        currentEditIndex = index;
+        const lead = leads[index];
+        document.getElementById('leadName').value = lead.name;
+        document.getElementById('leadPhone').value = lead.phone || '';
+        document.getElementById('leadNotes').value = lead.notes || '';
+        document.getElementById('leadTime').value = lead.time ? lead.time.slice(0, 16) : '';
+        document.getElementById('popupTitle').textContent = 'Edit Lead';
+        document.getElementById('deleteBtn').style.display = 'inline-flex';
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('popup').style.display = 'block';
+      } catch (error) {
+        console.error('Error editing lead:', error);
+        showNotification('warning', 'Error', 'Failed to edit lead.');
+      }
+    }
+
+    function renderLeads() {
+      try {
+        console.log('Rendering leads...');
+        const grid = document.getElementById('leadGrid');
+        const emptyState = document.getElementById('emptyState');
+        grid.innerHTML = '';
+
+        if (!leads || leads.length === 0) {
+          emptyState.style.display = 'block';
+          console.log('No leads, showing empty state');
+          return;
+        }
+
+        emptyState.style.display = 'none';
+
+        // Sort leads by appointment time (soonest first, null times last)
+        const sortedLeads = [...leads].sort((a, b) => {
+          if (!a.time && !b.time) return 0;
+          if (!a.time) return 1;
+          if (!b.time) return -1;
+          return new Date(a.time) - new Date(b.time);
+        });
+
+        sortedLeads.forEach((lead, index) => {
+          const originalIndex = leads.indexOf(lead);
+          const card = document.createElement('div');
+          card.className = 'lead-card';
+          card.onclick = () => editLead(originalIndex);
+          card.innerHTML = `
+            <div class="lead-header">
+              <div>
+                <div class="lead-name">${lead.name}</div>
+                ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i>${lead.phone}</div>` : ''}
+              </div>
+              <div class="lead-status">${lead.status}</div>
+            </div>
+            ${lead.notes ? `<div class="lead-notes">${lead.notes}</div>` : ''}
+            <div class="lead-footer">
+              <div class="lead-time">
+                <i class="fas fa-clock"></i>
+                ${lead.time ? new Date(lead.time).toLocaleString() : 'No appointment'}
+              </div>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+        console.log(`Rendered ${sortedLeads.length} leads, sorted by time`);
+      } catch (error) {
+        console.error('Error rendering leads:', error);
+        showNotification('warning', 'Error', 'Failed to render leads.');
+        document.getElementById('emptyState').style.display = 'block';
+      }
+    }
+
+    function filterLeads() {
+      try {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const filtered = leads.filter(lead => 
+          lead.name.toLowerCase().includes(search) || 
+          (lead.phone && lead.phone.includes(search))
+        );
+        const grid = document.getElementById('leadGrid');
+        const emptyState = document.getElementById('emptyState');
+        grid.innerHTML = '';
+
+        if (filtered.length === 0) {
+          emptyState.style.display = 'block';
+          return;
+        }
+
+        emptyState.style.display = 'none';
+
+        // Sort filtered leads by time
+        const sortedFiltered = filtered.sort((a, b) => {
+          if (!a.time && !b.time) return 0;
+          if (!a.time) return 1;
+          if (!b.time) return -1;
+          return new Date(a.time) - new Date(b.time);
+        });
+
+        sortedFiltered.forEach(lead => {
+          const originalIndex = leads.indexOf(lead);
+          const card = document.createElement('div');
+          card.className = 'lead-card';
+          card.onclick = () => editLead(originalIndex);
+          card.innerHTML = `
+            <div class="lead-header">
+              <div>
+                <div class="lead-name">${lead.name}</div>
+                ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i>${lead.phone}</div>` : ''}
+              </div>
+              <div class="lead-status">${lead.status}</div>
+            </div>
+            ${lead.notes ? `<div class="lead-notes">${lead.notes}</div>` : ''}
+            <div class="lead-footer">
+              <div class="lead-time">
+                <i class="fas fa-clock"></i>
+                ${lead.time ? new Date(lead.time).toLocaleString() : 'No appointment'}
+              </div>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      } catch (error) {
+        console.error('Error filtering leads:', error);
+        showNotification('warning', 'Error', 'Failed to filter leads.');
+      }
+    }
+
+    function updateStats() {
+      try {
+        const total = leads.length;
+        const upcoming = leads.filter(lead => lead.time && new Date(lead.time) > new Date()).length;
+        document.getElementById('totalLeads').textContent = `${total} Leads`;
+        document.getElementById('upcomingAppts').textContent = `${upcoming} Appointments`;
+      } catch (error) {
+        console.error('Error updating stats:', error);
+      }
+    }
+
+    function initCalendar() {
+      try {
+        const calendarEl = document.getElementById('calendarView');
+        calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+          editable: true,
+          events: function(fetchInfo, successCallback, failureCallback) {
+            try {
+              // Fetch the latest leads
+              const events = leads
+                .filter(lead => lead.time)
+                .map((lead, index) => ({
+                  title: lead.name,
+                  start: lead.time,
+                  extendedProps: { index }
+                }));
+              console.log('Fetched events for calendar:', events.length);
+              successCallback(events);
+            } catch (error) {
+              console.error('Error fetching calendar events:', error);
+              failureCallback(error);
+            }
+          },
+          eventClick: function(info) {
+            editLead(info.event.extendedProps.index);
+          },
+          eventDrop: function(info) {
+            try {
+              const index = info.event.extendedProps.index;
+              leads[index].time = info.event.start.toISOString();
+              console.log(`Dropped lead ${leads[index].name} to ${info.event.start}`);
+              saveLeads();
+              renderLeads();
+              updateStats();
+            } catch (error) {
+              console.error('Error handling event drop:', error);
+              showNotification('warning', 'Error', 'Failed to update schedule.');
+            }
+          }
+        });
+        calendar.render();
+      } catch (error) {
+        console.error('Error initializing calendar:', error);
+        showNotification('warning', 'Error', 'Failed to load calendar.');
+      }
+    }
+
+    function startReminderSystem() {
+      try {
+        setInterval(() => {
+          const now = new Date();
+          leads.forEach(lead => {
+            if (lead.time && !lead.reminderSent) {
+              const apptTime = new Date(lead.time);
+              const diff = (apptTime - now) / 1000 / 60; // Minutes
+              if (diff <= 60 && diff > 0) {
+                showNotification('warning', 'Reminder', `Appointment with ${lead.name} in ${Math.round(diff)} minutes.`);
+                lead.reminderSent = true;
+                saveLeads();
+              }
+            }
+          });
+        }, 60000); // Check every minute
+      } catch (error) {
+        console.error('Error in reminder system:', error);
+      }
+    }
+
+    function showNotification(type, title, message) {
+      try {
+        const notification = document.getElementById('notification');
+        notification.className = `notification ${type}`;
+        notification.querySelector('.notification-icon i').className = `fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}`;
+        notification.querySelector('.notification-title').textContent = title;
+        notification.querySelector('.notification-message').textContent = message;
+        notification.style.display = 'block';
+        setTimeout(() => notification.style.display = 'none', 3000);
+      } catch (error) {
+        console.error('Error showing notification:', error);
+      }
+    }
+
+    // Start the app
+    init();
+  </script>
+</body>
+</html>
