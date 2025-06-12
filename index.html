@@ -93,14 +93,15 @@
     .logo {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 1rem;
       font-size: 1.5rem;
       font-weight: 700;
       letter-spacing: -0.025em;
     }
 
     .logo img {
-      height: 32px;
+      height: 48px;
+      width: auto;
     }
 
     .header-stats {
@@ -380,26 +381,20 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: var(--bg-primary);
+      background: var(--radius);
       width: 500px;
-      max-width: 95vw;
+      max-width: 90vw;
       border-radius: 16px;
-      box-shadow: var(--shadow-xl);
       padding: 2rem;
       z-index: 1001;
       display: none;
-      animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: slideIn 0.3s ease;
+      background: var(--bg-primary);
+      box-shadow: var(--shadow-shadow);
     }
-
     @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translate(-50%, -60%);
-      }
-      to {
-        opacity: 1;
-        transform: translate(-50%, -50%);
-      }
+      from { opacity: 0; transform: translate(-50%, -60%); }
+      to { opacity: 1; transform: translate(-50%, -50%); }
     }
 
     .popup-header {
@@ -413,7 +408,7 @@
 
     .popup-title {
       font-size: 1.25rem;
-      font-weight: 700;
+      font-weight: bold;
       color: var(--text-primary);
     }
 
@@ -439,7 +434,7 @@
 
     .form-label {
       display: block;
-      font-weight: 600;
+      font-weight: bold;
       color: var(--text-primary);
       margin-bottom: 0.5rem;
       font-size: 0.875rem;
@@ -448,9 +443,9 @@
     .form-input,
     .form-textarea {
       width: 100%;
-      padding: 0.75rem 1rem;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+      padding: 0.75rem; 1rem;
+      border: 1px solid var(--border-radius);
+      border-radius: 10px;
       font-size: 0.875rem;
       transition: all 0.2s;
       font-family: inherit;
@@ -460,7 +455,7 @@
     .form-textarea:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(0, 85, 164, 0.1);
+      box-shadow: 0 0 0 3px rgba(0, 85, 164, 0.2);
     }
 
     .form-textarea {
@@ -475,7 +470,7 @@
       margin-top: 2rem;
     }
 
-    #calendarView {
+    #calendar {
       background: var(--bg-primary);
       border-radius: var(--radius);
       padding: 1.5rem;
@@ -786,4 +781,585 @@
     <div class="popup-header">
       <h2 class="popup-title" id="templatePopupTitle">Add New Template</h2>
       <button class="close-btn" onclick="closePopup()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <form id="templateForm">
+      <div class="form-group">
+        <label class="form-label" for="templateName">Template Name *</label>
+        <input class="form-input" id="templateName" type="text" placeholder="Enter template name" required>
+      </div>
       
+      <div class="form-group">
+        <label class="form-label" for="templateContent">Message Content *</label>
+        <textarea class="form-textarea" id="templateContent" placeholder="Enter message content..." required></textarea>
+      </div>
+    </form>
+    
+    <div class="popup-actions">
+      <button class="btn btn-secondary" onclick="closePopup()">Cancel</button>
+      <button class="btn btn-danger" id="deleteTemplateBtn" style="display: none;" onclick="confirmDelete('template')">
+        <i class="fas fa-trash"></i>
+        Delete
+      </button>
+      <button class="btn btn-primary" onclick="saveTemplate()">
+        <i class="fas fa-save"></i>
+        Save Template
+      </button>
+    </div>
+  </div>
+
+  <div class="notification" id="notification">
+    <div class="notification-content">
+      <div class="notification-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <div class="notification-text">
+        <div class="notification-title">Success!</div>
+        <div class="notification-message" id="notificationMessage">Action completed successfully.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let leads = [];
+    let templates = [];
+    let currentEditIndex = null;
+    let currentEditType = null;
+    let calendar = null;
+
+    function init() {
+      try {
+        console.log('Initializing CRM...');
+        loadData();
+        renderLeads();
+        renderTemplates();
+        updateStats();
+        initCalendar();
+        startReminderSystem();
+        console.log('Initialization complete.');
+      } catch (error) {
+        console.error('Initialization error:', error);
+        showNotification('warning', 'Error', 'Failed to initialize the application. Please refresh the page.');
+      }
+    }
+
+    function loadData() {
+      try {
+        const savedLeads = localStorage.getItem('leads');
+        const savedTemplates = localStorage.getItem('templates');
+        leads = savedLeads ? JSON.parse(savedLeads) : [];
+        templates = savedTemplates ? JSON.parse(savedTemplates) : [];
+        if (!Array.isArray(leads)) leads = [];
+        if (!Array.isArray(templates)) templates = [];
+        console.log('Data loaded:', { leads, templates });
+      } catch (error) {
+        console.error('Error loading data:', error);
+        leads = [];
+        templates = [];
+        localStorage.setItem('leads', JSON.stringify(leads));
+        localStorage.setItem('templates', JSON.stringify(templates));
+        showNotification('warning', 'Error', 'Data reset due to corruption. Please try again.');
+      }
+    }
+
+    function saveData(type) {
+      try {
+        if (type === 'leads' || !type) localStorage.setItem('leads', JSON.stringify(leads));
+        if (type === 'templates' || !type) localStorage.setItem('templates', JSON.stringify(templates));
+        console.log(`Data saved: ${type || 'all'}`);
+      } catch (error) {
+        console.error('Error saving data:', error);
+        showNotification('warning', 'Error', 'Failed to save data.');
+      }
+    }
+
+    function showTab(tab) {
+      try {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.content').forEach(c => c.style.display = 'none');
+        document.querySelector(`[onclick="showTab('${tab}')"]`).classList.add('active');
+        document.getElementById(tab).style.display = 'block';
+        if (tab === 'schedule' && calendar) calendar.render();
+        console.log(`Switched to tab: ${tab}`);
+      } catch (error) {
+        console.error('Error switching tab:', error);
+        showNotification('warning', 'Error', 'Failed to switch tabs.');
+      }
+    }
+
+    function showPopup(type) {
+      try {
+        currentEditType = type;
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById(`${type}Popup`).style.display = 'block';
+        document.getElementById(`${type}Form`).reset();
+        document.getElementById(`delete${type.charAt(0).toUpperCase() + type.slice(1)}Btn`).style.display = 'none';
+        document.getElementById(`${type}PopupTitle`).textContent = `Add New ${type.charAt(0).toUpperCase() + type.slice(1)}`;
+        console.log(`Showing popup: ${type}`);
+      } catch (error) {
+        console.error('Error showing popup:', error);
+        showNotification('warning', 'Error', 'Failed to open popup.');
+      }
+    }
+
+    function closePopup() {
+      try {
+        document.getElementById('overlay').style.display = 'none';
+        document.querySelectorAll('.popup').forEach(p => p.style.display = 'none');
+        currentEditIndex = null;
+        currentEditType = null;
+        console.log('Popup closed');
+      } catch (error) {
+        console.error('Error closing popup:', error);
+      }
+    }
+
+    function validatePhone(phone) {
+      const pattern = /^[0-9]{10}$/;
+      return !phone || pattern.test(phone.replace(/\D/g, ''));
+    }
+
+    function validateDateTime(dateTime) {
+      return dateTime ? !isNaN(new Date(dateTime).getTime()) : true;
+    }
+
+    function saveLead() {
+      try {
+        const name = document.getElementById('leadName').value.trim();
+        const phone = document.getElementById('leadPhone').value.trim();
+        const notes = document.getElementById('leadNotes').value.trim();
+        const time = document.getElementById('leadTime').value;
+
+        if (!name) {
+          showNotification('warning', 'Error', 'Name is required.');
+          return;
+        }
+
+        if (!validatePhone(phone)) {
+          showNotification('warning', 'Error', 'Invalid phone number. Use 10 digits.');
+          return;
+        }
+
+        if (time && !validateDateTime(time)) {
+          showNotification('warning', 'Error', 'Invalid appointment date/time.');
+          return;
+        }
+
+        const lead = {
+          name,
+          phone,
+          notes,
+          time: time ? new Date(time).toISOString() : null,
+          status: 'New'
+        };
+
+        if (currentEditIndex !== null) {
+          leads[currentEditIndex] = lead;
+        } else {
+          leads.push(lead);
+        }
+
+        saveData('leads');
+        renderLeads();
+        updateStats();
+        if (calendar) calendar.refetchEvents();
+        closePopup();
+        showNotification('success', 'Success', 'Lead saved successfully.');
+      } catch (error) {
+        console.error('Error saving lead:', error);
+        showNotification('warning', 'Error', 'Failed to save lead.');
+      }
+    }
+
+    function saveTemplate() {
+      try {
+        const name = document.getElementById('templateName').value.trim();
+        const content = document.getElementById('templateContent').value.trim();
+
+        if (!name || !content) {
+          showNotification('warning', 'Error', 'Template name and content are required.');
+          return;
+        }
+
+        const template = { name, content };
+
+        if (currentEditIndex !== null) {
+          templates[currentEditIndex] = template;
+        } else {
+          templates.push(template);
+        }
+
+        saveData('templates');
+        renderTemplates();
+        closePopup();
+        showNotification('success', 'Success', 'Template saved successfully.');
+      } catch (error) {
+        console.error('Error saving template:', error);
+        showNotification('warning', 'Error', 'Failed to save template.');
+      }
+    }
+
+    function confirmDelete(type) {
+      try {
+        if (confirm(`Are you sure you want to delete this ${type}?`)) {
+          if (type === 'lead') deleteLead();
+          else if (type === 'template') deleteTemplate();
+        }
+      } catch (error) {
+        console.error('Error confirming delete:', error);
+        showNotification('warning', 'Error', 'Failed to delete item.');
+      }
+    }
+
+    function deleteLead() {
+      try {
+        if (currentEditIndex !== null) {
+          leads.splice(currentEditIndex, 1);
+          saveData('leads');
+          renderLeads();
+          updateStats();
+          if (calendar) calendar.refetchEvents();
+          closePopup();
+          showNotification('success', 'Success', 'Lead deleted successfully.');
+        }
+      } catch (error) {
+        console.error('Error deleting lead:', error);
+        showNotification('warning', 'Error', 'Failed to delete lead.');
+      }
+    }
+
+    function deleteTemplate() {
+      try {
+        if (currentEditIndex !== null) {
+          templates.splice(currentEditIndex, 1);
+          saveData('templates');
+          renderTemplates();
+          closePopup();
+          showNotification('success', 'Success', 'Template deleted successfully.');
+        }
+      } catch (error) {
+        console.error('Error deleting template:', error);
+        showNotification('warning', 'Error', 'Failed to delete template.');
+      }
+    }
+
+    function editLead(index) {
+      try {
+        currentEditIndex = index;
+        currentEditType = 'lead';
+        const lead = leads[index];
+        document.getElementById('leadName').value = lead.name;
+        document.getElementById('leadPhone').value = lead.phone || '';
+        document.getElementById('leadNotes').value = lead.notes || '';
+        document.getElementById('leadTime').value = lead.time ? lead.time.slice(0, 16) : '';
+        document.getElementById('leadPopupTitle').textContent = 'Edit Lead';
+        document.getElementById('deleteLeadBtn').style.display = 'inline-flex';
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('leadPopup').style.display = 'block';
+        console.log(`Editing lead: ${index}`);
+      } catch (error) {
+        console.error('Error editing lead:', error);
+        showNotification('warning', 'Error', 'Failed to edit lead.');
+      }
+    }
+
+    function editTemplate(index) {
+      try {
+        currentEditIndex = index;
+        currentEditType = 'template';
+        const template = templates[index];
+        document.getElementById('templateName').value = template.name;
+        document.getElementById('templateContent').value = template.content;
+        document.getElementById('templatePopupTitle').textContent = 'Edit Template';
+        document.getElementById('deleteTemplateBtn').style.display = 'inline-flex';
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('templatePopup').style.display = 'block';
+        console.log(`Editing template: ${index}`);
+      } catch (error) {
+        console.error('Error editing template:', error);
+        showNotification('warning', 'Error', 'Failed to edit template.');
+      }
+    }
+
+    function copyTemplate(content) {
+      try {
+        navigator.clipboard.writeText(content).then(() => {
+          showNotification('success', 'Success', 'Template copied to clipboard.');
+        }).catch(() => {
+          showNotification('warning', 'Error', 'Failed to copy template.');
+        });
+      } catch (error) {
+        console.error('Error copying template:', error);
+        showNotification('warning', 'Error', 'Failed to copy template.');
+      }
+    }
+
+    function renderLeads() {
+      try {
+        const grid = document.getElementById('leadGrid');
+        const emptyState = document.getElementById('emptyLeadsState');
+        if (!grid || !emptyState) {
+          console.error('Lead grid or empty state not found');
+          return;
+        }
+        grid.innerHTML = '';
+
+        const sortedLeads = [...leads].sort((a, b) => {
+          const aTime = a.time ? new Date(a.time) : new Date(0);
+          const bTime = b.time ? new Date(b.time) : new Date(0);
+          return aTime - bTime;
+        });
+
+        if (!sortedLeads.length) {
+          emptyState.style.display = 'block';
+          console.log('No leads to render');
+          return;
+        }
+
+        emptyState.style.display = 'none';
+
+        sortedLeads.forEach((lead, index) => {
+          const originalIndex = leads.indexOf(lead);
+          const card = document.createElement('div');
+          card.className = 'lead-card';
+          card.onclick = () => editLead(originalIndex);
+          card.innerHTML = `
+            <div class="lead-header">
+              <div>
+                <div class="lead-name">${lead.name}</div>
+                ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i>${lead.phone}</div>` : ''}
+              </div>
+              <div class="lead-status">${lead.status}</div>
+            </div>
+            ${lead.notes ? `<div class="lead-notes">${lead.notes}</div>` : ''}
+            <div class="lead-footer">
+              <div class="lead-time">
+                <i class="fas fa-clock"></i>
+                ${lead.time ? new Date(lead.time).toLocaleString() : 'No appointment'}
+              </div>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+        console.log(`Rendered ${sortedLeads.length} leads`);
+      } catch (error) {
+        console.error('Error rendering leads:', error);
+        showNotification('warning', 'Error', 'Failed to render leads.');
+      }
+    }
+
+    function renderTemplates() {
+      try {
+        const grid = document.getElementById('templateGrid');
+        const emptyState = document.getElementById('emptyTemplatesState');
+        if (!grid || !emptyState) {
+          console.error('Template grid or empty state not found');
+          return;
+        }
+        grid.innerHTML = '';
+
+        if (!templates.length) {
+          emptyState.style.display = 'block';
+          console.log('No templates to render');
+          return;
+        }
+
+        emptyState.style.display = 'none';
+
+        templates.forEach((template, index) => {
+          const card = document.createElement('div');
+          card.className = 'template-card';
+          card.innerHTML = `
+            <div class="template-header">
+              <div class="template-name">${template.name}</div>
+            </div>
+            <div class="template-content">${template.content}</div>
+            <div class="template-footer">
+              <button class="btn btn-secondary" onclick="event.stopPropagation(); editTemplate(${index})">
+                <i class="fas fa-edit"></i>
+                Edit
+              </button>
+              <button class="btn btn-primary" onclick="event.stopPropagation(); copyTemplate('${template.content.replace(/'/g, "\\'")}')">
+                <i class="fas fa-copy"></i>
+                Copy
+              </button>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+        console.log(`Rendered ${templates.length} templates`);
+      } catch (error) {
+        console.error('Error rendering templates:', error);
+        showNotification('warning', 'Error', 'Failed to render templates.');
+      }
+    }
+
+    function filterLeads() {
+      try {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const filtered = leads.filter(lead => 
+          lead.name.toLowerCase().includes(search) || 
+          (lead.phone && lead.phone.includes(search))
+        );
+        renderFilteredLeads(filtered);
+        console.log(`Filtered ${filtered.length} leads`);
+      } catch (error) {
+        console.error('Error filtering leads:', error);
+        showNotification('warning', 'Error', 'Failed to filter leads.');
+      }
+    }
+
+    function renderFilteredLeads(filtered) {
+      try {
+        const grid = document.getElementById('leadGrid');
+        const emptyState = document.getElementById('emptyLeadsState');
+        if (!grid || !emptyState) {
+          console.error('Lead grid or empty state not found');
+          return;
+        }
+        grid.innerHTML = '';
+
+        if (!filtered.length) {
+          emptyState.style.display = 'block';
+          return;
+        }
+
+        emptyState.style.display = 'none';
+
+        filtered.sort((a, b) => {
+          const aTime = a.time ? new Date(a.time) : new Date(0);
+          const bTime = b.time ? new Date(b.time) : new Date(0);
+          return aTime - bTime;
+        }).forEach((lead, index) => {
+          const originalIndex = leads.indexOf(lead);
+          const card = document.createElement('div');
+          card.className = 'lead-card';
+          card.onclick = () => editLead(originalIndex);
+          card.innerHTML = `
+            <div class="lead-header">
+              <div>
+                <div class="lead-name">${lead.name}</div>
+                ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i>${lead.phone}</div>` : ''}
+              </div>
+              <div class="lead-status">${lead.status}</div>
+            </div>
+            ${lead.notes ? `<div class="lead-notes">${lead.notes}</div>` : ''}
+            <div class="lead-footer">
+              <div class="lead-time">
+                <i class="fas fa-clock"></i>
+                ${lead.time ? new Date(lead.time).toLocaleString() : 'No appointment'}
+              </div>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      } catch (error) {
+        console.error('Error rendering filtered leads:', error);
+        showNotification('warning', 'Error', 'Failed to render filtered leads.');
+      }
+    }
+
+    function initCalendar() {
+      try {
+        const calendarEl = document.getElementById('calendarView');
+        if (!calendarEl) {
+          console.error('Calendar view element not found');
+          return;
+        }
+        calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+          editable: true,
+          headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+          },
+          events: () => {
+            try {
+              return leads
+                .filter(lead => lead.time && !isNaN(new Date(lead.time).getTime()))
+                .map((lead, index) => ({
+                  title: lead.name,
+                  start: new Date(lead.time).toISOString(),
+                  extendedProps: { index }
+                }));
+            } catch (error) {
+              console.error('Error mapping events:', error);
+              return [];
+            }
+          },
+          eventClick: info => {
+            try {
+              const lead = leads[info.event.extendedProps.index];
+              const fileContent = `
+                <html>
+                  <head>
+                    <title>${lead.name}'s File</title>
+                    <style>
+                      body { font-family: Arial, sans-serif; padding: 20px; }
+                      h1 { color: #0055A4; }
+                      p { margin: 10px 0; }
+                    </style>
+                  </head>
+                  <body>
+                    <h1>${lead.name}'s File</h1>
+                    <p><strong>Phone:</strong> ${lead.phone || 'N/A'}</p>
+                    <p><strong>Notes:</strong> ${lead.notes || 'None'}</p>
+                    <p><strong>Appointment:</strong> ${lead.time ? new Date(lead.time).toLocaleString() : 'None'}</p>
+                  </body>
+                </html>
+              `;
+              const blob = new Blob([fileContent], { type: 'text/html' });
+              const url = URL.createObjectURL(blob);
+              window.open(url, '_blank');
+            } catch (error) {
+              console.error('Error opening event file:', error);
+              showNotification('warning', 'Error', 'Failed to open lead file.');
+            }
+          },
+          eventDrop: info => {
+            try {
+              const index = info.event.extendedProps.index;
+              const lead = leads[index];
+              const newTime = info.event.start.toISOString();
+              leads[index].time = newTime;
+              saveData('leads');
+              renderLeads();
+              updateStats();
+              showNotification('success', 'Success', `Appointment for ${lead.name} rescheduled to ${new Date(newTime).toLocaleString()}.`);
+            } catch (error) {
+              console.error('Error dropping event:', error);
+              showNotification('warning', 'Error', 'Failed to reschedule appointment.');
+            }
+          }
+        });
+        calendar.render();
+        console.log('Calendar initialized');
+      } catch (error) {
+        console.error('Error initializing calendar:', error);
+        showNotification('warning', 'Error', 'Failed to initialize calendar.');
+      }
+    }
+
+    function updateStats() {
+      try {
+        const total = leads.length;
+        const upcoming = leads.filter(lead => lead.time && new Date(lead.time) > new Date()).length;
+        document.getElementById('totalLeads').textContent = `${total} Lead${total === 1 ? '' : 's'}`;
+        document.getElementById('upcomingAppts').textContent = `${upcoming} Appointment${upcoming === 1 ? '' : 's'}`;
+        console.log(`Stats updated: ${total} leads, ${upcoming} upcoming`);
+      } catch (error) {
+        console.error('Error updating stats:', error);
+      }
+    }
+
+    function showNotification(type, title, message) {
+      try {
+        const notification = document.getElementById('notification');
+        const icon = notification.querySelector('.notification-icon i');
+        const titleEl = notification.querySelector('.notification-title');
+        const messageEl = document.getElementById('notificationMessage');
+
+        notification
