@@ -14,10 +14,10 @@
             background-color: #f4f6f9;
             margin: 0;
             padding: 20px;
-            border-top: 5px solid #007bff;
+            border-top: 5px solid #007bff; /* Blue top border */
         }
         .header-wrapper {
-            background-color: #007bff;
+            background-color: #007bff; /* Blue background for header */
             width: 100%;
             padding: 15px 0;
             margin-bottom: 20px;
@@ -32,13 +32,13 @@
         .header img {
             width: 50px;
             height: 50px;
-            border-radius: 50%;
+            border-radius: 50%; /* Rounded logo */
             margin-right: 15px;
         }
         .header h1 {
-            text-align: center;
+            text-align: center; /* Center title */
             margin: 0;
-            color: white;
+            color: white; /* White text for contrast */
         }
         .container {
             max-width: 1200px;
@@ -232,8 +232,8 @@
         </div>
         <div class="tabs">
             <div class="tab active" onclick="showTab('leads')">Leads</div>
-            <div class="tab" onclick="showTab('calendar')">Calendar</div>
             <div class="tab" onclick="showTab('templates')">Templates</div>
+            <div class="tab" onclick="showTab('calendar')">Calendar</div>
         </div>
         <div id="leads" class="content" style="display: block;">
             <div class="search-bar">
@@ -247,9 +247,6 @@
             </div>
             <div id="leadGrid" class="lead-grid"></div>
         </div>
-        <div id="calendar" class="content">
-            <div id="calendarView"></div>
-        </div>
         <div id="templates" class="content">
             <div class="search-bar">
                 <input type="text" class="form-control" id="templateSearchInput" placeholder="Search templates..." oninput="filterTemplates()">
@@ -261,6 +258,9 @@
                 <button class="btn btn-primary" onclick="showPopup('template')">Add Template</button>
             </div>
             <div id="templateGrid" class="template-grid"></div>
+        </div>
+        <div id="calendar" class="content">
+            <div id="calendarView"></div>
         </div>
     </div>
     <div id="overlay"></div>
@@ -353,6 +353,7 @@
                 updateStats();
                 initCalendar();
                 startReminderSystem();
+                // Ensure popup is closed on load
                 document.getElementById('overlay').style.display = 'none';
                 document.getElementById('popup').style.display = 'none';
             } catch (error) {
@@ -483,400 +484,4 @@
                 document.getElementById('leadSubjectGroup').style.display = mode === 'lead' ? 'block' : 'none';
                 document.getElementById('leadEmailGroup').style.display = mode === 'lead' ? 'block' : 'none';
                 document.getElementById('leadDobGroup').style.display = mode === 'lead' ? 'block' : 'none';
-                document.getElementById('leadNotesGroup').style.display = mode === 'lead' ? 'block' : 'none';
-                document.getElementById('leadTimeGroup').style.display = mode === 'lead' ? 'block' : 'none';
-                document.getElementById('templateNameGroup').style.display = mode === 'template' ? 'block' : 'none';
-                document.getElementById('templateMessageGroup').style.display = mode === 'template' ? 'block' : 'none';
-                if (mode === 'lead') {
-                    document.getElementById('popupTitle').textContent = 'Add New Lead';
-                    document.getElementById('saveBtnText').textContent = 'Save Lead';
-                    document.getElementById('deleteBtn').style.display = 'none';
-                } else {
-                    document.getElementById('popupTitle').textContent = 'Add New Template';
-                    document.getElementById('saveBtnText').textContent = 'Save Template';
-                    document.getElementById('deleteBtn').style.display = 'none';
-                }
-            } catch (error) {
-                console.error('Error showing popup:', error);
-                showNotification('warning', 'Error', 'Failed to show popup.');
-            }
-        }
-
-        function closePopup() {
-            try {
-                document.getElementById('overlay').style.display = 'none';
-                document.getElementById('popup').style.display = 'none';
-                currentEditIndex = null;
-                currentEditTemplateIndex = null;
-                currentPopupMode = 'lead';
-                if (dobPicker) dobPicker.clear();
-            } catch (error) {
-                console.error('Error closing popup:', error);
-            }
-        }
-
-        function validatePhone(phone) {
-            const pattern = /^[0-9]{10}$/;
-            return !phone || pattern.test(phone.replace(/\D/g, ''));
-        }
-
-        function validateDate(dateStr) {
-            if (!dateStr) return true;
-            const date = new Date(dateStr);
-            return !isNaN(date.getTime()) && date <= new Date();
-        }
-
-        function saveItem() {
-            try {
-                if (currentPopupMode === 'lead') {
-                    const name = document.getElementById('leadName').value.trim();
-                    const phone = document.getElementById('leadPhone').value.trim();
-                    const subject = document.getElementById('leadSubject').value.trim();
-                    const email = document.getElementById('leadEmail').value.trim();
-                    const dobRaw = document.getElementById('leadDob').value.trim();
-                    const notes = document.getElementById('leadNotes').value.trim();
-                    const time = document.getElementById('leadTime').value;
-
-                    if (!name) {
-                        showNotification('warning', 'Error', 'Name is required.');
-                        return;
-                    }
-                    if (!subject) {
-                        showNotification('warning', 'Error', 'Appointment subject is required.');
-                        return;
-                    }
-                    if (!validatePhone(phone)) {
-                        showNotification('warning', 'Error', 'Invalid phone number. Use 10 digits.');
-                        return;
-                    }
-                    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                        showNotification('warning', 'Error', 'Invalid email address.');
-                        return;
-                    }
-                    let dob = null;
-                    if (dobRaw) {
-                        const parsedDate = dobPicker.parseDate(dobRaw);
-                        if (!parsedDate || isNaN(parsedDate.getTime()) || parsedDate > new Date()) {
-                            showNotification('warning', 'Error', 'Invalid date of birth. Use a valid past date.');
-                            return;
-                        }
-                        dob = parsedDate.toISOString().split('T')[0];
-                    }
-                    const lead = {
-                        name,
-                        phone,
-                        subject,
-                        email,
-                        dob,
-                        notes,
-                        time: time ? new Date(time).toISOString() : null,
-                        status: 'New'
-                    };
-                    if (currentEditIndex !== null) {
-                        leads[currentEditIndex] = lead;
-                    } else {
-                        leads.push(lead);
-                    }
-                    saveLeads();
-                    renderLeads();
-                    updateStats();
-                    if (calendar) calendar.refetchEvents();
-                    closePopup();
-                    showNotification('success', 'Success', 'Lead saved successfully.');
-                } else {
-                    const name = document.getElementById('templateName').value.trim();
-                    const message = document.getElementById('templateMessage').value.trim();
-                    if (!name) {
-                        showNotification('warning', 'Error', 'Template name is required.');
-                        return;
-                    }
-                    if (!message) {
-                        showNotification('warning', 'Error', 'Message is required.');
-                        return;
-                    }
-                    const template = { name, message };
-                    if (currentEditTemplateIndex !== null) {
-                        templates[currentEditTemplateIndex] = template;
-                    } else {
-                        templates.push(template);
-                    }
-                    saveTemplates();
-                    renderTemplates();
-                    closePopup();
-                    showNotification('success', 'Success', 'Template saved successfully.');
-                }
-            } catch (error) {
-                console.error('Error saving item:', error);
-                showNotification('warning', 'Error', `Failed to save ${currentPopupMode}.`);
-            }
-        }
-
-        function deleteItem() {
-            try {
-                if (currentPopupMode === 'lead' && currentEditIndex !== null) {
-                    leads.splice(currentEditIndex, 1);
-                    saveLeads();
-                    renderLeads();
-                    updateStats();
-                    if (calendar) calendar.refetchEvents();
-                    closePopup();
-                    showNotification('success', 'Success', 'Lead deleted successfully.');
-                } else if (currentPopupMode === 'template' && currentEditTemplateIndex !== null) {
-                    templates.splice(currentEditTemplateIndex, 1);
-                    saveTemplates();
-                    renderTemplates();
-                    closePopup();
-                    showNotification('success', 'Success', 'Template deleted successfully.');
-                }
-            } catch (error) {
-                console.error('Error deleting item:', error);
-                showNotification('warning', 'Error', `Failed to delete ${currentPopupMode}.`);
-            }
-        }
-
-        function editLead(index) {
-            try {
-                if (index < 0 || index >= leads.length || !leads[index]) {
-                    throw new Error('Invalid lead index or lead data');
-                }
-                currentPopupMode = 'lead';
-                currentEditIndex = index;
-                currentEditTemplateIndex = null;
-                const lead = leads[index];
-                document.getElementById('leadName').value = lead.name || '';
-                document.getElementById('leadPhone').value = lead.phone || '';
-                document.getElementById('leadSubject').value = lead.subject || '';
-                document.getElementById('leadEmail').value = lead.email || '';
-                if (lead.dob && dobPicker) {
-                    try {
-                        dobPicker.setDate(lead.dob, true);
-                    } catch (e) {
-                        console.warn('Invalid DOB format:', lead.dob);
-                        dobPicker.clear();
-                    }
-                } else {
-                    if (dobPicker) dobPicker.clear();
-                }
-                document.getElementById('leadNotes').value = lead.notes || '';
-                document.getElementById('leadTime').value = lead.time ? lead.time.slice(0, 16) : '';
-                document.getElementById('popupTitle').textContent = 'Edit Lead';
-                document.getElementById('saveBtnText').textContent = 'Save Lead';
-                document.getElementById('deleteBtn').style.display = 'inline-flex';
-                document.getElementById('leadNameGroup').style.display = 'block';
-                document.getElementById('leadPhoneGroup').style.display = 'block';
-                document.getElementById('leadSubjectGroup').style.display = 'block';
-                document.getElementById('leadEmailGroup').style.display = 'block';
-                document.getElementById('leadDobGroup').style.display = 'block';
-                document.getElementById('leadNotesGroup').style.display = 'block';
-                document.getElementById('leadTimeGroup').style.display = 'block';
-                document.getElementById('templateNameGroup').style.display = 'none';
-                document.getElementById('templateMessageGroup').style.display = 'none';
-                document.getElementById('overlay').style.display = 'block';
-                document.getElementById('popup').style.display = 'block';
-            } catch (error) {
-                console.error('Error editing lead:', error);
-                showNotification('warning', 'Error', 'Failed to edit lead. Try refreshing the page or clearing local storage.');
-            }
-        }
-
-        function editTemplate(index) {
-            try {
-                currentPopupMode = 'template';
-                currentEditTemplateIndex = index;
-                currentEditIndex = null;
-                const template = templates[index];
-                document.getElementById('templateName').value = template.name;
-                document.getElementById('templateMessage').value = template.message;
-                document.getElementById('popupTitle').textContent = 'Edit Template';
-                document.getElementById('saveBtnText').textContent = 'Save Template';
-                document.getElementById('deleteBtn').style.display = 'inline-flex';
-                document.getElementById('leadNameGroup').style.display = 'none';
-                document.getElementById('leadPhoneGroup').style.display = 'none';
-                document.getElementById('leadSubjectGroup').style.display = 'none';
-                document.getElementById('leadEmailGroup').style.display = 'none';
-                document.getElementById('leadDobGroup').style.display = 'none';
-                document.getElementById('leadNotesGroup').style.display = 'none';
-                document.getElementById('leadTimeGroup').style.display = 'none';
-                document.getElementById('templateNameGroup').style.display = 'block';
-                document.getElementById('templateMessageGroup').style.display = 'block';
-                document.getElementById('overlay').style.display = 'block';
-                document.getElementById('popup').style.display = 'block';
-            } catch (error) {
-                console.error('Error editing template:', error);
-                showNotification('warning', 'Error', 'Failed to edit template.');
-            }
-        }
-
-        function renderLeads() {
-            try {
-                console.log('Rendering leads...');
-                const grid = document.getElementById('leadGrid');
-                const emptyState = document.getElementById('emptyState');
-                grid.innerHTML = '';
-                if (!leads || leads.length === 0) {
-                    emptyState.style.display = 'block';
-                    console.log('No leads, showing empty state');
-                    return;
-                }
-                emptyState.style.display = 'none';
-                const sortedLeads = [...leads].sort((a, b) => {
-                    if (!a.time && !b.time) return a.name.localeCompare(b.name);
-                    if (!a.time) return 1;
-                    if (!b.time) return -1;
-                    return new Date(a.time) - new Date(b.time);
-                });
-                sortedLeads.forEach((lead, index) => {
-                    const originalIndex = leads.indexOf(lead);
-                    const card = document.createElement('div');
-                    card.className = 'lead-card';
-                    card.onclick = () => editLead(originalIndex);
-                    card.innerHTML = `
-                        <div class="lead-header">
-                            <div>
-                                <div class="lead-name">${lead.name}</div>
-                                ${lead.subject ? `<div class="lead-subject"><i class="fas fa-comment"></i>${lead.subject}</div>` : ''}
-                                ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i>${lead.phone}</div>` : ''}
-                                ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i>${lead.email}</div>` : ''}
-                                ${lead.dob ? `<div class="lead-dob"><i class="fas fa-birthday-cake"></i>${new Date(lead.dob).toLocaleDateString()}</div>` : ''}
-                            </div>
-                            <div class="lead-status">${lead.status}</div>
-                        </div>
-                        ${lead.notes ? `<div class="lead-notes">${lead.notes}</div>` : ''}
-                        <div class="lead-footer">
-                            <div class="lead-time">
-                                <i class="fas fa-clock"></i>
-                                ${lead.time ? new Date(lead.time).toLocaleString() : 'No appointment'}
-                            </div>
-                        </div>
-                    `;
-                    grid.appendChild(card);
-                });
-                console.log('Rendered leads:', sortedLeads.length);
-            } catch (error) {
-                console.error('Error rendering leads:', error);
-                emptyState.style.display = 'block';
-                showNotification('warning', 'Error', 'Failed to render leads.');
-            }
-        }
-
-        function renderTemplates() {
-            try {
-                const grid = document.getElementById('templateGrid');
-                const emptyState = document.getElementById('templateEmptyState');
-                grid.innerHTML = '';
-                if (!templates || templates.length === 0) {
-                    emptyState.style.display = 'block';
-                    return;
-                }
-                emptyState.style.display = 'none';
-                templates.forEach((template, index) => {
-                    const card = document.createElement('div');
-                    card.className = 'template-card';
-                    card.onclick = () => editTemplate(index);
-                    card.innerHTML = `
-                        <div class="template-header">
-                            <div class="template-name">${template.name}</div>
-                        </div>
-                        <div class="template-message">${template.message}</div>
-                    `;
-                    grid.appendChild(card);
-                });
-            } catch (error) {
-                console.error('Error rendering templates:', error);
-                showNotification('warning', 'Error', 'Failed to render templates.');
-            }
-        }
-
-        function filterLeads() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const cards = document.querySelectorAll('.lead-card');
-            cards.forEach(card => {
-                const text = card.textContent.toLowerCase();
-                card.style.display = text.includes(searchTerm) ? 'block' : 'none';
-            });
-        }
-
-        function filterTemplates() {
-            const searchTerm = document.getElementById('templateSearchInput').value.toLowerCase();
-            const cards = document.querySelectorAll('.template-card');
-            cards.forEach(card => {
-                const text = card.textContent.toLowerCase();
-                card.style.display = text.includes(searchTerm) ? 'block' : 'none';
-            });
-        }
-
-        function updateStats() {
-            document.getElementById('totalLeads').textContent = `${leads.length} Leads`;
-            const upcoming = leads.filter(lead => lead.time && new Date(lead.time) > new Date()).length;
-            document.getElementById('upcomingAppts').textContent = `${upcoming} Appointments`;
-        }
-
-        function initCalendar() {
-            try {
-                const calendarEl = document.getElementById('calendarView');
-                calendar = new FullCalendar.Calendar(calendarEl, {
-                    initialView: 'dayGridMonth',
-                    editable: true, // Enable drag-and-drop
-                    events: function(fetchInfo, successCallback, failureCallback) {
-                        const events = leads
-                            .filter(lead => lead.time)
-                            .map((lead, index) => ({
-                                id: index.toString(), // Store lead index for updates
-                                title: `${lead.name}${lead.subject ? `: ${lead.subject}` : ''}`,
-                                start: lead.time,
-                                extendedProps: { leadIndex: index }
-                            }));
-                        successCallback(events);
-                    },
-                    eventDrop: function(info) {
-                        try {
-                            const leadIndex = parseInt(info.event.extendedProps.leadIndex);
-                            if (leadIndex >= 0 && leadIndex < leads.length) {
-                                const newStart = info.event.start.toISOString();
-                                leads[leadIndex].time = newStart;
-                                saveLeads();
-                                renderLeads(); // Update Leads tab
-                                showNotification('success', 'Success', 'Appointment updated.');
-                            } else {
-                                throw new Error('Invalid lead index');
-                            }
-                        } catch (error) {
-                            console.error('Error updating event:', error);
-                            showNotification('warning', 'Error', 'Failed to update appointment.');
-                            info.revert(); // Revert drag if error
-                        }
-                    }
-                });
-                calendar.render();
-            } catch (error) {
-                console.error('Error initializing calendar:', error);
-                showNotification('warning', 'Error', 'Failed to initialize calendar.');
-            }
-        }
-
-        function startReminderSystem() {
-        }
-
-        function showNotification(type, title, message) {
-            const notification = document.getElementById('notification');
-            const icon = notification.querySelector('.notification-icon i');
-            const titleEl = notification.querySelector('.notification-title');
-            const messageEl = notification.querySelector('.notification-message');
-            notification.className = `notification ${type}`;
-            titleEl.textContent = title;
-            messageEl.textContent = message;
-            if (type === 'success') {
-                icon.className = 'fas fa-check-circle';
-            } else {
-                icon.className = 'fas fa-exclamation-triangle';
-            }
-            notification.style.display = 'block';
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 3000);
-        }
-
-        document.addEventListener('DOMContentLoaded', init);
-    </script>
-</body>
-</html>
+                document.getElementById('leadNotesGroup').style.display = mode === 'lead' ? 'block' :
