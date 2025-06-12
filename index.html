@@ -3,395 +3,1239 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Allstate CRM - Sleek Modern</title>
-  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <title>Allstate CRM - Enhanced</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
   <style>
-    /* Font & base */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+    /* Fallback for missing icons */
+    .fas::before, .fa::before {
+      font-family: "Font Awesome 6 Free", "Font Awesome 5 Free", serif;
+      font-weight: 900;
+    }
+    
+    /* Icon fallbacks */
+    .fa-shield-alt::before { content: "🛡️"; font-family: system-ui; }
+    .fa-users::before { content: "👥"; font-family: system-ui; }
+    .fa-calendar-check::before { content: "📅"; font-family: system-ui; }
+    .fa-calendar-alt::before { content: "📆"; font-family: system-ui; }
+    .fa-plus::before { content: "+"; font-family: system-ui; font-weight: bold; }
+    .fa-search::before { content: "🔍"; font-family: system-ui; }
+    .fa-phone::before { content: "📞"; font-family: system-ui; }
+    .fa-clock::before { content: "🕐"; font-family: system-ui; }
+    .fa-calendar-plus::before { content: "📅"; font-family: system-ui; }
+    .fa-times::before { content: "×"; font-family: system-ui; font-weight: bold; }
+    .fa-save::before { content: "💾"; font-family: system-ui; }
+    .fa-trash::before { content: "🗑️"; font-family: system-ui; }
+    .fa-check-circle::before { content: "✅"; font-family: system-ui; }
+    .fa-exclamation-triangle::before { content: "⚠️"; font-family: system-ui; }
+    .fa-times-circle::before { content: "❌"; font-family: system-ui; }
+    .fa-user-plus::before { content: "👤"; font-family: system-ui; }
+  </style>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    :root {
+      --primary: #0055A4;
+      --primary-dark: #00338D;
+      --primary-light: #0072CE;
+      --secondary: #64748b;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8fafc;
+      --bg-tertiary: #f1f5f9;
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+      --border: #e2e8f0;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-        Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-      background: #f7f9fc;
-      color: #00338D;
-      margin: 0; padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(145deg, #f8fafc 0%, #e2e8f0 100%);
+      color: var(--text-primary);
+      line-height: 1.6;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      user-select: none;
+      min-height: 100vh;
     }
 
+    /* Glassmorphism header */
     header {
-      background: linear-gradient(90deg, #0055A4 0%, #00338D 100%);
+      background: linear-gradient(135deg, rgba(0, 85, 164, 0.95) 0%, rgba(0, 51, 141, 0.95) 100%);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       color: white;
-      padding: 1.25rem 0;
-      font-size: 1.8rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-align: center;
-      box-shadow: 0 3px 8px rgba(0, 51, 141, 0.4);
+      padding: 1.5rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-lg);
     }
 
-    /* Tabs */
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+    }
+
+    .logo i {
+      font-size: 1.8rem;
+      color: #60a5fa;
+    }
+
+    .header-stats {
+      display: flex;
+      gap: 2rem;
+      font-size: 0.875rem;
+      opacity: 0.9;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Modern tabs with hover effects */
     .tabs {
       display: flex;
-      justify-content: space-around;
-      background: #0072CE;
-      box-shadow: inset 0 -2px 0 #0055A4;
+      background: var(--bg-primary);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      box-shadow: var(--shadow-sm);
     }
+
     .tab {
-      flex: 1;
-      padding: 1rem 0;
-      color: white;
-      font-weight: 600;
-      text-align: center;
+      position: relative;
+      padding: 1rem 1.5rem;
+      color: var(--text-secondary);
+      font-weight: 500;
       cursor: pointer;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      user-select: none;
-      border-bottom: 4px solid transparent;
-    }
-    .tab:hover {
-      background: #0055A4;
-    }
-    .tab.active {
-      background: white;
-      color: #00338D;
-      border-bottom: 4px solid #00338D;
-      font-weight: 700;
-      box-shadow: 0 4px 10px rgba(0, 51, 141, 0.2);
-    }
-
-    /* Content wrapper */
-    .content {
-      padding: 1.5rem 1rem 3rem;
-      max-width: 960px;
-      margin: 0 auto;
-      min-height: 70vh;
-    }
-
-    /* Lead list */
-    .lead-list {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-bottom: 2px solid transparent;
       display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-top: 1rem;
-    }
-    .lead-item {
-      flex: 1 1 150px;
-      background: white;
-      color: #00338D;
-      border-radius: 12px;
-      box-shadow: 0 3px 8px rgb(0 51 141 / 0.15);
-      padding: 0.8rem 1rem;
-      font-weight: 600;
-      font-size: 1.1rem;
-      cursor: pointer;
-      transition: box-shadow 0.3s ease;
-      display: flex;
-      justify-content: center;
       align-items: center;
-      user-select: none;
-    }
-    .lead-item:hover {
-      box-shadow: 0 8px 16px rgb(0 51 141 / 0.3);
-      transform: translateY(-3px);
+      gap: 0.5rem;
     }
 
-    /* Overlay */
+    .tab:hover {
+      color: var(--primary);
+      background: rgba(0, 85, 164, 0.05);
+    }
+
+    .tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      font-weight: 600;
+    }
+
+    .tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+      border-radius: 1px;
+    }
+
+    /* Content areas */
+    .content {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      min-height: calc(100vh - 200px);
+    }
+
+    /* Enhanced buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      font-size: 0.875rem;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, var(--danger) 0%, #dc2626 100%);
+      color: white;
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-secondary {
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-tertiary);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Lead grid with card design */
+    .leads-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .leads-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .search-box {
+      position: relative;
+      max-width: 300px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 0.75rem 1rem 0.75rem 2.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      transition: all 0.2s;
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 85, 164, 0.1);
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+    }
+
+    .lead-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .lead-card {
+      background: var(--bg-primary);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-md);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .lead-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+    }
+
+    .lead-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
+      border-color: var(--primary);
+    }
+
+    .lead-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+
+    .lead-name {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+    }
+
+    .lead-phone {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+    }
+
+    .lead-status {
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+    }
+
+    .lead-notes {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .lead-footer {
+      display: flex;
+      justify-content: between;
+      align-items: center;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .lead-time {
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+    }
+
+    /* Enhanced popup */
     .overlay {
-      display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.45);
-      backdrop-filter: blur(2px);
-      z-index: 15;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      animation: fadeIn 0.3s ease;
     }
 
-    /* Popup */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
     .popup {
       position: fixed;
-      top: 50%; left: 50%;
+      top: 50%;
+      left: 50%;
       transform: translate(-50%, -50%);
-      background: white;
-      width: 400px;
+      background: var(--bg-primary);
+      width: 500px;
       max-width: 95vw;
       border-radius: 16px;
-      box-shadow: 0 16px 32px rgb(0 51 141 / 0.3);
-      padding: 2rem 2.5rem;
-      z-index: 20;
+      box-shadow: var(--shadow-xl);
+      padding: 2rem;
+      z-index: 1001;
       display: none;
-      user-select: text;
+      animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .popup input,
-    .popup textarea,
-    .popup input[type="datetime-local"] {
-      width: 100%;
-      padding: 0.7rem 1rem;
-      margin-bottom: 1.2rem;
-      font-size: 1rem;
-      border-radius: 10px;
-      border: 1.8px solid #cbd5e1;
-      transition: border-color 0.3s ease;
-      font-family: 'Inter', sans-serif;
-      outline-offset: 2px;
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
     }
-    .popup input:focus,
-    .popup textarea:focus,
-    .popup input[type="datetime-local"]:focus {
-      border-color: #0072CE;
-      box-shadow: 0 0 10px #0072CEaa;
-      outline: none;
-    }
-    .popup textarea {
-      resize: vertical;
-      min-height: 80px;
-      font-size: 1rem;
-    }
-    .popup-buttons {
+
+    .popup-header {
       display: flex;
-      justify-content: flex-end;
-      gap: 1rem;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
     }
-    .btn {
-      background: #0072CE;
-      border: none;
-      color: white;
-      padding: 0.75rem 1.6rem;
+
+    .popup-title {
+      font-size: 1.25rem;
       font-weight: 700;
-      border-radius: 10px;
+      color: var(--text-primary);
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.25rem;
+      color: var(--text-secondary);
       cursor: pointer;
-      transition: background-color 0.25s ease;
-      font-size: 1rem;
-      user-select: none;
-    }
-    .btn:hover {
-      background: #0055A4;
-    }
-    .btn.delete {
-      background: #d94f4f;
-    }
-    .btn.delete:hover {
-      background: #a63232;
+      padding: 0.25rem;
+      border-radius: 50%;
+      transition: all 0.2s;
     }
 
-    /* Reminder popup */
-    .reminder-popup {
-      position: fixed;
-      bottom: 25px;
-      right: 25px;
-      background: #0055A4;
-      color: white;
+    .close-btn:hover {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
       font-weight: 600;
-      padding: 1rem 1.5rem;
-      border-radius: 14px;
-      box-shadow: 0 10px 20px rgb(0 51 141 / 0.5);
-      z-index: 25;
-      display: none;
-      user-select: none;
-      max-width: 300px;
-      font-size: 1.1rem;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
     }
 
-    /* Calendar */
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 85, 164, 0.1);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .popup-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      margin-top: 2rem;
+    }
+
+    /* Calendar enhancements */
     #calendarView {
-      max-width: 900px;
-      margin: 0 auto;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgb(0 51 141 / 0.1);
-      background: white;
-      padding: 1rem;
+      background: var(--bg-primary);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border);
     }
 
-    /* Responsive */
-    @media (max-width: 480px) {
+    /* FullCalendar custom styling */
+    .fc {
+      --fc-border-color: var(--border);
+      --fc-button-bg-color: var(--primary);
+      --fc-button-border-color: var(--primary);
+      --fc-button-hover-bg-color: var(--primary-dark);
+      --fc-button-hover-border-color: var(--primary-dark);
+      --fc-button-active-bg-color: var(--primary-dark);
+      --fc-button-active-border-color: var(--primary-dark);
+      --fc-event-bg-color: var(--primary-light);
+      --fc-event-border-color: var(--primary);
+    }
+
+    .fc-header-toolbar {
+      margin-bottom: 1.5rem !important;
+    }
+
+    .fc-button {
+      border-radius: var(--radius) !important;
+      font-weight: 600 !important;
+      padding: 0.5rem 1rem !important;
+    }
+
+    .fc-event {
+      border-radius: 6px !important;
+      font-weight: 500 !important;
+    }
+
+    /* Notification system */
+    .notification {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.5rem;
+      box-shadow: var(--shadow-lg);
+      z-index: 2000;
+      display: none;
+      animation: slideInRight 0.3s ease;
+      max-width: 400px;
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .notification.success {
+      border-left: 4px solid var(--success);
+    }
+
+    .notification.warning {
+      border-left: 4px solid var(--warning);
+    }
+
+    .notification-content {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .notification-icon {
+      font-size: 1.25rem;
+    }
+
+    .notification.success .notification-icon {
+      color: var(--success);
+    }
+
+    .notification.warning .notification-icon {
+      color: var(--warning);
+    }
+
+    .notification-text {
+      flex: 1;
+    }
+
+    .notification-title {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .notification-message {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+
+      .header-stats {
+        justify-content: center;
+      }
+
+      .tabs {
+        padding: 0 1rem;
+      }
+
+      .content {
+        padding: 1rem;
+      }
+
+      .leads-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+      }
+
+      .search-box {
+        max-width: none;
+      }
+
+      .lead-grid {
+        grid-template-columns: 1fr;
+      }
+
       .popup {
         width: 95vw;
-        padding: 1.25rem 1.5rem;
+        padding: 1.5rem;
       }
-      .lead-item {
-        flex: 1 1 100%;
+
+      .popup-actions {
+        flex-direction: column;
       }
+    }
+
+    /* Loading states */
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Empty states */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-secondary);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    .empty-state h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
     }
   </style>
 </head>
 <body>
-  <header>Allstate CRM</header>
-  <div class="tabs" role="tablist">
-    <div role="tab" tabindex="0" aria-selected="true" class="tab active" onclick="showTab('leads')">Leads</div>
-    <div role="tab" tabindex="0" aria-selected="false" class="tab" onclick="showTab('calendar')">Schedule</div>
+  <header>
+    <div class="header-content">
+      <div class="logo">
+        <i class="fas fa-shield-alt"></i>
+        Allstate CRM
+      </div>
+      <div class="header-stats">
+        <div class="stat-item">
+          <i class="fas fa-users"></i>
+          <span id="totalLeads">0 Leads</span>
+        </div>
+        <div class="stat-item">
+          <i class="fas fa-calendar-check"></i>
+          <span id="upcomingAppts">0 Appointments</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('leads')">
+      <i class="fas fa-users"></i>
+      Leads
+    </div>
+    <div class="tab" onclick="showTab('calendar')">
+      <i class="fas fa-calendar-alt"></i>
+      Schedule
+    </div>
   </div>
 
   <main>
-    <section id="leads" class="content" role="tabpanel">
-      <button class="btn" style="margin-bottom:1rem;" onclick="showPopup()">+ Add Lead</button>
-      <div class="lead-list" id="leadList" aria-live="polite" aria-label="List of leads"></div>
+    <section id="leads" class="content">
+      <div class="leads-header">
+        <h1 class="leads-title">Lead Management</h1>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search leads..." oninput="filterLeads()">
+          </div>
+          <button class="btn btn-primary" onclick="showPopup()">
+            <i class="fas fa-plus"></i>
+            Add Lead
+          </button>
+        </div>
+      </div>
+      
+      <div class="lead-grid" id="leadGrid"></div>
+      
+      <div class="empty-state" id="emptyState" style="display: none;">
+        <i class="fas fa-user-plus"></i>
+        <h3>No leads yet</h3>
+        <p>Start by adding your first lead to get organized!</p>
+      </div>
     </section>
 
-    <section id="calendar" class="content" role="tabpanel" style="display:none;">
+    <section id="calendar" class="content" style="display: none;">
       <div id="calendarView"></div>
     </section>
   </main>
 
-  <div class="overlay" id="overlay" onclick="closePopup()" tabindex="-1" aria-hidden="true"></div>
+  <div class="overlay" id="overlay" onclick="closePopup()"></div>
 
-  <div class="popup" id="popup" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
-    <h2 id="popupTitle" style="margin-top:0; margin-bottom:1rem; color:#00338D; font-weight:700; font-size:1.4rem;">Lead Details</h2>
-    <input id="leadName" placeholder="Name" aria-label="Lead Name" />
-    <input id="leadPhone" placeholder="Phone" aria-label="Lead Phone" />
-    <textarea id="leadNotes" placeholder="Notes" aria-label="Lead Notes"></textarea>
-    <label for="leadTime" style="font-weight:600; color:#00338D; margin-bottom:0.3rem; display:block;">Appointment Time (optional):</label>
-    <input id="leadTime" type="datetime-local" aria-label="Appointment Time" />
-    <div class="popup-buttons">
-      <button class="btn" onclick="saveLead()">Save</button>
-      <button class="btn delete" id="deleteBtn" style="display:none;">Delete</button>
-      <button class="btn" onclick="closePopup()">Close</button>
+  <div class="popup" id="popup">
+    <div class="popup-header">
+      <h2 class="popup-title" id="popupTitle">Add New Lead</h2>
+      <button class="close-btn" onclick="closePopup()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <form id="leadForm">
+      <div class="form-group">
+        <label class="form-label" for="leadName">Full Name *</label>
+        <input class="form-input" id="leadName" type="text" placeholder="Enter full name" required>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="leadPhone">Phone Number</label>
+        <input class="form-input" id="leadPhone" type="tel" placeholder="(555) 123-4567">
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="leadNotes">Notes</label>
+        <textarea class="form-textarea" id="leadNotes" placeholder="Add any relevant information..."></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="leadTime">Appointment Date & Time</label>
+        <input class="form-input" id="leadTime" type="datetime-local">
+      </div>
+    </form>
+    
+    <div class="popup-actions">
+      <button class="btn btn-secondary" onclick="closePopup()">Cancel</button>
+      <button class="btn btn-danger" id="deleteBtn" style="display: none;" onclick="deleteLead()">
+        <i class="fas fa-trash"></i>
+        Delete
+      </button>
+      <button class="btn btn-primary" onclick="saveLead()">
+        <i class="fas fa-save"></i>
+        Save Lead
+      </button>
     </div>
   </div>
 
-  <div class="reminder-popup" id="reminderPopup" role="alert" aria-live="assertive"></div>
+  <div class="notification" id="notification">
+    <div class="notification-content">
+      <div class="notification-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <div class="notification-text">
+        <div class="notification-title">Success!</div>
+        <div class="notification-message">Lead has been saved successfully.</div>
+      </div>
+    </div>
+  </div>
 
-<script>
-  let leads = [];
+  <script>
+    let leads = [];
+    let currentEditIndex = null;
+    let calendar = null;
 
-  function showTab(tab) {
-    document.getElementById('leads').style.display = tab === 'leads' ? 'block' : 'none';
-    document.getElementById('calendar').style.display = tab === 'calendar' ? 'block' : 'none';
-    const tabs = document.querySelectorAll('.tab');
-    tabs.forEach(t => {
-      t.classList.remove('active');
-      t.setAttribute('aria-selected', 'false');
-    });
-    const activeTab = Array.from(tabs).find(t => t.textContent.toLowerCase() === tab);
-    if(activeTab) {
-      activeTab.classList.add('active');
-      activeTab.setAttribute('aria-selected', 'true');
-      activeTab.focus();
+    // Initialize the application
+    function init() {
+      loadLeads();
+      renderLeads();
+      updateStats();
+      initCalendar();
+      startReminderSystem();
     }
-  }
 
-  function showPopup(lead = null, index = null) {
-    document.getElementById('overlay').style.display = 'block';
-    const popup = document.getElementById('popup');
-    popup.style.display = 'block';
-    if (lead) {
-      document.getElementById('leadName').value = lead.name;
-      document.getElementById('leadPhone').value = lead.phone;
-      document.getElementById('leadNotes').value = lead.notes;
-      document.getElementById('leadTime').value = lead.time || '';
-      popup.dataset.index = index;
-      document.getElementById('deleteBtn').style.display = 'inline-block';
-    } else {
-      popup.dataset.index = '';
-      document.querySelectorAll('#popup input, #popup textarea').forEach(el => el.value = '');
-      document.getElementById('deleteBtn').style.display = 'none';
+    // Local storage functions
+    function saveLeads() {
+      // Note: In a real app, this would save to a database
+      // For demo purposes, we'll just keep in memory
     }
-    // Focus first input
-    setTimeout(() => document.getElementById('leadName').focus(), 100);
-  }
 
-  function closePopup() {
-    document.getElementById('overlay').style.display = 'none';
-    document.getElementById('popup').style.display = 'none';
-  }
-
-  function saveLead() {
-    const name = document.getElementById('leadName').value.trim();
-    if (!name) {
-      alert('Please enter a name.');
-      return;
+    function loadLeads() {
+      // Note: In a real app, this would load from a database
+      // For demo purposes, we'll start with some sample data
+      leads = [
+        {
+          name: "John Smith",
+          phone: "(555) 123-4567",
+          notes: "Interested in auto insurance. Current policy expires next month.",
+          time: "2025-06-15T10:00",
+          reminded: false
+        },
+        {
+          name: "Sarah Johnson",
+          phone: "(555) 987-6543",
+          notes: "Looking for home insurance quotes. New homeowner.",
+          time: "2025-06-16T14:30",
+          reminded: false
+        }
+      ];
     }
-    const phone = document.getElementById('leadPhone').value.trim();
-    const notes = document.getElementById('leadNotes').value.trim();
-    const time = document.getElementById('leadTime').value;
-    const index = document.getElementById('popup').dataset.index;
 
-    const lead = { name, phone, notes, time, reminded: false };
-
-    if (index) leads[index] = lead;
-    else leads.push(lead);
-
-    renderLeads();
-    closePopup();
-  }
-
-  function renderLeads() {
-    const list = document.getElementById('leadList');
-    list.innerHTML = '';
-    leads.forEach((lead, i) => {
-      const item = document.createElement('div');
-      item.className = 'lead-item';
-      item.textContent = lead.name;
-      item.setAttribute('tabindex', '0');
-      item.setAttribute('role', 'button');
-      item.setAttribute('aria-label', `View details for ${lead.name}`);
-      item.onclick = () => showPopup(lead, i);
-      item.onkeydown = (e) => { if(e.key === 'Enter' || e.key === ' ') showPopup(lead, i); };
-      list.appendChild(item);
-    });
-    renderCalendar();
-  }
-
-  // Delete button handler
-  document.getElementById('deleteBtn').addEventListener('click', () => {
-    const index = document.getElementById('popup').dataset.index;
-    if (index !== '') {
-      if (confirm('Delete this lead?')) {
-        leads.splice(index, 1);
-        closePopup();
-        renderLeads();
+    // Tab switching
+    function showTab(tabName) {
+      // Hide all content sections
+      document.getElementById('leads').style.display = 'none';
+      document.getElementById('calendar').style.display = 'none';
+      
+      // Show selected section
+      document.getElementById(tabName).style.display = 'block';
+      
+      // Update tab styles
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      // Refresh calendar if switching to it
+      if (tabName === 'calendar' && calendar) {
+        setTimeout(() => calendar.render(), 100);
       }
     }
-  });
 
-  // FullCalendar integration
-  let calendar;
+    // Lead management
+    function renderLeads() {
+      const grid = document.getElementById('leadGrid');
+      const emptyState = document.getElementById('emptyState');
+      
+      if (leads.length === 0) {
+        grid.style.display = 'none';
+        emptyState.style.display = 'block';
+        return;
+      }
+      
+      grid.style.display = 'grid';
+      emptyState.style.display = 'none';
+      
+      grid.innerHTML = leads.map((lead, index) => {
+        const hasAppointment = lead.time;
+        const appointmentDate = hasAppointment ? new Date(lead.time) : null;
+        
+        return `
+          <div class="lead-card" onclick="editLead(${index})">
+            <div class="lead-header">
+              <div>
+                <div class="lead-name">${lead.name}</div>
+                ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
+              </div>
+              <div class="lead-status">Active</div>
+            </div>
+            
+            ${lead.notes ? `<div class="lead-notes">${lead.notes}</div>` : ''}
+            
+            <div class="lead-footer">
+              ${hasAppointment ? `
+                <div class="lead-time">
+                  <i class="fas fa-clock"></i>
+                  ${appointmentDate.toLocaleDateString()} at ${appointmentDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                </div>
+              ` : `
+                <div class="lead-time">
+                  <i class="fas fa-calendar-plus"></i>
+                  No appointment scheduled
+                </div>
+              `}
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      updateCalendar();
+    }
 
-  function renderCalendar() {
-    const calendarEl = document.getElementById('calendarView');
-    calendarEl.innerHTML = '';
-    calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth',
-      height: 'auto',
-      headerToolbar: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay'
-      },
-      events: leads
+    function filterLeads() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      const filteredLeads = leads.filter(lead => 
+        lead.name.toLowerCase().includes(searchTerm) ||
+        lead.phone.includes(searchTerm) ||
+        lead.notes.toLowerCase().includes(searchTerm)
+      );
+      
+      const grid = document.getElementById('leadGrid');
+      grid.innerHTML = filteredLeads.map((lead, originalIndex) => {
+        const index = leads.indexOf(lead);
+        const hasAppointment = lead.time;
+        const appointmentDate = hasAppointment ? new Date(lead.time) : null;
+        
+        return `
+          <div class="lead-card" onclick="editLead(${index})">
+            <div class="lead-header">
+              <div>
+                <div class="lead-name">${lead.name}</div>
+                ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
+              </div>
+              <div class="lead-status">Active</div>
+            </div>
+            
+            ${lead.notes ? `<div class="lead-notes">${lead.notes}</div>` : ''}
+            
+            <div class="lead-footer">
+              ${hasAppointment ? `
+                <div class="lead-time">
+                  <i class="fas fa-clock"></i>
+                  ${appointmentDate.toLocaleDateString()} at ${appointmentDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                </div>
+              ` : `
+                <div class="lead-time">
+                  <i class="fas fa-calendar-plus"></i>
+                  No appointment scheduled
+                </div>
+              `}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function showPopup() {
+      currentEditIndex = null;
+      document.getElementById('popupTitle').textContent = 'Add New Lead';
+      document.getElementById('leadForm').reset();
+      document.getElementById('deleteBtn').style.display = 'none';
+      
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('popup').style.display = 'block';
+      
+      setTimeout(() => {
+        document.getElementById('leadName').focus();
+      }, 100);
+    }
+
+    function editLead(index) {
+      currentEditIndex = index;
+      const lead = leads[index];
+      
+      document.getElementById('popupTitle').textContent = 'Edit Lead';
+      document.getElementById('leadName').value = lead.name;
+      document.getElementById('leadPhone').value = lead.phone || '';
+      document.getElementById('leadNotes').value = lead.notes || '';
+      document.getElementById('leadTime').value = lead.time || '';
+      document.getElementById('deleteBtn').style.display = 'inline-flex';
+      
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('popup').style.display = 'block';
+      
+      setTimeout(() => {
+        document.getElementById('leadName').focus();
+      }, 100);
+    }
+
+    function closePopup() {
+      document.getElementById('overlay').style.display = 'none';
+      document.getElementById('popup').style.display = 'none';
+      currentEditIndex = null;
+    }
+
+    function saveLead() {
+      const name = document.getElementById('leadName').value.trim();
+      const phone = document.getElementById('leadPhone').value.trim();
+      const notes = document.getElementById('leadNotes').value.trim();
+      const time = document.getElementById('leadTime').value;
+      
+      if (!name) {
+        showNotification('Please enter a name for the lead.', 'warning');
+        return;
+      }
+      
+      const lead = {
+        name,
+        phone,
+        notes,
+        time,
+        reminded: false
+      };
+      
+      if (currentEditIndex !== null) {
+        leads[currentEditIndex] = lead;
+        showNotification('Lead updated successfully!', 'success');
+      } else {
+        leads.push(lead);
+        showNotification('New lead added successfully!', 'success');
+      }
+      
+      saveLeads();
+      renderLeads();
+      updateStats();
+      closePopup();
+    }
+
+    function deleteLead() {
+      if (currentEditIndex !== null) {
+        if (confirm('Are you sure you want to delete this lead?')) {
+          leads.splice(currentEditIndex, 1);
+          saveLeads();
+          renderLeads();
+          updateStats();
+          closePopup();
+          showNotification('Lead deleted successfully!', 'success');
+        }
+      }
+    }
+
+    // Calendar functionality
+    function initCalendar() {
+      const calendarEl = document.getElementById('calendarView');
+      
+      calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        height: 'auto',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        events: [],
+        eventClick: function(info) {
+          const leadName = info.event.title;
+          const leadIndex = leads.findIndex(lead => 
+            lead.name === leadName && lead.time === info.event.startStr
+          );
+          if (leadIndex !== -1) {
+            editLead(leadIndex);
+          }
+        },
+        eventDidMount: function(info) {
+          info.el.style.cursor = 'pointer';
+        }
+      });
+      
+      calendar.render();
+      updateCalendar();
+    }
+
+    function updateCalendar() {
+      if (!calendar) return;
+      
+      const events = leads
         .filter(lead => lead.time)
         .map(lead => ({
           title: lead.name,
           start: lead.time,
-          extendedProps: { notes: lead.notes, phone: lead.phone }
-        })),
-      eventClick: function(info) {
-        // Find lead by name and time, then show popup
-        const event = info.event;
-        const lead = leads.find(l => l.name === event.title && l.time === event.startStr);
-        if(lead) {
-          showPopup(lead, leads.indexOf(lead));
-          showTab('leads');
-        }
-      },
-    });
-    calendar.render();
-  }
+          description: lead.notes,
+          backgroundColor: getEventColor(lead),
+          borderColor: getEventColor(lead)
+        }));
+      
+      calendar.removeAllEvents();
+      calendar.addEventSource(events);
+    }
 
-  // Reminder popup every minute
-  setInterval(() => {
-    const now = new Date().toISOString();
-    leads.forEach(lead => {
-      if (lead.time && !lead.reminded && now >= lead.time) {
-        const popup = document.getElementById('reminderPopup');
-        popup.innerText = `Reminder: Appointment with ${lead.name} at ${new Date(lead.time).toLocaleString()}`;
-        popup.style.display = 'block';
-        setTimeout(() => { popup.style.display = 'none'; }, 6000);
-        lead.reminded = true;
+    function getEventColor(lead) {
+      const now = new Date();
+      const appointmentTime = new Date(lead.time);
+      
+      if (appointmentTime < now) {
+        return '#6b7280'; // Past appointments - gray
+      } else if (appointmentTime - now < 24 * 60 * 60 * 1000) {
+        return '#f59e0b'; // Within 24 hours - yellow
+      } else {
+        return '#0072CE'; // Future appointments - blue
+      }
+    }
+
+    // Statistics and updates
+    function updateStats() {
+      const totalLeads = leads.length;
+      const upcomingAppts = leads.filter(lead => {
+        if (!lead.time) return false;
+        const appointmentTime = new Date(lead.time);
+        const now = new Date();
+        return appointmentTime > now;
+      }).length;
+      
+      document.getElementById('totalLeads').textContent = `${totalLeads} Lead${totalLeads !== 1 ? 's' : ''}`;
+      document.getElementById('upcomingAppts').textContent = `${upcomingAppts} Appointment${upcomingAppts !== 1 ? 's' : ''}`;
+    }
+
+    // Notification system
+    function showNotification(message, type = 'success') {
+      const notification = document.getElementById('notification');
+      const icon = notification.querySelector('.notification-icon i');
+      const title = notification.querySelector('.notification-title');
+      const messageEl = notification.querySelector('.notification-message');
+      
+      // Reset classes
+      notification.className = 'notification';
+      notification.classList.add(type);
+      
+      // Update content
+      if (type === 'success') {
+        icon.className = 'fas fa-check-circle';
+        title.textContent = 'Success!';
+      } else if (type === 'warning') {
+        icon.className = 'fas fa-exclamation-triangle';
+        title.textContent = 'Warning!';
+      } else if (type === 'error') {
+        icon.className = 'fas fa-times-circle';
+        title.textContent = 'Error!';
+      }
+      
+      messageEl.textContent = message;
+      
+      // Show notification
+      notification.style.display = 'block';
+      
+      // Hide after 4 seconds
+      setTimeout(() => {
+        notification.style.display = 'none';
+      }, 4000);
+    }
+
+    // Reminder system
+    function startReminderSystem() {
+      setInterval(checkReminders, 60000); // Check every minute
+    }
+
+    function checkReminders() {
+      const now = new Date();
+      const reminderThreshold = 15 * 60 * 1000; // 15 minutes in milliseconds
+      
+      leads.forEach(lead => {
+        if (lead.time && !lead.reminded) {
+          const appointmentTime = new Date(lead.time);
+          const timeDiff = appointmentTime - now;
+          
+          // Show reminder if appointment is within 15 minutes
+          if (timeDiff > 0 && timeDiff <= reminderThreshold) {
+            showNotification(
+              `Upcoming appointment with ${lead.name} at ${appointmentTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`,
+              'warning'
+            );
+            lead.reminded = true;
+            saveLeads();
+          }
+        }
+      });
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+      // Escape key to close popup
+      if (e.key === 'Escape') {
+        closePopup();
+      }
+      
+      // Ctrl/Cmd + N for new lead
+      if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+        e.preventDefault();
+        showPopup();
+      }
+      
+      // Enter key to save when popup is open
+      if (e.key === 'Enter' && document.getElementById('popup').style.display === 'block') {
+        if (e.target.tagName !== 'TEXTAREA') {
+          e.preventDefault();
+          saveLead();
+        }
       }
     });
-  }, 60000);
 
-  // Initial render
-  renderLeads();
-</script>
+    // Form validation
+    document.getElementById('leadName').addEventListener('input', function() {
+      const value = this.value.trim();
+      if (value.length < 2) {
+        this.style.borderColor = '#ef4444';
+      } else {
+        this.style.borderColor = '#e2e8f0';
+      }
+    });
+
+    // Phone number formatting
+    document.getElementById('leadPhone').addEventListener('input', function() {
+      let value = this.value.replace(/\D/g, '');
+      if (value.length >= 6) {
+        value = value.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+      } else if (value.length >= 3) {
+        value = value.replace(/(\d{3})(\d{0,3})/, '($1) $2');
+      }
+      this.value = value;
+    });
+
+    // Auto-save draft functionality
+    let draftTimer;
+    function saveDraft() {
+      const draft = {
+        name: document.getElementById('leadName').value,
+        phone: document.getElementById('leadPhone').value,
+        notes: document.getElementById('leadNotes').value,
+        time: document.getElementById('leadTime').value
+      };
+      
+      // In a real app, this would save to localStorage or server
+      console.log('Draft saved:', draft);
+    }
+
+    ['leadName', 'leadPhone', 'leadNotes', 'leadTime'].forEach(id => {
+      document.getElementById(id).addEventListener('input', function() {
+        clearTimeout(draftTimer);
+        draftTimer = setTimeout(saveDraft, 1000); // Save draft after 1 second of inactivity
+      });
+    });
+
+    // Initialize the application when the page loads
+    document.addEventListener('DOMContentLoaded', init);
+
+    // Add some sample interactions for demo
+    setTimeout(() => {
+      if (leads.length > 0) {
+        updateStats();
+      }
+    }, 1000);
+  </script>
 </body>
 </html>
