@@ -5,242 +5,203 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Allstate CRM</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    * {
-      box-sizing: border-box;
+  <script defer>
+    let leads = [];
+
+    function addLead() {
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+      const notes = document.getElementById('notes').value;
+      const appointment = document.getElementById('appointment').value;
+
+      if (!name || !phone) {
+        alert('Please fill out name and phone.');
+        return;
+      }
+
+      const lead = {
+        name,
+        phone,
+        notes,
+        appointment,
+        id: Date.now()
+      };
+
+      leads.push(lead);
+      renderLeads();
+      showReminderPopup(lead);
+      clearForm();
     }
+
+    function clearForm() {
+      document.getElementById('name').value = '';
+      document.getElementById('phone').value = '';
+      document.getElementById('notes').value = '';
+      document.getElementById('appointment').value = '';
+    }
+
+    function deleteLead(id) {
+      leads = leads.filter(lead => lead.id !== id);
+      renderLeads();
+    }
+
+    function showReminderPopup(lead) {
+      const popup = document.getElementById('reminderPopup');
+      popup.innerHTML = `<strong>Reminder:</strong> Follow up with ${lead.name} at ${lead.phone} on ${lead.appointment}`;
+      popup.style.display = 'block';
+      setTimeout(() => popup.style.display = 'none', 5000);
+    }
+
+    function showLeadPopup(id) {
+      const lead = leads.find(l => l.id === id);
+      const modal = document.getElementById('leadModal');
+      const content = document.getElementById('leadModalContent');
+      content.innerHTML = `
+        <h3>${lead.name}</h3>
+        <p><strong>Phone:</strong> ${lead.phone}</p>
+        <p><strong>Appointment:</strong> ${lead.appointment || 'None'}</p>
+        <p><strong>Notes:</strong> ${lead.notes}</p>
+        <button onclick="deleteLead(${lead.id}); closeModal()">Delete Lead</button>
+        <button onclick="closeModal()">Close</button>
+      `;
+      modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('leadModal').style.display = 'none';
+    }
+
+    function renderLeads() {
+      const container = document.getElementById('leadList');
+      container.innerHTML = '';
+      leads.forEach(lead => {
+        const div = document.createElement('div');
+        div.className = 'leadButton';
+        div.innerText = lead.name;
+        div.onclick = () => showLeadPopup(lead.id);
+        container.appendChild(div);
+      });
+    }
+  </script>
+  <style>
     body {
-      margin: 0;
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #e6efff, #ffffff);
-      color: #00338d;
+      margin: 0;
+      background: linear-gradient(to right, #003399, #0079c1);
+      color: #fff;
     }
     header {
-      background: #00338d;
-      color: white;
-      padding: 1.5rem;
+      background: #001f5f;
+      padding: 1rem;
       text-align: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      font-size: 1.5rem;
     }
     nav {
+      background: #0047ab;
       display: flex;
       justify-content: space-around;
-      background: #0072ce;
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      padding: 0.5rem;
     }
-    nav button {
-      flex: 1;
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .container {
       padding: 1rem;
-      background: transparent;
-      border: none;
-      color: white;
-      font-size: 1rem;
-      font-weight: 600;
-      transition: background 0.3s;
     }
-    nav button.active, nav button:hover {
-      background: #0056a3;
-    }
-    section {
-      display: none;
-      padding: 2rem 1rem;
-      max-width: 800px;
-      margin: auto;
-      animation: fadeIn 0.3s ease-in-out;
-    }
-    section.active {
-      display: block;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .form-group {
-      margin-bottom: 1.5rem;
-    }
-    input, textarea, button, select {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1rem;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-      transition: all 0.2s;
-    }
-    input:focus, textarea:focus, select:focus {
-      border-color: #0072ce;
-      outline: none;
-    }
-    button {
-      background: #0072ce;
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .lead-card {
-      background: white;
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
       margin-bottom: 1rem;
-      padding: 1.5rem;
-      border-left: 5px solid #0072ce;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
     }
-    .calendar {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 0.75rem;
-      margin-top: 1rem;
+    .form input, .form textarea {
+      padding: 0.5rem;
+      border: none;
+      border-radius: 8px;
     }
-    .day {
-      padding: 1rem;
+    .form button {
+      background: #ffcc00;
+      color: #003399;
+      padding: 0.5rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+    .leadButton {
       background: white;
+      color: #003399;
+      padding: 1rem;
+      border-radius: 1rem;
+      margin-bottom: 0.5rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      cursor: pointer;
+      font-weight: bold;
       text-align: center;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    #reminderPopup {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #fff;
+      color: #003399;
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      display: none;
+      z-index: 9999;
+    }
+    #leadModal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+    #leadModalContent {
+      background: white;
+      color: #003399;
+      padding: 2rem;
+      border-radius: 1rem;
+      max-width: 90%;
+      text-align: center;
     }
     @media (max-width: 600px) {
-      .calendar {
-        grid-template-columns: repeat(2, 1fr);
+      nav {
+        flex-direction: column;
       }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Allstate Lead Manager</h1>
-  </header>
+  <header>Allstate CRM</header>
   <nav>
-    <button id="leadsTab" class="active">Leads</button>
-    <button id="scheduleTab">Schedule</button>
+    <a href="#leads">Leads</a>
+    <a href="#schedule">Schedule</a>
   </nav>
-
-  <section id="leadsSection" class="active">
-    <h2>Add New Lead</h2>
-    <div class="form-group">
-      <input type="text" id="name" placeholder="Full Name" />
-    </div>
-    <div class="form-group">
-      <input type="tel" id="phone" placeholder="Phone Number" />
-    </div>
-    <div class="form-group">
-      <input type="email" id="email" placeholder="Email" />
-    </div>
-    <div class="form-group">
-      <select id="status">
-        <option value="New">New</option>
-        <option value="Follow-up">Follow-up</option>
-        <option value="Quoted">Quoted</option>
-        <option value="Closed">Closed</option>
-      </select>
-    </div>
-    <div class="form-group">
+  <div class="container" id="leads">
+    <div class="form">
+      <input type="text" id="name" placeholder="Lead Name" />
+      <input type="text" id="phone" placeholder="Phone Number" />
+      <input type="datetime-local" id="appointment" placeholder="Appointment Time" />
       <textarea id="notes" placeholder="Notes"></textarea>
+      <button onclick="addLead()">Add Lead</button>
     </div>
-    <div class="form-group">
-      <input type="date" id="reminderDate" />
-    </div>
-    <button onclick="addLead()">Save Lead</button>
-
-    <h2 style="margin-top: 2rem;">Lead List</h2>
     <div id="leadList"></div>
-  </section>
-
-  <section id="scheduleSection">
-    <h2>Follow-Up Calendar</h2>
-    <div class="calendar" id="calendar"></div>
-  </section>
-
-  <script>
-    const leadsTab = document.getElementById("leadsTab");
-    const scheduleTab = document.getElementById("scheduleTab");
-    const leadsSection = document.getElementById("leadsSection");
-    const scheduleSection = document.getElementById("scheduleSection");
-
-    leadsTab.onclick = () => {
-      leadsTab.classList.add("active");
-      scheduleTab.classList.remove("active");
-      leadsSection.classList.add("active");
-      scheduleSection.classList.remove("active");
-    };
-
-    scheduleTab.onclick = () => {
-      scheduleTab.classList.add("active");
-      leadsTab.classList.remove("active");
-      scheduleSection.classList.add("active");
-      leadsSection.classList.remove("active");
-    };
-
-    function addLead() {
-      const name = document.getElementById("name").value;
-      const phone = document.getElementById("phone").value;
-      const email = document.getElementById("email").value;
-      const status = document.getElementById("status").value;
-      const notes = document.getElementById("notes").value;
-      const reminder = document.getElementById("reminderDate").value;
-
-      const lead = { name, phone, email, status, notes, reminder };
-      let leads = JSON.parse(localStorage.getItem("leads")) || [];
-      leads.push(lead);
-      localStorage.setItem("leads", JSON.stringify(leads));
-
-      document.getElementById("name").value = "";
-      document.getElementById("phone").value = "";
-      document.getElementById("email").value = "";
-      document.getElementById("status").value = "New";
-      document.getElementById("notes").value = "";
-      document.getElementById("reminderDate").value = "";
-
-      showLeads();
-      showCalendar();
-    }
-
-    function showLeads() {
-      const leads = JSON.parse(localStorage.getItem("leads")) || [];
-      const list = document.getElementById("leadList");
-      list.innerHTML = "";
-      leads.forEach((lead, i) => {
-        const div = document.createElement("div");
-        div.className = "lead-card";
-        div.innerHTML = `
-          <strong>${lead.name}</strong><br>
-          📞 ${lead.phone}<br>
-          📧 ${lead.email}<br>
-          📋 Status: ${lead.status}<br>
-          📝 ${lead.notes}<br>
-          ⏰ Reminder: ${lead.reminder || "None"}<br>
-        `;
-        list.appendChild(div);
-      });
-    }
-
-    function showCalendar() {
-      const calendar = document.getElementById("calendar");
-      calendar.innerHTML = "";
-      const leads = JSON.parse(localStorage.getItem("leads")) || [];
-      const dates = {};
-      leads.forEach(lead => {
-        if (lead.reminder) {
-          if (!dates[lead.reminder]) dates[lead.reminder] = [];
-          dates[lead.reminder].push(lead.name);
-        }
-      });
-      const today = new Date();
-      for (let i = 0; i < 30; i++) {
-        const date = new Date();
-        date.setDate(today.getDate() + i);
-        const str = date.toISOString().split('T')[0];
-        const div = document.createElement("div");
-        div.className = "day";
-        div.innerHTML = `<strong>${str}</strong><br>${dates[str]?.join("<br>") || "No events"}`;
-        calendar.appendChild(div);
-      }
-    }
-
-    showLeads();
-    showCalendar();
-  </script>
+  </div>
+  <div class="container" id="schedule">
+    <h2>Schedule</h2>
+    <p>Appointments will appear when added to leads.</p>
+  </div>
+  <div id="reminderPopup"></div>
+  <div id="leadModal">
+    <div id="leadModalContent"></div>
+  </div>
 </body>
 </html>
