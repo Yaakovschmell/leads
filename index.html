@@ -804,12 +804,30 @@
       </button>
     </div>
     
-    <form id="leadForm">
-      <div class="form-group" id="leadNameGroup">
-        <label class="form-label" for="leadName">Full Name *</label>
-        <input class="form-input" id="leadName" type="text" placeholder="Enter full name" required>
-      </div>
-      
+   <form id="leadForm" class="mt-4">
+  <div class="mb-3">
+    <label for="name" class="form-label">Name</label>
+    <input type="text" class="form-control" id="name" placeholder="Enter your name" required>
+  </div>
+  <div class="mb-3">
+    <label for="phone" class="form-label">Phone Number</label>
+    <input type="tel" class="form-control" id="phone" placeholder="Enter your phone number" required>
+  </div>
+  <!-- New Subject Field -->
+  <div class="mb-3">
+    <label for="subject" class="form-label">Appointment Subject</label>
+    <input type="text" class="form-control" id="subject" placeholder="Enter the reason for the appointment" required>
+  </div>
+  <div class="mb-3">
+    <label for="date" class="form-label">Preferred Date</label>
+    <input type="date" class="form-control" id="date" required>
+  </div>
+  <div class="mb-3">
+    <label for="time" class="form-label">Preferred Time</label>
+    <input type="time" class="form-control" id="time" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
       <div class="form-group" id="leadPhoneGroup">
         <label class="form-label" for="leadPhone">Phone Number</label>
         <input class="form-input" id="leadPhone" type="tel" placeholder="(555) 123-4567">
