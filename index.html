@@ -7,6 +7,9 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.css" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <!-- Flatpickr for DOB calendar popup -->
+  <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <style>
     /* Fallback for missing icons */
     .fas::before, .fa::before {
@@ -500,6 +503,29 @@
       margin-top: 2rem;
     }
 
+    /* DOB input with calendar icon */
+    .date-input-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .date-input-container input {
+      padding-right: 2.5rem; /* Space for icon */
+    }
+
+    .date-input-container i {
+      position: absolute;
+      right: 1rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .date-input-container i:hover {
+      color: var(--primary);
+    }
+
     #calendarView {
       background: var(--bg-primary);
       border-radius: var(--radius);
@@ -796,7 +822,10 @@
       
       <div class="form-group" id="leadDobGroup">
         <label class="form-label" for="leadDob">Date of Birth</label>
-        <input class="form-input" id="leadDob" type="date">
+        <div class="date-input-container">
+          <input class="form-input" id="leadDob" type="text" placeholder="MM-DD-YYYY or January 1, 1990">
+          <i class="fas fa-calendar-alt"></i>
+        </div>
       </div>
       
       <div class="form-group" id="leadNotesGroup">
@@ -852,12 +881,14 @@
     let currentEditTemplateIndex = null;
     let currentPopupMode = 'lead';
     let calendar = null;
+    let dobPicker = null;
 
     function init() {
       try {
         console.log('Initializing app...');
         loadLeads();
         loadTemplates();
+        initDatePicker();
         renderLeads();
         renderTemplates();
         updateStats();
@@ -866,6 +897,34 @@
       } catch (error) {
         console.error('Initialization error:', error);
         showNotification('warning', 'Error', 'Failed to initialize app. Please refresh.');
+      }
+    }
+
+    function initDatePicker() {
+      try {
+        dobPicker = flatpickr('#leadDob', {
+          dateFormat: 'Y-m-d',
+          altInput: true,
+          altFormat: 'F j, Y',
+          allowInput: true,
+          maxDate: new Date(), // Prevent future DOBs
+          parseDate: (datestr, format) => {
+            return new Date(datestr); // Fallback parsing
+          },
+          onOpen: function() {
+            console.log('DOB date picker opened');
+          },
+          onChange: function(selectedDates, dateStr) {
+            console.log('DOB selected:', dateStr);
+          }
+        });
+        // Trigger picker on calendar icon click
+        document.querySelector('#leadDobGroup .fa-calendar-alt').addEventListener('click', () => {
+          dobPicker.open();
+        });
+      } catch (error) {
+        console.error('Error initializing date picker:', error);
+        showNotification('warning', 'Error', 'Failed to initialize date picker.');
       }
     }
 
@@ -878,6 +937,7 @@
           if (!lead || typeof lead !== 'object') return false;
           if (!lead.name || typeof lead.name !== 'string') return false;
           if (lead.time && isNaN(new Date(lead.time).getTime())) return false;
+          if (lead.dob && isNaN(new Date(lead.dob).getTime())) return false;
           return true;
         });
         localStorage.setItem('leads', JSON.stringify(leads));
@@ -952,6 +1012,7 @@
         document.getElementById('overlay').style.display = 'block';
         document.getElementById('popup').style.display = 'block';
         document.getElementById('leadForm').reset();
+        if (dobPicker) dobPicker.clear();
 
         document.getElementById('leadNameGroup').style.display = mode === 'lead' ? 'block' : 'none';
         document.getElementById('leadPhoneGroup').style.display = mode === 'lead' ? 'block' : 'none';
@@ -984,6 +1045,7 @@
         currentEditIndex = null;
         currentEditTemplateIndex = null;
         currentPopupMode = 'lead';
+        if (dobPicker) dobPicker.clear();
       } catch (error) {
         console.error('Error closing popup:', error);
       }
@@ -994,12 +1056,19 @@
       return !phone || pattern.test(phone.replace(/\D/g, ''));
     }
 
+    function validateDate(dateStr) {
+      if (!dateStr) return true; // Allow empty DOB
+      const date = new Date(dateStr);
+      return !isNaN(date.getTime()) && date <= new Date(); // Valid date, not in future
+    }
+
     function saveItem() {
       try {
         if (currentPopupMode === 'lead') {
           const name = document.getElementById('leadName').value.trim();
           const phone = document.getElementById('leadPhone').value.trim();
           const email = document.getElementById('leadEmail').value.trim();
+          const dobRaw = document.getElementById('leadDob').value.trim();
           const notes = document.getElementById('leadNotes').value.trim();
           const time = document.getElementById('leadTime').value;
 
@@ -1018,11 +1087,21 @@
             return;
           }
 
+          let dob = null;
+          if (dobRaw) {
+            const parsedDate = dobPicker.parseDate(dobRaw);
+            if (!parsedDate || isNaN(parsedDate.getTime()) || parsedDate > new Date()) {
+              showNotification('warning', 'Error', 'Invalid date of birth. Use a valid past date.');
+              return;
+            }
+            dob = parsedDate.toISOString().split('T')[0]; // YYYY-MM-DD
+          }
+
           const lead = {
             name,
             phone,
             email,
-            dob: document.getElementById('leadDob').value || null,
+            dob,
             notes,
             time: time ? new Date(time).toISOString() : null,
             status: 'New'
@@ -1105,7 +1184,11 @@
         document.getElementById('leadName').value = lead.name;
         document.getElementById('leadPhone').value = lead.phone || '';
         document.getElementById('leadEmail').value = lead.email || '';
-        document.getElementById('leadDob').value = lead.dob || '';
+        if (lead.dob && dobPicker) {
+          dobPicker.setDate(lead.dob, true);
+        } else {
+          if (dobPicker) dobPicker.clear();
+        }
         document.getElementById('leadNotes').value = lead.notes || '';
         document.getElementById('leadTime').value = lead.time ? lead.time.slice(0, 16) : '';
         document.getElementById('popupTitle').textContent = 'Edit Lead';
