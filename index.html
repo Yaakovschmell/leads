@@ -94,13 +94,15 @@
     }
 
     .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-size: 1.5rem;
-      font-weight: 700;
-      letter-spacing: -0.025em;
-    }
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center content */
+  gap: 0.75rem;
+  font-size: 2rem; /* Increase text size (was 1.5rem) */
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin: 0 auto; /* Center block element */
+}
 
     .logo img {
       height: 64px;
@@ -589,10 +591,13 @@
 
     @media (max-width: 768px) {
       .header-content {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
-      }
+  display: flex;
+  flex-direction: column; /* Stack vertically */
+  align-items: center; /* Center horizontally */
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+}
 
       .header-stats {
         justify-content: center;
