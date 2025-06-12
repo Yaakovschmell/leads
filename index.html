@@ -776,356 +776,368 @@
   </div>
 
   <script>
-    let leads = [];
-    let currentEditIndex = null;
-    let calendar = null;
+  let leads = [];
+  let currentEditIndex = null;
+</ let calendar = null;
 
-    function init() {
-      console.log('Initializing app...');
-      loadLeads();
+  function init() {
+    console.log('Initializing app...');
+    loadLeads();
+    renderLeads();
+    updateStats();
+    initCalendar();
+    startReminderSystem();
+  }
+
+  function loadLeads() {
+    try {
+      const savedLeads = localStorage.getItem('leads');
+      leads = savedLeads ? JSON.parse(savedLeads) : [];
+      if (!Array.isArray(leads)) leads = [];
+      localStorage.setItem('leads', JSON.stringify(leads));
+      console.log('Loaded leads:', leads.length);
+    } catch (error) {
+      console.error('Error loading leads:', error);
+      leads = [];
+      localStorage.setItem('leads', JSON.stringify(leads));
+      showNotification('warning', 'Error', 'Failed to load leads.');
+    }
+  }
+
+  function saveLeads() {
+    try {
+      localStorage.setItem('leads', JSON.stringify(leads));
+      console.log('Saved leads:', leads.length);
+    } catch (error) {
+      console.error('Error saving leads:', error);
+      showNotification('warning', 'Error', 'Failed to save leads.');
+    }
+  }
+
+  function showTab(tab) {
+    try {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.content').forEach(c => c.style.display = 'none');
+      document.querySelector(`[onclick="showTab('${tab}')"]`).classList.add('active');
+      document.getElementById(tab).style.display = 'block';
+      if (tab === 'calendar' && calendar) calendar.render();
+    } catch (error) {
+      console.error('Error switching tab:', error);
+      showNotification('warning', 'Error', 'Failed to switch tab.');
+    }
+  }
+
+  function showPopup() {
+    try {
+      currentEditIndex = null;
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('popup').style.display = 'block';
+      document.getElementById('leadForm').reset();
+      document.getElementById('popupTitle').textContent = 'Add New Lead';
+      document.getElementById('deleteBtn').style.display = 'none';
+    } catch (error) {
+      console.error('Error showing popup:', error);
+      showNotification('warning', 'Error', 'Failed to show popup.');
+    }
+  }
+
+  function closePopup() {
+    try {
+      document.getElementById('overlay').style.display = 'none';
+      document.getElementById('popup').style.display = 'none';
+      currentEditIndex = null;
+    } catch (error) {
+      console.error('Error closing popup:', error);
+    }
+  }
+
+  function validatePhone(phone) {
+    const pattern = /^[0-9]{10}$/;
+    return !phone || pattern.test(phone.replace(/\D/g, ''));
+  }
+
+  function saveLead() {
+    try {
+      const name = document.getElementById('leadName').value.trim();
+      const phone = document.getElementById('leadPhone').value.trim();
+      const notes = document.getElementById('leadNotes').value.trim();
+      const time = document.getElementById('leadTime').value;
+
+      if (!name) {
+        showNotification('warning', 'Error', 'Name is required.');
+        return;
+      }
+
+      if (!validatePhone(phone)) {
+        showNotification('warning', 'Error', 'Invalid phone number. Use 10 digits.');
+        return;
+      }
+
+      const lead = {
+        name,
+        phone,
+        notes,
+        time: time ? new Date(time).toISOString() : null,
+        status: 'New'
+      };
+
+      if (currentEditIndex !== null) {
+        leads[currentEditIndex] = lead;
+      } else {
+        leads.push(lead);
+      }
+
+      saveLeads();
       renderLeads();
       updateStats();
-      initCalendar();
-      startReminderSystem();
+      if (calendar) calendar.refetchEvents();
+      closePopup();
+      showNotification('success', 'Success', 'Lead saved successfully.');
+    } catch (error) {
+      console.error('Error saving lead:', error);
+      showNotification('warning', 'Error', 'Failed to save lead.');
     }
+  }
 
-    function loadLeads() {
-      try {
-        const savedLeads = localStorage.getItem('leads');
-        leads = savedLeads ? JSON.parse(savedLeads) : [];
-        if (!Array.isArray(leads)) leads = [];
-        localStorage.setItem('leads', JSON.stringify(leads));
-        console.log('Loaded leads:', leads.length);
-      } catch (error) {
-        console.error('Error loading leads:', error);
-        leads = [];
-        localStorage.setItem('leads', JSON.stringify(leads));
-        showNotification('warning', 'Error', 'Failed to load leads.');
-      }
-    }
-
-    function saveLeads() {
-      try {
-        localStorage.setItem('leads', JSON.stringify(leads));
-        console.log('Saved leads:', leads.length);
-      } catch (error) {
-        console.error('Error saving leads:', error);
-        showNotification('warning', 'Error', 'Failed to save leads.');
-      }
-    }
-
-    function showTab(tab) {
-      try {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.content').forEach(c => c.style.display = 'none');
-        document.querySelector(`[onclick="showTab('${tab}')"]`).classList.add('active');
-        document.getElementById(tab).style.display = 'block';
-        if (tab === 'calendar' && calendar) calendar.render();
-      } catch (error) {
-        console.error('Error switching tab:', error);
-        showNotification('warning', 'Error', 'Failed to switch tab.');
-      }
-    }
-
-    function showPopup() {
-      try {
-        currentEditIndex = null;
-        document.getElementById('overlay').style.display = 'block';
-        document.getElementById('popup').style.display = 'block';
-        document.getElementById('leadForm').reset();
-        document.getElementById('popupTitle').textContent = 'Add New Lead';
-        document.getElementById('deleteBtn').style.display = 'none';
-      } catch (error) {
-        console.error('Error showing popup:', error);
-        showNotification('warning', 'Error', 'Failed to show popup.');
-      }
-    }
-
-    function closePopup() {
-      try {
-        document.getElementById('overlay').style.display = 'none';
-        document.getElementById('popup').style.display = 'none';
-        currentEditIndex = null;
-      } catch (error) {
-        console.error('Error closing popup:', error);
-      }
-    }
-
-    function validatePhone(phone) {
-      const pattern = /^[0-9]{10}$/;
-      return !phone || pattern.test(phone.replace(/\D/g, ''));
-    }
-
-    function saveLead() {
-      try {
-        const name = document.getElementById('leadName').value.trim();
-        const phone = document.getElementById('leadPhone').value.trim();
-        const notes = document.getElementById('leadNotes').value.trim();
-        const time = document.getElementById('leadTime').value;
-
-        if (!name) {
-          showNotification('warning', 'Error', 'Name is required.');
-          return;
-        }
-
-        if (!validatePhone(phone)) {
-          showNotification('warning', 'Error', 'Invalid phone number. Use 10 digits.');
-          return;
-        }
-
-        const lead = {
-          name,
-          phone,
-          notes,
-          time: time ? new Date(time).toISOString() : null,
-          status: 'New'
-        };
-
-        if (currentEditIndex !== null) {
-          leads[currentEditIndex] = lead;
-        } else {
-          leads.push(lead);
-        }
-
+  function deleteLead() {
+    try {
+      if (currentEditIndex !== null) {
+        leads.splice(currentEditIndex, 1);
         saveLeads();
         renderLeads();
         updateStats();
         if (calendar) calendar.refetchEvents();
         closePopup();
-        showNotification('success', 'Success', 'Lead saved successfully.');
-      } catch (error) {
-        console.error('Error saving lead:', error);
-        showNotification('warning', 'Error', 'Failed to save lead.');
+        showNotification('success', 'Success', 'Lead deleted successfully.');
       }
+    } catch (error) {
+      console.error('Error deleting lead:', error);
+      showNotification('warning', 'Error', 'Failed to delete lead.');
     }
+  }
 
-    function deleteLead() {
-      try {
-        if (currentEditIndex !== null) {
-          leads.splice(currentEditIndex, 1);
-          saveLeads();
-          renderLeads();
-          updateStats();
-          if (calendar) calendar.refetchEvents();
-          closePopup();
-          showNotification('success', 'Success', 'Lead deleted successfully.');
+  function editLead(index) {
+    try {
+      currentEditIndex = index;
+      const lead = leads[index];
+      document.getElementById('leadName').value = lead.name;
+      document.getElementById('leadPhone').value = lead.phone || '';
+      document.getElementById('leadNotes').value = lead.notes || '';
+      document.getElementById('leadTime').value = lead.time ? lead.time.slice(0, 16) : '';
+      document.getElementById('popupTitle').textContent = 'Edit Lead';
+      document.getElementById('deleteBtn').style.display = 'inline-flex';
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('popup').style.display = 'block';
+    } catch (error) {
+      console.error('Error editing lead:', error);
+      showNotification('warning', 'Error', 'Failed to edit lead.');
+    }
+  }
+
+  function renderLeads() {
+    try {
+      console.log('Rendering leads...');
+      const grid = document.getElementById('leadGrid');
+      const emptyState = document.getElementById('emptyState');
+      grid.innerHTML = '';
+
+      if (!leads || leads.length === 0) {
+        emptyState.style.display = 'block';
+        console.log('No leads, showing empty state');
+        return;
+      }
+
+      emptyState.style.display = 'none';
+
+      // Sort leads by appointment time (soonest first, null times last)
+      const sortedLeads = [...leads].sort((a, b) => {
+        if (!a.time && !b.time) return 0;
+        if (!a.time) return 1;
+        if (!b.time) return -1;
+        return new Date(a.time) - new Date(b.time);
+      });
+
+      sortedLeads.forEach((lead, index) => {
+        const originalIndex = leads.indexOf(lead);
+        const card = document.createElement('div');
+        card.className = 'lead-card';
+        card.onclick = () => editLead(originalIndex);
+        card.innerHTML = `
+          <div class="lead-header">
+            <div>
+              <div class="lead-name">${lead.name}</div>
+              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i>${lead.phone}</div>` : ''}
+            </div>
+            <div class="lead-status">${lead.status}</div>
+          </div>
+          ${lead.notes ? `<div class="lead-notes">${lead.notes}</div>` : ''}
+          <div class="lead-footer">
+            <div class="lead-time">
+              <i class="fas fa-clock"></i>
+              ${lead.time ? new Date(lead.time).toLocaleString() : 'No appointment'}
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+      console.log(`Rendered ${sortedLeads.length} leads, sorted by time`);
+    } catch (error) {
+      console.error('Error rendering leads:', error);
+      showNotification('warning', 'Error', 'Failed to render leads.');
+      document.getElementById('emptyState').style.display = 'block';
+    }
+  }
+
+  function filterLeads() {
+    try {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = leads.filter(lead => 
+        lead.name.toLowerCase().includes(search) || 
+        (lead.phone && lead.phone.includes(search))
+      );
+      const grid = document.getElementById('leadGrid');
+      const emptyState = document.getElementById('emptyState');
+      grid.innerHTML = '';
+
+      if (filtered.length === 0) {
+        emptyState.style.display = 'block';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+
+      // Sort filtered leads by time
+      const sortedFiltered = filtered.sort((a, b) => {
+        if (!a.time && !b.time) return 0;
+        if (!a.time) return 1;
+        if (!b.time) return -1;
+        return new Date(a.time) - new Date(b.time);
+      });
+
+      sortedFiltered.forEach(lead => {
+        const originalIndex = leads.indexOf(lead);
+        const card = document.createElement('div');
+        card.className = 'lead-card';
+        card.onclick = () => editLead(originalIndex);
+        card.innerHTML = `
+          <div class="lead-header">
+            <div>
+              <div class="lead-name">${lead.name}</div>
+              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i>${lead.phone}</div>` : ''}
+            </div>
+            <div class="lead-status">${lead.status}</div>
+          </div>
+          ${lead.notes ? `<div class="lead-notes">${lead.notes}</div>` : ''}
+          <div class="lead-footer">
+            <div class="lead-time">
+              <i class="fas fa-clock"></i>
+              ${lead.time ? new Date(lead.time).toLocaleString() : 'No appointment'}
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    } catch (error) {
+      console.error('Error filtering leads:', error);
+      showNotification('warning', 'Error', 'Failed to filter leads.');
+    }
+  }
+
+  function updateStats() {
+    try {
+      const total = leads.length;
+      const upcoming = leads.filter(lead => lead.time && new Date(lead.time) > new Date()).length;
+      document.getElementById('totalLeads').textContent = `${total} Leads`;
+      document.getElementById('upcomingAppts').textContent = `${upcoming} Appointments`;
+    } catch (error) {
+      console.error('Error updating stats:', error);
+    }
+  }
+
+  function initCalendar() {
+    try {
+      const calendarEl = document.getElementById('calendarView');
+      calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        editable: true,
+        events: function(fetchInfo, successCallback, failureCallback) {
+          try {
+            // Fetch the latest leads
+            const events = leads
+              .filter(lead => lead.time) // Only include leads with a time
+              .map((lead, index) => ({
+                title: lead.name,
+                start: lead.time,
+                extendedProps: { index }
+              }));
+            console.log('Fetched events for calendar:', events.length);
+            successCallback(events);
+          } catch (error) {
+            console.error('Error fetching calendar events:', error);
+            failureCallback(error);
+          }
+        },
+        eventClick: function(info) {
+          editLead(info.event.extendedProps.index);
+        },
+        eventDrop: function(info) {
+          try {
+            const index = info.event.extendedProps.index;
+            leads[index].time = info.event.start.toISOString();
+            console.log(`Dragged lead ${leads[index].name} to ${info.event.start}`);
+            saveLeads();
+            renderLeads();
+            updateStats();
+          } catch (error) {
+            console.error('Error handling event drop:', error);
+            showNotification('warning', 'Error', 'Failed to update schedule.');
+          }
         }
-      } catch (error) {
-        console.error('Error deleting lead:', error);
-        showNotification('warning', 'Error', 'Failed to delete lead.');
-      }
+      });
+      calendar.render();
+    } catch (error) {
+      console.error('Error initializing calendar:', error);
+      showNotification('warning', 'Error', 'Failed to load calendar.');
     }
+  }
 
-    function editLead(index) {
-      try {
-        currentEditIndex = index;
-        const lead = leads[index];
-        document.getElementById('leadName').value = lead.name;
-        document.getElementById('leadPhone').value = lead.phone || '';
-        document.getElementById('leadNotes').value = lead.notes || '';
-        document.getElementById('leadTime').value = lead.time ? lead.time.slice(0, 16) : '';
-        document.getElementById('popupTitle').textContent = 'Edit Lead';
-        document.getElementById('deleteBtn').style.display = 'inline-flex';
-        document.getElementById('overlay').style.display = 'block';
-        document.getElementById('popup').style.display = 'block';
-      } catch (error) {
-        console.error('Error editing lead:', error);
-        showNotification('warning', 'Error', 'Failed to edit lead.');
-      }
-    }
-
-    function renderLeads() {
-      try {
-        console.log('Rendering leads...');
-        const grid = document.getElementById('leadGrid');
-        const emptyState = document.getElementById('emptyState');
-        grid.innerHTML = '';
-
-        if (!leads || leads.length === 0) {
-          emptyState.style.display = 'block';
-          console.log('No leads, showing empty state');
-          return;
-        }
-
-        emptyState.style.display = 'none';
-
-        // Sort leads by appointment time (soonest first, null times last)
-        const sortedLeads = [...leads].sort((a, b) => {
-          if (!a.time && !b.time) return 0;
-          if (!a.time) return 1;
-          if (!b.time) return -1;
-          return new Date(a.time) - new Date(b.time);
-        });
-
-        sortedLeads.forEach((lead, index) => {
-          const originalIndex = leads.indexOf(lead);
-          const card = document.createElement('div');
-          card.className = 'lead-card';
-          card.onclick = () => editLead(originalIndex);
-          card.innerHTML = `
-            <div class="lead-header">
-              <div>
-                <div class="lead-name">${lead.name}</div>
-                ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i>${lead.phone}</div>` : ''}
-              </div>
-              <div class="lead-status">${lead.status}</div>
-            </div>
-            ${lead.notes ? `<div class="lead-notes">${lead.notes}</div>` : ''}
-            <div class="lead-footer">
-              <div class="lead-time">
-                <i class="fas fa-clock"></i>
-                ${lead.time ? new Date(lead.time).toLocaleString() : 'No appointment'}
-              </div>
-            </div>
-          `;
-          grid.appendChild(card);
-        });
-        console.log(`Rendered ${sortedLeads.length} leads, sorted by time`);
-      } catch (error) {
-        console.error('Error rendering leads:', error);
-        showNotification('warning', 'Error', 'Failed to render leads.');
-        document.getElementById('emptyState').style.display = 'block';
-      }
-    }
-
-    function filterLeads() {
-      try {
-        const search = document.getElementById('searchInput').value.toLowerCase();
-        const filtered = leads.filter(lead => 
-          lead.name.toLowerCase().includes(search) || 
-          (lead.phone && lead.phone.includes(search))
-        );
-        const grid = document.getElementById('leadGrid');
-        const emptyState = document.getElementById('emptyState');
-        grid.innerHTML = '';
-
-        if (filtered.length === 0) {
-          emptyState.style.display = 'block';
-          return;
-        }
-
-        emptyState.style.display = 'none';
-
-        // Sort filtered leads by time
-        const sortedFiltered = filtered.sort((a, b) => {
-          if (!a.time && !b.time) return 0;
-          if (!a.time) return 1;
-          if (!b.time) return -1;
-          return new Date(a.time) - new Date(b.time);
-        });
-
-        sortedFiltered.forEach(lead => {
-          const originalIndex = leads.indexOf(lead);
-          const card = document.createElement('div');
-          card.className = 'lead-card';
-          card.onclick = () => editLead(originalIndex);
-          card.innerHTML = `
-            <div class="lead-header">
-              <div>
-                <div class="lead-name">${lead.name}</div>
-                ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i>${lead.phone}</div>` : ''}
-              </div>
-              <div class="lead-status">${lead.status}</div>
-            </div>
-            ${lead.notes ? `<div class="lead-notes">${lead.notes}</div>` : ''}
-            <div class="lead-footer">
-              <div class="lead-time">
-                <i class="fas fa-clock"></i>
-                ${lead.time ? new Date(lead.time).toLocaleString() : 'No appointment'}
-              </div>
-            </div>
-          `;
-          grid.appendChild(card);
-        });
-      } catch (error) {
-        console.error('Error filtering leads:', error);
-        showNotification('warning', 'Error', 'Failed to filter leads.');
-      }
-    }
-
-    function updateStats() {
-      try {
-        const total = leads.length;
-        const upcoming = leads.filter(lead => lead.time && new Date(lead.time) > new Date()).length;
-        document.getElementById('totalLeads').textContent = `${total} Leads`;
-        document.getElementById('upcomingAppts').textContent = `${upcoming} Appointments`;
-      } catch (error) {
-        console.error('Error updating stats:', error);
-      }
-    }
-
-    function initCalendar() {
-      try {
-        const calendarEl = document.getElementById('calendarView');
-        calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: 'dayGridMonth',
-          editable: true, // Enable drag-and-drop
-          events: leads.map((lead, index) => ({
-            title: lead.name,
-            start: lead.time,
-            extendedProps: { index }
-          })),
-          eventClick: function(info) {
-            editLead(info.event.extendedProps.index);
-          },
-          eventDrop: function(info) {
-            try {
-              const index = info.event.extendedProps.index;
-              leads[index].time = info.event.start.toISOString();
-              console.log(`Dragged lead ${leads[index].name} to ${info.event.start}`);
+  function startReminderSystem() {
+    try {
+      setInterval(() => {
+        const now = new Date();
+        leads.forEach(lead => {
+          if (lead.time && !lead.reminderSent) {
+            const apptTime = new Date(lead.time);
+            const diff = (apptTime - now) / 1000 / 60; // Minutes
+            if (diff <= 60 && diff > 0) {
+              showNotification('warning', 'Reminder', `Appointment with ${lead.name} in ${Math.round(diff)} minutes.`);
+              lead.reminderSent = true;
               saveLeads();
-              renderLeads();
-              updateStats();
-            } catch (error) {
-              console.error('Error handling event drop:', error);
-              showNotification('warning', 'Error', 'Failed to update schedule.');
             }
           }
         });
-        calendar.render();
-      } catch (error) {
-        console.error('Error initializing calendar:', error);
-        showNotification('warning', 'Error', 'Failed to load calendar.');
-      }
+      }, 60000); // Check every minute
+    } catch (error) {
+      console.error('Error in reminder system:', error);
     }
+  }
 
-    function startReminderSystem() {
-      try {
-        setInterval(() => {
-          const now = new Date();
-          leads.forEach(lead => {
-            if (lead.time && !lead.reminderSent) {
-              const apptTime = new Date(lead.time);
-              const diff = (apptTime - now) / 1000 / 60; // Minutes
-              if (diff <= 60 && diff > 0) {
-                showNotification('warning', 'Reminder', `Appointment with ${lead.name} in ${Math.round(diff)} minutes.`);
-                lead.reminderSent = true;
-                saveLeads();
-              }
-            }
-          });
-        }, 60000); // Check every minute
-      } catch (error) {
-        console.error('Error in reminder system:', error);
-      }
+  function showNotification(type, title, message) {
+    try {
+      const notification = document.getElementById('notification');
+      notification.className = `notification ${type}`;
+      notification.querySelector('.notification-icon i').className = `fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}`;
+      notification.querySelector('.notification-title').textContent = title;
+      notification.querySelector('.notification-message').textContent = message;
+      notification.style.display = 'block';
+      setTimeout(() => notification.style.display = 'none', 3000);
+    } catch (error) {
+      console.error('Error showing notification:', error);
     }
+  }
 
-    function showNotification(type, title, message) {
-      try {
-        const notification = document.getElementById('notification');
-        notification.className = `notification ${type}`;
-        notification.querySelector('.notification-icon i').className = `fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}`;
-        notification.querySelector('.notification-title').textContent = title;
-        notification.querySelector('.notification-message').textContent = message;
-        notification.style.display = 'block';
-        setTimeout(() => notification.style.display = 'none', 3000);
-      } catch (error) {
-        console.error('Error showing notification:', error);
-      }
-    }
-
-    // Start the app
-    init();
-  </script>
+  // Start the app
+  init();
+</script>
 </body>
 </html>
