@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Allstate CRM - Enhanced</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/main.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/main.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allstate CRM</title>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
@@ -66,22 +66,19 @@
 
         .header-content {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
             max-width: 1200px;
             margin: 0 auto;
-            text-align: center;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 1rem;
             font-size: 2.25rem;
             font-weight: 700;
             letter-spacing: -0.025em;
-            margin-bottom: 1.5rem;
             animation: fadeInDown 1s ease-out;
         }
 
@@ -91,8 +88,8 @@
         }
 
         .logo img {
-            height: 72px;
-            width: 72px;
+            height: 40px;
+            width: 40px;
             border-radius: 50%;
             object-fit: cover;
             border: 3px solid rgba(255, 255, 255, 0.2);
@@ -103,9 +100,9 @@
             transform: scale(1.1) rotate(5deg);
         }
 
-        .header-stats {
+        .stats {
             display: flex;
-            gap: 3rem;
+            gap: 2rem;
             font-size: 0.95rem;
             opacity: 0.95;
             animation: fadeInUp 1s ease-out 0.3s both;
@@ -146,7 +143,6 @@
         }
 
         .tab {
-            position: relative;
             padding: 1.25rem 2rem;
             color: var(--text-secondary);
             font-weight: 500;
@@ -186,16 +182,14 @@
         }
 
         .content {
-            padding: 2.5rem;
             max-width: 1200px;
             margin: 2rem auto;
-            min-height: calc(100vh - 250px);
+            padding: 2rem;
             background: var(--bg-primary);
             border-radius: var(--radius);
             box-shadow: var(--shadow-md);
             border: 1px solid var(--border);
             position: relative;
-            overflow: hidden;
         }
 
         .content::before {
@@ -206,6 +200,65 @@
             right: 0;
             height: 4px;
             background: var(--gradient-2);
+        }
+
+        .leads-header, .templates-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .leads-title, .templates-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            position: relative;
+        }
+
+        .leads-title::after, .templates-title::after {
+            content: '';
+            position: absolute;
+            bottom: -1rem;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--gradient-2);
+            border-radius: 2px;
+        }
+
+        .search-box {
+            position: relative;
+            max-width: 350px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1.25rem 1rem 3rem;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            transition: all 0.3s;
+            background: var(--bg-secondary);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 85, 164, 0.1);
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 1.1rem;
         }
 
         .btn {
@@ -276,68 +329,9 @@
             transform: translateY(-2px);
         }
 
-        .leads-header, .templates-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .leads-title, .templates-title {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            position: relative;
-        }
-
-        .leads-title::after, .templates-title::after {
-            content: '';
-            position: absolute;
-            bottom: -1rem;
-            left: 0;
-            width: 60px;
-            height: 4px;
-            background: var(--gradient-2);
-            border-radius: 2px;
-        }
-
-        .search-box {
-            position: relative;
-            max-width: 350px;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 1rem 1.25rem 1rem 3rem;
-            border: 2px solid var(--border);
-            border-radius: var(--radius);
-            font-size: 0.875rem;
-            transition: all 0.3s;
-            background: var(--bg-secondary);
-        }
-
-        .search-box input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(0, 85, 164, 0.1);
-            background: white;
-            transform: translateY(-2px);
-        }
-
-        .search-box i {
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-        }
-
         .lead-grid, .template-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 2rem;
             margin-top: 2rem;
         }
@@ -347,7 +341,6 @@
             border-radius: var(--radius);
             padding: 2rem;
             box-shadow: var(--shadow-md);
-            cursor: pointer;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             border: 2px solid var(--border);
             position: relative;
@@ -374,45 +367,47 @@
             background: var(--gradient-3);
         }
 
-        .lead-header, .card-card {
-            display: var(--lead-card);
+        .lead-header, .template-header {
+            display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
-        .lead-card-title {
+        .lead-name, .template-name {
             font-size: 1.25rem;
-            font-weight: bold;
+            font-weight: 700;
             color: var(--text-primary);
             margin-bottom: 0.5rem;
         }
 
-        .lead-phone, .lead-card-email, .lead {
+        .lead-status {
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.2) 100%);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .lead-phone, .lead-email, .lead-dob {
             color: var(--text-secondary);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             display: flex;
             align-items: center;
-            gap: 1rem;
-            margin-top: 0.5rem;
-            padding: 0.25rem;
-        }
-
-        .lead-card .lead-phone i, .lead-card .lead-email i, .lead-card .lead-dob i {
-            color: #007bff;
-            font-size: 1rem;
-        }
-
-        .lead-card-status {
-            background-color: #e0f2fe;
-            color: 0.5rem #0284c7;
-            padding: 0.5rem;
-            border-radius: 0.25rem;
-            font-size: 1rem;
+            gap: 0.5rem;
             margin-top: 0.5rem;
         }
 
-        .lead-card-notes, .template-card-message {
+        .lead-phone i, .lead-email i, .lead-dob i {
+            color: var(--primary);
+            font-size: 1rem;
+        }
+
+        .lead-notes, .template-message {
             color: var(--text-secondary);
             font-size: 0.9rem;
             line-height: 1.6;
@@ -430,7 +425,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-top: 1.5rem;
+            padding-top: 1rem;
             border-top: 2px solid var(--border);
         }
 
@@ -522,11 +517,11 @@
             padding: 0.5rem;
             border-radius: 50%;
             transition: all 0.3s;
-            width: flex;
-            align-items: center;
-            display: 40px;
-            justify-content: center;
+            width: 40px;
             height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .close-btn:hover {
@@ -534,124 +529,132 @@
             color: var(--danger);
             transform: rotate(90deg);
         }
-        }
 
         .form-group {
             margin-bottom: 2rem;
         }
 
         .form-label {
+            display: block;
             font-weight: 600;
-            font-size: 0.9rem;
             color: var(--text-primary);
             margin-bottom: 0.75rem;
-            display: block;
+            font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .form-input, .form-group {
+        .form-input, .form-textarea {
             width: 100%;
-            padding: 1rem;
-            border-radius: 2px solid var(--border);
-            font-size: 1rem;
-            border: 0.25rem;
-            transition: all 0.25s;
-            font-family: var(--font-family);
-            background: inherit;
-        }
-        .form-input:focus, .form-group .form-textarea:focus {
-            background-color: white;
-            border-color: var(--primary);
-            border-color: var(--border-color);
-            box-shadow: 0 0 4px rgba(0,0.1, 0.1);
+            padding: 1rem 1.25rem;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            font-family: inherit;
+            background: var(--bg-secondary);
         }
 
-        .form-grouptextarea {
-            background: var(--background-color);
-            resize: none;
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 85, 164, 0.1);
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        .form-textarea {
+            resize: vertical;
             min-height: 120px;
         }
 
-        .date-date-container {
-            display: flex;
+        .date-input-container {
             position: relative;
+            display: flex;
             align-items: center;
         }
 
-        .date-date-container input {
-            padding-right: 2rem;
-            width: 100%;
+        .date-input-container input {
+            padding-right: 3rem;
         }
 
-        .date-date-container {
-            position: right;
-            right: absolute;
-            color: var(--text-primary);
+        .date-input-container i {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
             cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.25s;
+            font-size: 1.2rem;
+            transition: all 0.3s;
         }
 
-        .date-date-container:hover {
+        .date-input-container i:hover {
             color: var(--primary);
-            transform: scale(1.1);
+            transform: translateY(-50%) scale(1.2);
         }
 
         .popup-actions {
             display: flex;
-            gap: 2rem;
+            gap: 1.5rem;
             justify-content: flex-end;
             margin-top: 2rem;
-            padding-top: 1rem;
-            border-top: 2px solid var(--border-color);
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--border);
         }
 
-        #calendar-view {
-            background-color: var(--bg-white);
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: var(--shadow-sm);
-            border: var(--border-color);
+        #calendar {
+            background: var(--bg-primary);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            border: 2px solid var(--border);
         }
 
         .fc {
-            --fc-bg-event-color: var(--primary-color);
-            --fc-border-color: var(--border-color);
-            --fc-button-bg-color: var(--primary-color);
-            --fc-button-border-color: var(--primary-color-color);
-            --fc-button-hover-bg-color: var(--primary-dark-color);
-            --fc-button-hover-border-color: var(--primary-dark-color);
-            --fc-button-active-bg-color: var(--primary-color-dark);
+            --fc-border-color: var(--border);
+            --fc-button-bg-color: var(--primary);
+            --fc-button-border-color: var(--primary);
+            --fc-button-hover-bg-color: var(--primary-dark);
+            --fc-button-hover-border-color: var(--primary-dark);
+            --fc-button-active-bg-color: var(--primary-dark);
             --fc-button-active-border-color: var(--primary-dark);
             --fc-event-bg-color: var(--primary-light);
-            --fc-event-border-color: var(--primary-color);
+            --fc-event-border-color: var(--primary);
         }
 
         .fc-button {
-            border-radius: 5px !important;
-            font-weight: bold !important;
-            padding: 0.5rem 1rem !important;
+            border-radius: var(--radius) !important;
+            font-weight: 600 !important;
+            padding: 0.75rem 1.25rem !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
         }
 
         .fc-event {
-            border-radius: 5px !important;
-            font-weight: bold !important;
+            border-radius: 8px !important;
+            font-weight: 600 !important;
             cursor: move;
+            transition: all 0.3s ease !important;
+        }
+
+        .fc-event:hover {
+            transform: scale(1.05) !important;
+            box-shadow: var(--shadow-md) !important;
         }
 
         .notification {
-            position: none;
-            top: fixed;
-            right: 20px;
-            background-color: var(--bg-white);
-            color: var(--primary-color);
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: var(--shadow-sm);
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 1rem 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
             display: none;
             z-index: 1000;
-            transition: none;
+            transition: opacity 0.3s ease;
         }
     </style>
 </head>
@@ -663,12 +666,351 @@
                 <span>Allstate CRM</span>
             </div>
             <div class="stats">
-                <div class="stat-item"><i class="fas fa-users"></i> <span id="lead-count">0</span> Leads</span></div>
-                <div class="stat-item"><i class="fas fa-calendar"></i> <span id="event-count">0</span> Events</span>
-</div>
+                <div class="stat-item"><i class="fas fa-users"></i> <span id="leadCount">0</span> Leads</div>
+                <div class="stat-item"><i class="fas fa-calendar"></i> <span id="eventCount">0</span> Events</div>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <div class="tabs">
-            <div class="tab active" data-tab="#leads-tab"><i class="fas fa-users"></i> Leads</div>
-            <div class="tab" data-tab="#calendar-tab"><i class="fa
+    <div class="tabs">
+        <div class="tab active" data-tab="leads"><i class="fas fa-users"></i> Leads</div>
+        <div class="tab" data-tab="calendar"><i class="fas fa-calendar"></i> Calendar</div>
+        <div class="tab" data-tab="templates"><i class="fas fa-file-alt"></i> Templates</div>
+    </div>
+
+    <div class="content">
+        <div id="leads" class="tab-content">
+            <div class="leads-header">
+                <h2 class="leads-title">Leads</h2>
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search leads...">
+                </div>
+            </div>
+            <button class="btn btn-primary" id="addLeadBtn"><i class="fas fa-plus"></i> Add Lead</button>
+            <div class="lead-grid" id="leadGrid"></div>
+        </div>
+
+        <div id="calendar" class="tab-content" style="display: none;"></div>
+
+        <div id="templates" class="tab-content" style="display: none;">
+            <div class="templates-header">
+                <h2 class="templates-title">Templates</h2>
+                <button class="btn btn-primary" id="addTemplateBtn"><i class="fas fa-plus"></i> Add Template</button>
+            </div>
+            <div class="template-grid" id="templateGrid"></div>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <div class="popup" id="leadPopup">
+        <div class="popup-header">
+            <h2 class="popup-title">Add/Edit Lead</h2>
+            <button class="close-btn" onclick="closePopup('lead')"><i class="fas fa-times"></i></button>
+        </div>
+        <form id="leadForm">
+            <div class="form-group">
+                <label class="form-label" for="leadName">Name</label>
+                <input class="form-input" type="text" id="leadName" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="leadPhone">Phone</label>
+                <input class="form-input" type="tel" id="leadPhone">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="leadEmail">Email</label>
+                <input class="form-input" type="email" id="leadEmail">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="leadDob">Date of Birth</label>
+                <div class="date-input-container">
+                    <input class="form-input" type="text" id="leadDob">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="leadStatus">Status</label>
+                <select class="form-input" id="leadStatus">
+                    <option value="new">New</option>
+                    <option value="contacted">Contacted</option>
+                    <option value="qualified">Qualified</option>
+                    <option value="lost">Lost</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="leadNotes">Notes</label>
+                <textarea class="form-textarea" id="leadNotes" rows="4"></textarea>
+            </div>
+            <div class="popup-actions">
+                <button type="button" class="btn btn-secondary" onclick="closePopup('lead')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="popup" id="templatePopup">
+        <div class="popup-header">
+            <h2 class="popup-title">Add/Edit Template</h2>
+            <button class="close-btn" onclick="closePopup('template')"><i class="fas fa-times"></i></button>
+        </div>
+        <form id="templateForm">
+            <div class="form-group">
+                <label class="form-label" for="templateName">Template Name</label>
+                <input class="form-input" type="text" id="templateName" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="templateMessage">Message</label>
+                <textarea class="form-textarea" id="templateMessage" rows="6" required></textarea>
+            </div>
+            <div class="popup-actions">
+                <button type="button" class="btn btn-secondary" onclick="closePopup('template')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="notification" id="notification"></div>
+
+    <script>
+        let leads = JSON.parse(localStorage.getItem('leads')) || [];
+        let templates = JSON.parse(localStorage.getItem('templates')) || [];
+        let calendar;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeCalendar();
+            renderLeads();
+            renderTemplates();
+            updateStats();
+
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+                    tab.classList.add('active');
+                    document.getElementById(tab.dataset.tab).style.display = 'block';
+                });
+            });
+
+            document.getElementById('addLeadBtn').addEventListener('click', () => openLeadPopup());
+            document.getElementById('addTemplateBtn').addEventListener('click', () => openTemplatePopup());
+            document.getElementById('leadForm').addEventListener('submit', handleLeadSubmit);
+            document.getElementById('templateForm').addEventListener('submit', handleTemplateSubmit);
+            document.getElementById('searchInput').addEventListener('input', renderLeads);
+
+            flatpickr('#leadDob', {
+                dateFormat: 'Y-m-d',
+                allowInput: true
+            });
+        });
+
+        function initializeCalendar() {
+            const calendarEl = document.getElementById('calendar');
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                editable: true,
+                selectable: true,
+                events: leads.map(lead => ({
+                    id: lead.id,
+                    title: lead.name,
+                    start: lead.dob || new Date().toISOString().split('T')[0]
+                })),
+                dateClick: function(info) {
+                    openLeadPopup({ dob: info.dateStr });
+                },
+                eventClick: function(info) {
+                    const lead = leads.find(l => l.id == info.event.id);
+                    openLeadPopup(lead);
+                },
+                eventDrop: function(info) {
+                    const lead = leads.find(l => l.id == info.event.id);
+                    lead.dob = info.event.start.toISOString().split('T')[0];
+                    saveLeads();
+                }
+            });
+            calendar.render();
+        }
+
+        function openLeadPopup(lead = {}) {
+            const form = document.getElementById('leadForm');
+            form.dataset.id = lead.id || '';
+            document.getElementById('leadName').value = lead.name || '';
+            document.getElementById('leadPhone').value = lead.phone || '';
+            document.getElementById('leadEmail').value = lead.email || '';
+            document.getElementById('leadDob').value = lead.dob || '';
+            document.getElementById('leadStatus').value = lead.status || 'new';
+            document.getElementById('leadNotes').value = lead.notes || '';
+            showPopup('lead');
+        }
+
+        function openTemplatePopup(template = {}) {
+            const form = document.getElementById('templateForm');
+            form.dataset.id = template.id || '';
+            document.getElementById('templateName').value = template.name || '';
+            document.getElementById('templateMessage').value = template.message || '';
+            showPopup('template');
+        }
+
+        function showPopup(type) {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById(`${type}Popup`).style.display = 'block';
+        }
+
+        function closePopup(type) {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById(`${type}Popup`).style.display = 'none';
+        }
+
+        function handleLeadSubmit(e) {
+            e.preventDefault();
+            const form = e.target;
+            const id = form.dataset.id || Date.now();
+            const lead = {
+                id,
+                name: document.getElementById('leadName').value,
+                phone: document.getElementById('leadPhone').value,
+                email: document.getElementById('leadEmail').value,
+                dob: document.getElementById('leadDob').value,
+                status: document.getElementById('leadStatus').value,
+                notes: document.getElementById('leadNotes').value,
+                createdAt: new Date().toISOString()
+            };
+
+            if (form.dataset.id) {
+                const index = leads.findIndex(l => l.id == id);
+                leads[index] = lead;
+            } else {
+                leads.push(lead);
+            }
+
+            saveLeads();
+            renderLeads();
+            updateStats();
+            calendar.refetchEvents();
+            closePopup('lead');
+            showNotification('Lead saved successfully!');
+        }
+
+        function handleTemplateSubmit(e) {
+            e.preventDefault();
+            const form = e.target;
+            const id = form.dataset.id || Date.now();
+            const template = {
+                id,
+                name: document.getElementById('templateName').value,
+                message: document.getElementById('templateMessage').value
+            };
+
+            if (form.dataset.id) {
+                const index = templates.findIndex(t => t.id == id);
+                templates[index] = template;
+            } else {
+                templates.push(template);
+            }
+
+            saveTemplates();
+            renderTemplates();
+            closePopup('template');
+            showNotification('Template saved successfully!');
+        }
+
+        function renderLeads() {
+            const grid = document.getElementById('leadGrid');
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            grid.innerHTML = '';
+
+            const filteredLeads = leads.filter(lead =>
+                lead.name.toLowerCase().includes(search) ||
+                lead.phone.toLowerCase().includes(search) ||
+                lead.email.toLowerCase().includes(search)
+            );
+
+            filteredLeads.forEach(lead => {
+                const card = document.createElement('div');
+                card.className = 'lead-card';
+                card.innerHTML = `
+                    <div class="lead-header">
+                        <div>
+                            <div class="lead-name">${lead.name}</div>
+                            <div class="lead-status">${lead.status}</div>
+                        </div>
+                        <div>
+                            <button class="btn btn-secondary" onclick="openLeadPopup(${JSON.stringify(lead)})"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-danger" onclick="deleteLead(${lead.id})"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone || 'N/A'}</div>
+                    <div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email || 'N/A'}</div>
+                    <div class="lead-dob"><i class="fas fa-calendar-alt"></i> ${lead.dob || 'N/A'}</div>
+                    <div class="lead-notes">${lead.notes || 'No notes'}</div>
+                    <div class="lead-footer">
+                        <div class="lead-time"><i class="fas fa-clock"></i> ${new Date(lead.createdAt).toLocaleString()}</div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderTemplates() {
+            const grid = document.getElementById('templateGrid');
+            grid.innerHTML = '';
+
+            templates.forEach(template => {
+                const card = document.createElement('div');
+                card.className = 'template-card';
+                card.innerHTML = `
+                    <div class="template-header">
+                        <div class="template-name">${template.name}</div>
+                        <div>
+                            <button class="btn btn-secondary" onclick="openTemplatePopup(${JSON.stringify(template)})"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-danger" onclick="deleteTemplate(${template.id})"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="template-message">${template.message}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function deleteLead(id) {
+            if (confirm('Are you sure you want to delete this lead?')) {
+                leads = leads.filter(l => l.id != id);
+                saveLeads();
+                renderLeads();
+                updateStats();
+                calendar.refetchEvents();
+                showNotification('Lead deleted successfully!');
+            }
+        }
+
+        function deleteTemplate(id) {
+            if (confirm('Are you sure you want to delete this template?')) {
+                templates = templates.filter(t => t.id != id);
+                saveTemplates();
+                renderTemplates();
+                showNotification('Template deleted successfully!');
+            }
+        }
+
+        function saveLeads() {
+            localStorage.setItem('leads', JSON.stringify(leads));
+        }
+
+        function saveTemplates() {
+            localStorage.setItem('templates', JSON.stringify(templates));
+        }
+
+        function updateStats() {
+            document.getElementById('leadCount').textContent = leads.length;
+            document.getElementById('eventCount').textContent = leads.filter(l => l.dob).length;
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            setTimeout(() => notification.style.display = 'none', 3000);
+        }
+    </script>
+</body>
+</html>
