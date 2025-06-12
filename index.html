@@ -14,10 +14,10 @@
             background-color: #f4f6f9;
             margin: 0;
             padding: 20px;
-            border-top: 5px solid #007bff; /* Blue top border */
+            border-top: 5px solid #007bff;
         }
         .header-wrapper {
-            background-color: #007bff; /* Blue background for header */
+            background-color: #007bff;
             width: 100%;
             padding: 15px 0;
             margin-bottom: 20px;
@@ -32,13 +32,13 @@
         .header img {
             width: 50px;
             height: 50px;
-            border-radius: 50%; /* Rounded logo */
+            border-radius: 50%;
             margin-right: 15px;
         }
         .header h1 {
-            text-align: center; /* Center title */
+            text-align: center;
             margin: 0;
-            color: white; /* White text for contrast */
+            color: white;
         }
         .container {
             max-width: 1200px;
@@ -232,8 +232,8 @@
         </div>
         <div class="tabs">
             <div class="tab active" onclick="showTab('leads')">Leads</div>
-            <div class="tab" onclick="showTab('templates')">Templates</div>
             <div class="tab" onclick="showTab('calendar')">Calendar</div>
+            <div class="tab" onclick="showTab('templates')">Templates</div>
         </div>
         <div id="leads" class="content" style="display: block;">
             <div class="search-bar">
@@ -247,6 +247,9 @@
             </div>
             <div id="leadGrid" class="lead-grid"></div>
         </div>
+        <div id="calendar" class="content">
+            <div id="calendarView"></div>
+        </div>
         <div id="templates" class="content">
             <div class="search-bar">
                 <input type="text" class="form-control" id="templateSearchInput" placeholder="Search templates..." oninput="filterTemplates()">
@@ -258,9 +261,6 @@
                 <button class="btn btn-primary" onclick="showPopup('template')">Add Template</button>
             </div>
             <div id="templateGrid" class="template-grid"></div>
-        </div>
-        <div id="calendar" class="content">
-            <div id="calendarView"></div>
         </div>
     </div>
     <div id="overlay"></div>
@@ -353,7 +353,6 @@
                 updateStats();
                 initCalendar();
                 startReminderSystem();
-                // Ensure popup is closed on load
                 document.getElementById('overlay').style.display = 'none';
                 document.getElementById('popup').style.display = 'none';
             } catch (error) {
@@ -581,7 +580,7 @@
                     saveLeads();
                     renderLeads();
                     updateStats();
-                    if (calendar) calendar.render();
+                    if (calendar) calendar.refetchEvents();
                     closePopup();
                     showNotification('success', 'Success', 'Lead saved successfully.');
                 } else {
@@ -721,7 +720,7 @@
                 }
                 emptyState.style.display = 'none';
                 const sortedLeads = [...leads].sort((a, b) => {
-                    if (!a.time && !b.time) return 0;
+                    if (!a.time && !b.time) return a.name.localeCompare(b.name);
                     if (!a.time) return 1;
                     if (!b.time) return -1;
                     return new Date(a.time) - new Date(b.time);
@@ -813,20 +812,46 @@
         }
 
         function initCalendar() {
-            const calendarEl = document.getElementById('calendarView');
-            calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                events: function(fetchInfo, successCallback, failureCallback) {
-                    const events = leads
-                        .filter(lead => lead.time)
-                        .map(lead => ({
-                            title: `${lead.name}${lead.subject ? `: ${lead.subject}` : ''}`,
-                            start: lead.time,
-                            extendedProps: { lead }
-                        }));
-                    successCallback(events);
-                }
-            });
+            try {
+                const calendarEl = document.getElementById('calendarView');
+                calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    editable: true, // Enable drag-and-drop
+                    events: function(fetchInfo, successCallback, failureCallback) {
+                        const events = leads
+                            .filter(lead => lead.time)
+                            .map((lead, index) => ({
+                                id: index.toString(), // Store lead index for updates
+                                title: `${lead.name}${lead.subject ? `: ${lead.subject}` : ''}`,
+                                start: lead.time,
+                                extendedProps: { leadIndex: index }
+                            }));
+                        successCallback(events);
+                    },
+                    eventDrop: function(info) {
+                        try {
+                            const leadIndex = parseInt(info.event.extendedProps.leadIndex);
+                            if (leadIndex >= 0 && leadIndex < leads.length) {
+                                const newStart = info.event.start.toISOString();
+                                leads[leadIndex].time = newStart;
+                                saveLeads();
+                                renderLeads(); // Update Leads tab
+                                showNotification('success', 'Success', 'Appointment updated.');
+                            } else {
+                                throw new Error('Invalid lead index');
+                            }
+                        } catch (error) {
+                            console.error('Error updating event:', error);
+                            showNotification('warning', 'Error', 'Failed to update appointment.');
+                            info.revert(); // Revert drag if error
+                        }
+                    }
+                });
+                calendar.render();
+            } catch (error) {
+                console.error('Error initializing calendar:', error);
+                showNotification('warning', 'Error', 'Failed to initialize calendar.');
+            }
         }
 
         function startReminderSystem() {
