@@ -70,6 +70,7 @@ body {
 .fa-times-circle::before { content: "❌"; font-family: system-ui; }
 .fa-user-plus::before { content: "👤"; font-family: system-ui; }
 .fa-sms::before { content: "💬"; font-family: system-ui; }
+.fa-microphone::before { content: "🎙️"; font-family: system-ui; }
 
 .sidebar {
     width: 250px;
@@ -605,6 +606,31 @@ header {
 .form-textarea {
     resize: vertical;
     min-height: 100px;
+    position: relative;
+}
+
+.speech-btn {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.speech-btn.active {
+    color: var(--primary-blue);
+}
+
+.speech-btn:hover {
+    background: var(--accent-gray);
+    color: #fff;
 }
 
 .popup-actions {
