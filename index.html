@@ -266,16 +266,19 @@
         leads = leads.filter(lead => {
           if (!lead || typeof lead !== 'object') return false;
           if (!lead.name || typeof lead.name !== 'string') return false;
-          if (lead.time && isNaN(new Date(lead.time).getTime())) return false;
+          if (lead.time && isNaN(new Date(lead.time).getTime())) {
+            console.warn('Invalid time for lead:', lead.name, lead.time);
+            return false;
+          }
           return true;
         });
-        localStorage.setItem('leads', JSON.stringify(leads));
+        localStorage.setItem('leads', JSON.stringify(leads)); // Ensure data is saved back
         console.log('Loaded leads:', leads.length);
       } catch (error) {
         console.error('Error loading leads:', error);
         leads = [];
         localStorage.setItem('leads', JSON.stringify(leads));
-        showNotification('warning', 'Error', 'Failed to load leads.');
+        showNotification('warning', 'Error', 'Failed to load leads. Data reset.');
       }
     }
 
@@ -811,7 +814,7 @@
 
         emptyState.style.display = 'none';
 
-        const sortedFiltered = filtered.sort((a, b) {
+        const sortedFiltered = filtered.sort((a, b) => {
           if (!a.time && !b.time) return 0;
           if (!a.time) return 1;
           if (!b.time) return -1;
