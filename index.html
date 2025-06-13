@@ -118,43 +118,43 @@
       
       <form id="leadForm">
         <div class="form-group" id="leadNameGroup">
+          <input class="form-input" id="leadName" type="text" placeholder=" " required>
           <label class="form-label" for="leadName">Full Name *</label>
-          <input class="form-input" id="leadName" type="text" placeholder="Enter full name" required>
         </div>
         
         <div class="form-group" id="leadPhoneGroup">
+          <input class="form-input" id="leadPhone" type="tel" placeholder=" ">
           <label class="form-label" for="leadPhone">Phone Number</label>
-          <input class="form-input" id="leadPhone" type="tel" placeholder="(555) 123-4567">
         </div>
         
         <div class="form-group" id="leadEmailGroup">
+          <input class="form-input" id="leadEmail" type="email" placeholder=" ">
           <label class="form-label" for="leadEmail">Email Address</label>
-          <input class="form-input" id="leadEmail" type="email" placeholder="example@domain.com">
         </div>
         
         <div class="form-group" id="leadDobGroup">
+          <input class="form-input" id="leadDob" type="date" placeholder=" ">
           <label class="form-label" for="leadDob">Date of Birth</label>
-          <input class="form-input" id="leadDob" type="date">
         </div>
         
         <div class="form-group" id="leadNotesGroup">
+          <textarea class="form-textarea" id="leadNotes" placeholder=" "></textarea>
           <label class="form-label" for="leadNotes">Notes</label>
-          <textarea class="form-textarea" id="leadNotes" placeholder="Add any relevant information..."></textarea>
         </div>
         
         <div class="form-group" id="leadTimeGroup">
+          <input class="form-input" id="leadTime" type="datetime-local" placeholder=" ">
           <label class="form-label" for="leadTime">Appointment Date & Time</label>
-          <input class="form-input" id="leadTime" type="datetime-local">
         </div>
 
         <div class="form-group" id="templateNameGroup" style="display: none;">
+          <input class="form-input" id="templateName" type="text" placeholder=" " required>
           <label class="form-label" for="templateName">Template Name *</label>
-          <input class="form-input" id="templateName" type="text" placeholder="e.g., New Lead Text" required>
         </div>
         
         <div class="form-group" id="templateMessageGroup" style="display: none;">
+          <textarea class="form-textarea" id="templateMessage" placeholder=" " required></textarea>
           <label class="form-label" for="templateMessage">Message *</label>
-          <textarea class="form-textarea" id="templateMessage" placeholder="Enter text message..." required></textarea>
         </div>
       </form>
       
@@ -808,6 +808,52 @@
           btn.classList.remove('loading');
         }, 1000);
       });
+    });
+
+    // Floating label behavior
+    document.querySelectorAll('.form-input, .form-textarea').forEach(input => {
+        input.addEventListener('input', function() {
+            const label = this.nextElementSibling || this.previousElementSibling; // Adjust based on label position
+            if (label && label.classList.contains('form-label')) {
+                if (this.value.trim() !== '') {
+                    label.style.top = '-0.5rem';
+                    label.style.fontSize = '0.75rem';
+                    label.style.background = 'var(--card-bg)';
+                    label.style.padding = '0 0.25rem';
+                    label.style.color = 'var(--primary-blue)';
+                } else {
+                    label.style.top = '0.75rem';
+                    label.style.fontSize = '0.875rem';
+                    label.style.background = 'transparent';
+                    label.style.padding = '0';
+                    label.style.color = 'var(--text-secondary)';
+                }
+            }
+        });
+
+        // Trigger on focus to move label immediately
+        input.addEventListener('focus', function() {
+            const label = this.nextElementSibling || this.previousElementSibling;
+            if (label && label.classList.contains('form-label') && this.value.trim() === '') {
+                label.style.top = '-0.5rem';
+                label.style.fontSize = '0.75rem';
+                label.style.background = 'var(--card-bg)';
+                label.style.padding = '0 0.25rem';
+                label.style.color = 'var(--primary-blue)';
+            }
+        });
+
+        // Reset on blur if empty
+        input.addEventListener('blur', function() {
+            const label = this.nextElementSibling || this.previousElementSibling;
+            if (label && label.classList.contains('form-label') && this.value.trim() === '') {
+                label.style.top = '0.75rem';
+                label.style.fontSize = '0.875rem';
+                label.style.background = 'transparent';
+                label.style.padding = '0';
+                label.style.color = 'var(--text-secondary)';
+            }
+        });
     });
 
     // Start the app
