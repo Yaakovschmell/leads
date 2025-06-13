@@ -140,6 +140,7 @@
         <div class="form-group" id="leadNotesGroup">
           <textarea class="form-textarea" id="leadNotes" placeholder=" "></textarea>
           <label class="form-label" for="leadNotes">Notes</label>
+          <button type="button" id="speechBtn" class="speech-btn"><i class="fas fa-microphone"></i></button>
         </div>
         
         <div class="form-group" id="leadTimeGroup">
@@ -191,6 +192,7 @@
     let currentEditTemplateIndex = null;
     let currentPopupMode = 'lead';
     let calendar = null;
+    let recognition = null;
 
     function init() {
       try {
@@ -206,6 +208,7 @@
         const isDarkMode = localStorage.getItem('darkMode') === 'true';
         if (isDarkMode) document.body.classList.add('dark-mode');
         document.querySelector('.theme-toggle').addEventListener('click', toggleDarkMode);
+        initSpeechRecognition();
       } catch (error) {
         console.error('Initialization error:', error);
         showNotification('warning', 'Error', 'Failed to initialize app. Please refresh.');
@@ -310,6 +313,7 @@
           document.getElementById('popupTitle').textContent = 'Add New Lead';
           document.getElementById('saveBtnText').textContent = 'Save Lead';
           document.getElementById('deleteBtn').style.display = 'none';
+          if (recognition) recognition.stop(); // Stop any ongoing recognition
         } else {
           document.getElementById('popupTitle').textContent = 'Add New Template';
           document.getElementById('saveBtnText').textContent = 'Save Template';
@@ -328,6 +332,7 @@
         currentEditIndex = null;
         currentEditTemplateIndex = null;
         currentPopupMode = 'lead';
+        if (recognition) recognition.stop(); // Stop recognition when closing popup
       } catch (error) {
         console.error('Error closing popup:', error);
       }
@@ -475,6 +480,7 @@
         document.getElementById('templateMessageGroup').style.display = 'none';
         document.getElementById('overlay').style.display = 'block';
         document.getElementById('popup').style.display = 'block';
+        if (recognition) recognition.stop(); // Stop any ongoing recognition
       } catch (error) {
         console.error('Error editing lead:', error);
         showNotification('warning', 'Error', 'Failed to edit lead.');
@@ -916,8 +922,58 @@
       showNotification('success', 'Success', 'Leads exported as leads.csv');
     }
 
+    // Speech Recognition
+    function initSpeechRecognition() {
+      if ('webkitSpeechRecognition' in window) {
+        recognition = new webkitSpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
+
+        recognition.onresult = function(event) {
+          let finalTranscript = '';
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            if (event.results[i].isFinal) {
+              finalTranscript += event.results[i][0].transcript;
+            }
+          }
+          const notesField = document.getElementById('leadNotes');
+          notesField.value = notesField.value + finalTranscript;
+          // Trigger floating label behavior
+          const label = notesField.nextElementSibling;
+          if (label && label.classList.contains('form-label') && notesField.value.trim() !== '') {
+            label.style.top = '-0.5rem';
+            label.style.fontSize = '0.75rem';
+            label.style.background = 'var(--card-bg)';
+            label.style.padding = '0 0.25rem';
+            label.style.color = 'var(--primary-blue)';
+          }
+        };
+
+        recognition.onerror = function(event) {
+          console.error('Speech recognition error:', event.error);
+          showNotification('warning', 'Error', 'Speech recognition failed. Please try again.');
+        };
+
+        document.getElementById('speechBtn').addEventListener('click', function() {
+          if (recognition) {
+            if (recognition.isStarted) {
+              recognition.stop();
+              this.classList.remove('active');
+              showNotification('success', 'Speech Stopped', 'Speech recognition has stopped.');
+            } else {
+              recognition.start();
+              this.classList.add('active');
+              showNotification('success', 'Speech Started', 'Speak now to add notes.');
+            }
+          }
+        });
+      } else {
+        console.log('Speech recognition not supported in this browser.');
+        showNotification('warning', 'Error', 'Speech recognition is not supported in your browser.');
+      }
+    }
+
     // Start the app
     init();
   </script>
-</body>
-</html>
