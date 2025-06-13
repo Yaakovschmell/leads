@@ -154,9 +154,19 @@
         </div>
         
         <div class="form-group" id="leadNotesGroup">
-          <textarea class="form-textarea" id="leadNotes" placeholder=" "></textarea>
-          <label class="form-label" for="leadNotes">Notes</label>
-          <button type="button" id="speechBtn" class="speech-btn"><i class="fas fa-microphone"></i></button>
+          <div style="position: relative;">
+            <label>Current company:</label>
+            <input type="text" id="leadCurrentCompany" class="form-input" style="margin-bottom: 5px;">
+            <label>Currently paying:</label>
+            <input type="text" id="leadCurrentlyPaying" class="form-input" style="margin-bottom: 5px;">
+            <label>Products quoted:</label>
+            <input type="text" id="leadProductsQuoted" class="form-input" style="margin-bottom: 5px;">
+            <label>Our rate:</label>
+            <input type="text" id="leadOurRate" class="form-input" style="margin-bottom: 5px;">
+            <label>Notes:</label>
+            <textarea class="form-textarea" id="leadNotes" placeholder=" "></textarea>
+            <button type="button" id="speechBtn" class="speech-btn"><i class="fas fa-microphone"></i></button>
+          </div>
         </div>
         
         <div class="form-group" id="leadTimeGroup">
@@ -401,6 +411,10 @@
             const name = document.getElementById('leadName').value.trim();
             const phone = document.getElementById('leadPhone').value.trim();
             const email = document.getElementById('leadEmail').value.trim();
+            const currentCompany = document.getElementById('leadCurrentCompany').value.trim();
+            const currentlyPaying = document.getElementById('leadCurrentlyPaying').value.trim();
+            const productsQuoted = document.getElementById('leadProductsQuoted').value.trim();
+            const ourRate = document.getElementById('leadOurRate').value.trim();
             const notes = document.getElementById('leadNotes').value.trim();
             const time = document.getElementById('leadTime').value;
 
@@ -424,6 +438,10 @@
               phone,
               email,
               dob: document.getElementById('leadDob').value || null,
+              currentCompany,
+              currentlyPaying,
+              productsQuoted,
+              ourRate,
               notes,
               time: time ? new Date(time).toISOString() : null,
               status: 'New'
@@ -550,6 +568,10 @@
         document.getElementById('leadPhone').value = lead.phone || '';
         document.getElementById('leadEmail').value = lead.email || '';
         document.getElementById('leadDob').value = lead.dob || '';
+        document.getElementById('leadCurrentCompany').value = lead.currentCompany || '';
+        document.getElementById('leadCurrentlyPaying').value = lead.currentlyPaying || '';
+        document.getElementById('leadProductsQuoted').value = lead.productsQuoted || '';
+        document.getElementById('leadOurRate').value = lead.ourRate || '';
         document.getElementById('leadNotes').value = lead.notes || '';
         document.getElementById('leadTime').value = lead.time ? lead.time.slice(0, 16) : '';
         document.getElementById('popupTitle').textContent = 'Edit Lead';
@@ -636,7 +658,11 @@
               </div>
               <div class="lead-status status-${lead.status.toLowerCase()}">${lead.status}</div>
             </div>
-            ${lead.notes ? `<div class="lead-notes">${lead.notes}</div>` : ''}
+            ${lead.currentCompany ? `<div class="lead-notes"><strong>Current company:</strong> ${lead.currentCompany}</div>` : ''}
+            ${lead.currentlyPaying ? `<div class="lead-notes"><strong>Currently paying:</strong> ${lead.currentlyPaying}</div>` : ''}
+            ${lead.productsQuoted ? `<div class="lead-notes"><strong>Products quoted:</strong> ${lead.productsQuoted}</div>` : ''}
+            ${lead.ourRate ? `<div class="lead-notes"><strong>Our rate:</strong> ${lead.ourRate}</div>` : ''}
+            ${lead.notes ? `<div class="lead-notes"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
             <div class="lead-footer">
               <div class="lead-time">
                 <i class="fas fa-clock"></i>
@@ -682,7 +708,11 @@
               </div>
               <div class="lead-status status-new">Deleted</div>
             </div>
-            ${lead.notes ? `<div class="lead-notes">${lead.notes}</div>` : ''}
+            ${lead.currentCompany ? `<div class="lead-notes"><strong>Current company:</strong> ${lead.currentCompany}</div>` : ''}
+            ${lead.currentlyPaying ? `<div class="lead-notes"><strong>Currently paying:</strong> ${lead.currentlyPaying}</div>` : ''}
+            ${lead.productsQuoted ? `<div class="lead-notes"><strong>Products quoted:</strong> ${lead.productsQuoted}</div>` : ''}
+            ${lead.ourRate ? `<div class="lead-notes"><strong>Our rate:</strong> ${lead.ourRate}</div>` : ''}
+            ${lead.notes ? `<div class="lead-notes"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
             <div class="lead-footer">
               <div class="lead-time">
                 <i class="fas fa-clock"></i>
@@ -744,7 +774,12 @@
         const filtered = leads.filter(lead => 
           lead.name.toLowerCase().includes(search) || 
           (lead.phone && lead.phone.includes(search)) ||
-          (lead.email && lead.email.toLowerCase().includes(search))
+          (lead.email && lead.email.toLowerCase().includes(search)) ||
+          (lead.currentCompany && lead.currentCompany.toLowerCase().includes(search)) ||
+          (lead.currentlyPaying && lead.currentlyPaying.toLowerCase().includes(search)) ||
+          (lead.productsQuoted && lead.productsQuoted.toLowerCase().includes(search)) ||
+          (lead.ourRate && lead.ourRate.toLowerCase().includes(search)) ||
+          (lead.notes && lead.notes.toLowerCase().includes(search))
         );
         const grid = document.getElementById('leadGrid');
         const emptyState = document.getElementById('emptyState');
@@ -779,7 +814,11 @@
               </div>
               <div class="lead-status status-${lead.status.toLowerCase()}">${lead.status}</div>
             </div>
-            ${lead.notes ? `<div class="lead-notes">${lead.notes}</div>` : ''}
+            ${lead.currentCompany ? `<div class="lead-notes"><strong>Current company:</strong> ${lead.currentCompany}</div>` : ''}
+            ${lead.currentlyPaying ? `<div class="lead-notes"><strong>Currently paying:</strong> ${lead.currentlyPaying}</div>` : ''}
+            ${lead.productsQuoted ? `<div class="lead-notes"><strong>Products quoted:</strong> ${lead.productsQuoted}</div>` : ''}
+            ${lead.ourRate ? `<div class="lead-notes"><strong>Our rate:</strong> ${lead.ourRate}</div>` : ''}
+            ${lead.notes ? `<div class="lead-notes"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
             <div class="lead-footer">
               <div class="lead-time">
                 <i class="fas fa-clock"></i>
@@ -1024,12 +1063,16 @@
 
     function exportLeads() {
       const csv = [
-        ['Name', 'Phone', 'Email', 'Date of Birth', 'Notes', 'Appointment Time', 'Status'],
+        ['Name', 'Phone', 'Email', 'Date of Birth', 'Current company', 'Currently paying', 'Products quoted', 'Our rate', 'Notes', 'Appointment Time', 'Status'],
         ...leads.map(lead => [
           lead.name,
           lead.phone || '',
           lead.email || '',
           lead.dob || '',
+          lead.currentCompany || '',
+          lead.currentlyPaying || '',
+          lead.productsQuoted || '',
+          lead.ourRate || '',
           lead.notes || '',
           lead.time || '',
           lead.status || 'New'
@@ -1053,7 +1096,7 @@
         recognition = new webkitSpeechRecognition();
         recognition.continuous = true;
         recognition.interimResults = true;
-        recognition.lang = 'en-US'; // Google’s default language setting
+        recognition.lang = 'en-US';
 
         recognition.onresult = function(event) {
           let finalTranscript = '';
@@ -1077,25 +1120,25 @@
         recognition.onerror = function(event) {
           console.error('Speech recognition error:', event.error);
           showNotification('warning', 'Error', 'Speech recognition failed. Please try again.');
+          const speechBtn = document.getElementById('speechBtn');
+          if (speechBtn) speechBtn.classList.remove('active');
         };
 
         recognition.onend = function() {
-          document.getElementById('speechBtn').classList.remove('active');
+          const speechBtn = document.getElementById('speechBtn');
+          if (speechBtn) speechBtn.classList.remove('active');
           showNotification('success', 'Speech Stopped', 'Speech recognition has stopped.');
         };
 
         document.getElementById('speechBtn').addEventListener('click', function() {
           if (recognition) {
-            if (recognition.isStarted || !recognition.isStarted) {
-              if (!recognition.isStarted) {
-                recognition.start();
-                this.classList.add('active');
-                showNotification('success', 'Speech Started', 'Speak now to add notes.');
-              } else {
-                recognition.stop();
-                this.classList.remove('active');
-                showNotification('success', 'Speech Stopped', 'Speech recognition has stopped.');
-              }
+            if (!recognition.isStarted) {
+              recognition.start();
+              this.classList.add('active');
+              showNotification('success', 'Speech Started', 'Speak now to add notes.');
+            } else {
+              recognition.stop();
+              this.classList.remove('active');
             }
           }
         });
@@ -1107,3 +1150,5 @@
 
     init();
   </script>
+</body>
+</html>
