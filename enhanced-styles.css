@@ -37,8 +37,13 @@ body {
     --text-primary: #f9fafb;
     --text-secondary: #d1d5db;
     --border: 1px solid rgba(255, 255, 255, 0.1);
-    /* Override body background with solid dark color in dark mode */
+    /* Set solid dark background for the entire body */
     background: #1f2937 !important;
+}
+
+.dark-mode header {
+    background: #1f2937 !important; /* Override header background */
+    background-image: none !important; /* Remove any gradient or pattern */
 }
 
 .fas::before, .fa::before {
@@ -326,3 +331,63 @@ header {
 .search-box {
     position: relative;
     max-width: 300px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    border: var(--border);
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    background: var(--card-bg);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+}
+
+.search-box input:not(:placeholder-shown) {
+    border-color: var(--primary-blue);
+}
+
+.search-box i {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+}
+
+.lead-grid, .template-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.lead-card, .template-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+    border: var(--border);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.lead-card:hover, .template-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--primary-blue);
+}
+
+.lead-card::before, .template-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
