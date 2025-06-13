@@ -37,13 +37,12 @@ body {
     --text-primary: #f9fafb;
     --text-secondary: #d1d5db;
     --border: 1px solid rgba(255, 255, 255, 0.1);
-    /* Set solid dark background for the entire body */
     background: #1f2937 !important;
 }
 
 .dark-mode header {
-    background: #1f2937 !important; /* Override header background */
-    background-image: none !important; /* Remove any gradient or pattern */
+    background: #1f2937 !important;
+    background-image: none !important;
 }
 
 .fas::before, .fa::before {
@@ -200,7 +199,7 @@ header {
     height: 80px;
     width: 80px;
     border-radius: 50% !important;
-    object-fit: contain; /* Changed to contain to avoid cropping */
+    object-fit: contain;
 }
 
 .header-stats {
@@ -310,6 +309,16 @@ header {
 .btn-danger:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-lg);
+}
+
+.delete-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+}
+
+.btn-small {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
 }
 
 .leads-header, .templates-header {
@@ -452,6 +461,11 @@ header {
     color: var(--accent-gold);
 }
 
+.lead-status.status-deleted {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+}
+
 .lead-notes, .template-message {
     color: var(--text-secondary);
     font-size: 0.875rem;
@@ -560,7 +574,7 @@ header {
     color: var(--text-secondary);
     transition: all 0.3s ease;
     pointer-events: none;
-    z-index: 1; /* Ensure label stays above input */
+    z-index: 1;
 }
 
 .form-input, .form-textarea {
@@ -574,7 +588,7 @@ header {
     color: var(--text-primary);
     transition: all 0.3s ease;
     position: relative;
-    z-index: 0; /* Ensure input is below label initially */
+    z-index: 0;
 }
 
 .form-input:focus, .form-textarea:focus {
@@ -595,12 +609,12 @@ header {
 }
 
 .form-input:placeholder-shown + .form-label {
-    opacity: 1; /* Ensure label is visible when empty */
+    opacity: 1;
 }
 
 .form-input:not(:placeholder-shown),
 .form-textarea:not(:placeholder-shown) {
-    padding-top: 1.5rem; /* Adjust padding to accommodate moved label */
+    padding-top: 1.5rem;
 }
 
 .form-textarea {
@@ -614,23 +628,35 @@ header {
     right: 1rem;
     top: 50%;
     transform: translateY(-50%);
-    background: none;
-    border: none;
-    font-size: 1.25rem;
-    color: var(--text-secondary);
-    cursor: pointer;
-    padding: 0.25rem;
+    background: linear-gradient(135deg, #3b82f6 0%, var(--primary-blue) 100%);
+    border: 2px solid rgba(255, 255, 255, 0.2);
     border-radius: 50%;
-    transition: all 0.3s ease;
-}
-
-.speech-btn.active {
-    color: var(--primary-blue);
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.25rem;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .speech-btn:hover {
-    background: var(--accent-gray);
-    color: #fff;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: var(--shadow-lg);
+}
+
+.speech-btn.active {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: translateY(-50%) scale(1); }
+    50% { transform: translateY(-50%) scale(1.05); }
+    100% { transform: translateY(-50%) scale(1); }
 }
 
 .popup-actions {
@@ -810,5 +836,11 @@ header {
 
     .popup-actions {
         flex-direction: column;
+    }
+
+    .speech-btn {
+        width: 2rem;
+        height: 2rem;
+        font-size: 1rem;
     }
 }
