@@ -19,6 +19,7 @@
       <button class="nav-link active" data-tab="leads"><i class="fas fa-users"></i> Leads</button>
       <button class="nav-link" data-tab="calendar"><i class="fas fa-calendar-alt"></i> Schedule</button>
       <button class="nav-link" data-tab="templates"><i class="fas fa-sms"></i> Text Templates</button>
+      <button class="nav-link" data-tab="trash"><i class="fas fa-trash"></i> Trash</button>
     </nav>
     <div class="sidebar-footer">
       <button class="theme-toggle"><i class="fas fa-moon"></i> Toggle Dark Mode</button>
@@ -104,6 +105,21 @@
           <p>Create your first text template to streamline communication!</p>
         </div>
       </section>
+
+      <section id="trash" class="content" style="display: none;">
+        <div class="leads-header">
+          <h1 class="leads-title">Trash</h1>
+          <div class="action-group">
+            <button class="btn btn-secondary" onclick="clearTrash()">Clear Trash</button>
+          </div>
+        </div>
+        <div class="lead-grid" id="trashGrid"></div>
+        <div class="empty-state" id="trashEmptyState" style="display: none;">
+          <i class="fas fa-trash"></i>
+          <h3>No deleted leads</h3>
+          <p>Deleted leads will appear here for 24 hours.</p>
+        </div>
+      </section>
     </main>
 
     <div class="overlay" id="overlay" onclick="closePopup()"></div>
@@ -160,11 +176,11 @@
       </form>
       
       <div class="popup-actions">
-        <button class="btn btn-secondary" onclick="closePopup()">Cancel</button>
-        <button class="btn btn-danger" id="deleteBtn" style="display: none;" onclick="deleteItem()">
+        <button class="btn btn-danger delete-btn" id="deleteBtn" style="display: none;" onclick="deleteItem()">
           <i class="fas fa-trash"></i>
           Delete
         </button>
+        <button class="btn btn-secondary" onclick="closePopup()">Cancel</button>
         <button class="btn btn-primary" id="saveBtn" onclick="saveItem()">
           <i class="fas fa-save"></i>
           <span id="saveBtnText">Save Lead</span>
@@ -187,6 +203,7 @@
 
   <script>
     let leads = [];
+    let deletedLeads = [];
     let templates = [];
     let currentEditIndex = null;
     let currentEditTemplateIndex = null;
@@ -198,13 +215,14 @@
       try {
         console.log('Initializing app...');
         loadLeads();
+        loadDeletedLeads();
         loadTemplates();
         renderLeads();
+        renderTrash();
         renderTemplates();
         updateStats();
         initCalendar();
         startReminderSystem();
-        // Set initial theme from localStorage or default to light
         const isDarkMode = localStorage.getItem('darkMode') === 'true';
         if (isDarkMode) document.body.classList.add('dark-mode');
         document.querySelector('.theme-toggle').addEventListener('click', toggleDarkMode);
@@ -233,6 +251,27 @@
         leads = [];
         localStorage.setItem('leads', JSON.stringify(leads));
         showNotification('warning', 'Error', 'Failed to load leads.');
+      }
+    }
+
+    function loadDeletedLeads() {
+      try {
+        const savedDeleted = localStorage.getItem('deletedLeads');
+        deletedLeads = savedDeleted ? JSON.parse(savedDeleted) : [];
+        if (!Array.isArray(deletedLeads)) deletedLeads = [];
+        deletedLeads = deletedLeads.filter(lead => {
+          if (!lead || typeof lead !== 'object') return false;
+          if (!lead.name || typeof lead.name !== 'string') return false;
+          if (!lead.deletedAt || isNaN(new Date(lead.deletedAt).getTime())) return false;
+          return new Date(lead.deletedAt) > new Date(Date.now() - 24 * 60 * 60 * 1000); // Keep for 24 hours
+        });
+        localStorage.setItem('deletedLeads', JSON.stringify(deletedLeads));
+        console.log('Loaded deleted leads:', deletedLeads.length);
+      } catch (error) {
+        console.error('Error loading deleted leads:', error);
+        deletedLeads = [];
+        localStorage.setItem('deletedLeads', JSON.stringify(deletedLeads));
+        showNotification('warning', 'Error', 'Failed to load deleted leads.');
       }
     }
 
@@ -267,6 +306,16 @@
       }
     }
 
+    function saveDeletedLeads() {
+      try {
+        localStorage.setItem('deletedLeads', JSON.stringify(deletedLeads));
+        console.log('Saved deleted leads:', deletedLeads.length);
+      } catch (error) {
+        console.error('Error saving deleted leads:', error);
+        showNotification('warning', 'Error', 'Failed to save deleted leads.');
+      }
+    }
+
     function saveTemplates() {
       try {
         localStorage.setItem('templates', JSON.stringify(templates));
@@ -285,6 +334,7 @@
         document.getElementById(tab).style.display = 'block';
         document.querySelector('.breadcrumbs .current').textContent = document.querySelector(`[data-tab="${tab}"]`).textContent.trim();
         if (tab === 'calendar' && calendar) calendar.render();
+        if (tab === 'trash') renderTrash();
       } catch (error) {
         console.error('Error switching tab:', error);
         showNotification('warning', 'Error', 'Failed to switch tab.');
@@ -312,12 +362,12 @@
         if (mode === 'lead') {
           document.getElementById('popupTitle').textContent = 'Add New Lead';
           document.getElementById('saveBtnText').textContent = 'Save Lead';
-          document.getElementById('deleteBtn').style.display = 'none';
+          document.getElementById('deleteBtn').style.display = currentEditIndex !== null ? 'inline-flex' : 'none';
           if (recognition) recognition.stop(); // Stop any ongoing recognition
         } else {
           document.getElementById('popupTitle').textContent = 'Add New Template';
           document.getElementById('saveBtnText').textContent = 'Save Template';
-          document.getElementById('deleteBtn').style.display = 'none';
+          document.getElementById('deleteBtn').style.display = currentEditTemplateIndex !== null ? 'inline-flex' : 'none';
         }
       } catch (error) {
         console.error('Error showing popup:', error);
@@ -432,19 +482,24 @@
         document.getElementById('deleteBtn').classList.add('loading');
         setTimeout(() => {
           if (currentPopupMode === 'lead' && currentEditIndex !== null) {
+            const lead = leads[currentEditIndex];
+            lead.deletedAt = new Date().toISOString();
+            deletedLeads.push(lead);
             leads.splice(currentEditIndex, 1);
             saveLeads();
+            saveDeletedLeads();
             renderLeads();
+            renderTrash();
             updateStats();
             if (calendar) calendar.refetchEvents();
             closePopup();
-            showNotification('success', 'Success', 'Lead deleted successfully.');
+            showNotification('warning', 'Deleted', 'Lead moved to trash. Restore within 24 hours.');
           } else if (currentPopupMode === 'template' && currentEditTemplateIndex !== null) {
             templates.splice(currentEditTemplateIndex, 1);
             saveTemplates();
             renderTemplates();
             closePopup();
-            showNotification('success', 'Success', 'Template deleted successfully.');
+            showNotification('warning', 'Deleted', 'Template deleted.');
           }
           document.getElementById('deleteBtn').classList.remove('loading');
         }, 500);
@@ -452,6 +507,36 @@
         console.error('Error deleting item:', error);
         showNotification('warning', 'Error', `Failed to delete ${currentPopupMode}.`);
         document.getElementById('deleteBtn').classList.remove('loading');
+      }
+    }
+
+    function restoreLead(index) {
+      try {
+        const lead = deletedLeads[index];
+        leads.push(lead);
+        deletedLeads.splice(index, 1);
+        saveLeads();
+        saveDeletedLeads();
+        renderLeads();
+        renderTrash();
+        updateStats();
+        if (calendar) calendar.refetchEvents();
+        showNotification('success', 'Restored', 'Lead restored successfully.');
+      } catch (error) {
+        console.error('Error restoring lead:', error);
+        showNotification('warning', 'Error', 'Failed to restore lead.');
+      }
+    }
+
+    function clearTrash() {
+      try {
+        deletedLeads = [];
+        saveDeletedLeads();
+        renderTrash();
+        showNotification('success', 'Cleared', 'Trash cleared successfully.');
+      } catch (error) {
+        console.error('Error clearing trash:', error);
+        showNotification('warning', 'Error', 'Failed to clear trash.');
       }
     }
 
@@ -566,6 +651,53 @@
         console.error('Error rendering leads:', error);
         showNotification('warning', 'Error', 'Failed to render leads.');
         document.getElementById('emptyState').style.display = 'block';
+      }
+    }
+
+    function renderTrash() {
+      try {
+        console.log('Rendering trash...');
+        const grid = document.getElementById('trashGrid');
+        const emptyState = document.getElementById('trashEmptyState');
+        grid.innerHTML = '';
+
+        if (!deletedLeads || deletedLeads.length === 0) {
+          emptyState.style.display = 'block';
+          console.log('No deleted leads, showing empty state');
+          return;
+        }
+
+        emptyState.style.display = 'none';
+
+        deletedLeads.forEach((lead, index) => {
+          const card = document.createElement('div');
+          card.className = 'lead-card';
+          card.innerHTML = `
+            <div class="lead-header">
+              <div>
+                <div class="lead-name">${lead.name}</div>
+                ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i>${lead.phone}</div>` : ''}
+                ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i>${lead.email}</div>` : ''}
+                ${lead.dob ? `<div class="lead-dob"><i class="fas fa-birthday-cake"></i>${new Date(lead.dob).toLocaleDateString()}</div>` : ''}
+              </div>
+              <div class="lead-status status-new">Deleted</div>
+            </div>
+            ${lead.notes ? `<div class="lead-notes">${lead.notes}</div>` : ''}
+            <div class="lead-footer">
+              <div class="lead-time">
+                <i class="fas fa-clock"></i>
+                Deleted: ${new Date(lead.deletedAt).toLocaleString()}
+              </div>
+              <button class="btn btn-secondary btn-small" onclick="restoreLead(${index}); event.stopPropagation();">Restore</button>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+        console.log(`Rendered ${deletedLeads.length} deleted leads`);
+      } catch (error) {
+        console.error('Error rendering trash:', error);
+        showNotification('warning', 'Error', 'Failed to render trash.');
+        document.getElementById('trashEmptyState').style.display = 'block';
       }
     }
 
@@ -820,7 +952,6 @@
       });
     });
 
-    // Floating label behavior
     document.querySelectorAll('.form-input, .form-textarea').forEach(input => {
         input.addEventListener('input', function() {
             const label = this.nextElementSibling || this.previousElementSibling;
@@ -841,7 +972,6 @@
             }
         });
 
-        // Trigger on focus to move label immediately
         input.addEventListener('focus', function() {
             const label = this.nextElementSibling || this.previousElementSibling;
             if (label && label.classList.contains('form-label') && this.value.trim() === '') {
@@ -853,7 +983,6 @@
             }
         });
 
-        // Reset on blur if empty
         input.addEventListener('blur', function() {
             const label = this.nextElementSibling || this.previousElementSibling;
             if (label && label.classList.contains('form-label') && this.value.trim() === '') {
@@ -866,7 +995,6 @@
         });
     });
 
-    // Dark mode toggle
     function toggleDarkMode() {
       const body = document.body;
       const isDarkMode = body.classList.toggle('dark-mode');
@@ -874,7 +1002,6 @@
       showNotification('success', 'Theme Updated', `Switched to ${isDarkMode ? 'Dark' : 'Light'} Mode`);
     }
 
-    // Print functionality
     function printSection() {
       const printContent = document.querySelector('#leads').innerHTML;
       const originalContent = document.body.innerHTML;
@@ -892,10 +1019,9 @@
         </html>`;
       window.print();
       document.body.innerHTML = originalContent;
-      location.reload(); // Reload to restore the page
+      location.reload();
     }
 
-    // Export functionality
     function exportLeads() {
       const csv = [
         ['Name', 'Phone', 'Email', 'Date of Birth', 'Notes', 'Appointment Time', 'Status'],
@@ -922,13 +1048,12 @@
       showNotification('success', 'Success', 'Leads exported as leads.csv');
     }
 
-    // Speech Recognition
     function initSpeechRecognition() {
       if ('webkitSpeechRecognition' in window) {
         recognition = new webkitSpeechRecognition();
         recognition.continuous = true;
         recognition.interimResults = true;
-        recognition.lang = 'en-US';
+        recognition.lang = 'en-US'; // Google’s default language setting
 
         recognition.onresult = function(event) {
           let finalTranscript = '';
@@ -939,7 +1064,6 @@
           }
           const notesField = document.getElementById('leadNotes');
           notesField.value = notesField.value + finalTranscript;
-          // Trigger floating label behavior
           const label = notesField.nextElementSibling;
           if (label && label.classList.contains('form-label') && notesField.value.trim() !== '') {
             label.style.top = '-0.5rem';
@@ -955,16 +1079,23 @@
           showNotification('warning', 'Error', 'Speech recognition failed. Please try again.');
         };
 
+        recognition.onend = function() {
+          document.getElementById('speechBtn').classList.remove('active');
+          showNotification('success', 'Speech Stopped', 'Speech recognition has stopped.');
+        };
+
         document.getElementById('speechBtn').addEventListener('click', function() {
           if (recognition) {
-            if (recognition.isStarted) {
-              recognition.stop();
-              this.classList.remove('active');
-              showNotification('success', 'Speech Stopped', 'Speech recognition has stopped.');
-            } else {
-              recognition.start();
-              this.classList.add('active');
-              showNotification('success', 'Speech Started', 'Speak now to add notes.');
+            if (recognition.isStarted || !recognition.isStarted) {
+              if (!recognition.isStarted) {
+                recognition.start();
+                this.classList.add('active');
+                showNotification('success', 'Speech Started', 'Speak now to add notes.');
+              } else {
+                recognition.stop();
+                this.classList.remove('active');
+                showNotification('success', 'Speech Stopped', 'Speech recognition has stopped.');
+              }
             }
           }
         });
@@ -974,6 +1105,5 @@
       }
     }
 
-    // Start the app
     init();
   </script>
