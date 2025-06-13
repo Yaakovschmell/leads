@@ -157,18 +157,31 @@
           <textarea class="form-textarea" id="leadNotes" placeholder=" "></textarea>
           <label class="form-label" for="leadNotes">Notes</label>
           <button type="button" id="speechBtn" class="speech-btn"><i class="fas fa-microphone"></i></button>
-          <div style="position: relative;">
-            <label>Current company:</label>
-            <input type="text" id="leadCurrentCompany" class="form-input" style="margin-bottom: 5px;">
-            <label>Currently paying:</label>
-            <input type="text" id="leadCurrentlyPaying" class="form-input" style="margin-bottom: 5px;">
-            <label>Products quoted:</label>
-            <input type="text" id="leadProductsQuoted" class="form-input" style="margin-bottom: 5px;">
-            <label>Our rate:</label>
-            <input type="text" id="leadOurRate" class="form-input" style="margin-bottom: 5px;">
-            <label>Notes:</label>
-            <textarea class="form-textarea" id="leadNotesAdditional" placeholder=" "></textarea>
-          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Current company:</label>
+          <input type="text" id="leadCurrentCompany" class="form-input">
+        </div>
+        
+        <div class="form-group">
+          <label>Currently paying:</label>
+          <input type="text" id="leadCurrentlyPaying" class="form-input">
+        </div>
+        
+        <div class="form-group">
+          <label>Products quoted:</label>
+          <input type="text" id="leadProductsQuoted" class="form-input">
+        </div>
+        
+        <div class="form-group">
+          <label>Our rate:</label>
+          <input type="text" id="leadOurRate" class="form-input">
+        </div>
+        
+        <div class="form-group">
+          <label>Notes:</label>
+          <textarea class="form-textarea" id="leadNotesAdditional" placeholder=" "></textarea>
         </div>
         
         <div class="form-group" id="leadTimeGroup">
@@ -733,7 +746,7 @@
       } catch (error) {
         console.error('Error rendering trash:', error);
         showNotification('warning', 'Error', 'Failed to render trash.');
-        document.getElementById('trashEmptyState').style.display = 'block');
+        document.getElementById('trashEmptyState').style.display = 'block';
       }
     }
 
@@ -780,7 +793,12 @@
         const filtered = leads.filter(lead => 
           lead.name.toLowerCase().includes(search) || 
           (lead.phone && lead.phone.includes(search)) ||
-          (lead.email && lead.email.toLowerCase().includes(search))
+          (lead.email && lead.email.toLowerCase().includes(search)) ||
+          (lead.currentCompany && lead.currentCompany.toLowerCase().includes(search)) ||
+          (lead.currentlyPaying && lead.currentlyPaying.toLowerCase().includes(search)) ||
+          (lead.productsQuoted && lead.productsQuoted.toLowerCase().includes(search)) ||
+          (lead.ourRate && lead.ourRate.toLowerCase().includes(search)) ||
+          (lead.notes && lead.notes.toLowerCase().includes(search))
         );
         const grid = document.getElementById('leadGrid');
         const emptyState = document.getElementById('emptyState');
@@ -815,7 +833,11 @@
               </div>
               <div class="lead-status status-${lead.status.toLowerCase()}">${lead.status}</div>
             </div>
-            ${lead.notes ? `<div class="lead-notes">${lead.notes}</div>` : ''}
+            ${lead.currentCompany ? `<div class="lead-notes"><strong>Current company:</strong> ${lead.currentCompany}</div>` : ''}
+            ${lead.currentlyPaying ? `<div class="lead-notes"><strong>Currently paying:</strong> ${lead.currentlyPaying}</div>` : ''}
+            ${lead.productsQuoted ? `<div class="lead-notes"><strong>Products quoted:</strong> ${lead.productsQuoted}</div>` : ''}
+            ${lead.ourRate ? `<div class="lead-notes"><strong>Our rate:</strong> ${lead.ourRate}</div>` : ''}
+            ${lead.notes ? `<div class="lead-notes"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
             <div class="lead-footer">
               <div class="lead-time">
                 <i class="fas fa-clock"></i>
@@ -1060,7 +1082,7 @@
 
     function exportLeads() {
       const csv = [
-        ['Name', 'Phone', 'Email', 'Date of Birth', 'Notes', 'Appointment Time', 'Status'],
+        ['Name', 'Phone', 'Email', 'Date of Birth', 'Notes', 'Appointment Time', 'Status', 'Current company', 'Currently paying', 'Products quoted', 'Our rate'],
         ...leads.map(lead => [
           lead.name,
           lead.phone || '',
@@ -1068,7 +1090,11 @@
           lead.dob || '',
           lead.notes || '',
           lead.time || '',
-          lead.status || 'New'
+          lead.status || 'New',
+          lead.currentCompany || '',
+          lead.currentlyPaying || '',
+          lead.productsQuoted || '',
+          lead.ourRate || ''
         ])
       ].map(row => row.join(',')).join('\n');
 
