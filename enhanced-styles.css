@@ -94,9 +94,6 @@ body {
     font-size: 1.5rem;
     font-weight: 700;
     letter-spacing: 0.05em;
-}
-
-.logo img {
     height: 80px; /* Increased size further to ensure clarity */
     width: 80px; /* Increased size further to ensure clarity */
     border-radius: 50% !important; /* Force circular shape */
