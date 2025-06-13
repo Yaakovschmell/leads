@@ -547,6 +547,7 @@ header {
     color: var(--text-secondary);
     transition: all 0.3s ease;
     pointer-events: none;
+    z-index: 1; /* Ensure label stays above input */
 }
 
 .form-input, .form-textarea {
@@ -559,6 +560,8 @@ header {
     background: var(--card-bg);
     color: var(--text-primary);
     transition: all 0.3s ease;
+    position: relative;
+    z-index: 0; /* Ensure input is below label initially */
 }
 
 .form-input:focus, .form-textarea:focus {
@@ -567,15 +570,24 @@ header {
     box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
 }
 
-.form-input:focus + .form-label,
 .form-input:not(:placeholder-shown) + .form-label,
-.form-textarea:focus + .form-label,
-.form-textarea:not(:placeholder-shown) + .form-label {
+.form-input:focus + .form-label,
+.form-textarea:not(:placeholder-shown) + .form-label,
+.form-textarea:focus + .form-label {
     top: -0.5rem;
     font-size: 0.75rem;
     background: var(--card-bg);
     padding: 0 0.25rem;
     color: var(--primary-blue);
+}
+
+.form-input:placeholder-shown + .form-label {
+    opacity: 1; /* Ensure label is visible when empty */
+}
+
+.form-input:not(:placeholder-shown),
+.form-textarea:not(:placeholder-shown) {
+    padding-top: 1.5rem; /* Adjust padding to accommodate moved label */
 }
 
 .form-textarea {
