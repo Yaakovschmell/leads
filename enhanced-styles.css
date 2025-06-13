@@ -84,20 +84,17 @@ body {
 .sidebar-header {
     text-align: center;
     margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    font-size: 1.5rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    height: 80px; /* Increased size further to ensure clarity */
-    width: 80px; /* Increased size further to ensure clarity */
-    border-radius: 50% !important; /* Force circular shape */
-    object-fit: cover; /* Maintain aspect ratio */
+    height: 80px;
+    width: 80px;
+    border-radius: 50% !important;
+    object-fit: cover;
+    margin-bottom: 0.5rem;
 }
 
 .tagline {
@@ -191,14 +188,18 @@ header {
 }
 
 .header-content .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
     margin-bottom: 1rem;
 }
 
 .header-content .logo img {
-    height: 80px; /* Increased size further to ensure clarity */
-    width: 80px; /* Increased size further to ensure clarity */
-    border-radius: 50% !important; /* Force circular shape */
-    object-fit: cover; /* Maintain aspect ratio */
+    height: 80px;
+    width: 80px;
+    border-radius: 50% !important;
+    object-fit: contain; /* Changed to contain to avoid cropping */
 }
 
 .header-stats {
