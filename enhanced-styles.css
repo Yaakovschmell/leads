@@ -97,10 +97,10 @@ body {
 }
 
 .logo img {
-    height: 48px;
-    width: 48px;
+    height: 64px; /* Increased size to prevent squishing */
+    width: 64px; /* Increased size to prevent squishing */
     border-radius: 50%; /* Ensure circular shape */
-    object-fit: cover; /* Maintain image aspect ratio while filling the circle */
+    object-fit: cover; /* Maintain aspect ratio while filling the circle */
 }
 
 .tagline {
@@ -195,6 +195,13 @@ header {
 
 .header-content .logo {
     margin-bottom: 1rem;
+}
+
+.header-content .logo img {
+    height: 64px; /* Increased size to prevent squishing */
+    width: 64px; /* Increased size to prevent squishing */
+    border-radius: 50%; /* Ensure circular shape */
+    object-fit: cover; /* Maintain aspect ratio while filling the circle */
 }
 
 .header-stats {
