@@ -202,6 +202,10 @@
         updateStats();
         initCalendar();
         startReminderSystem();
+        // Set initial theme from localStorage or default to light
+        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+        if (isDarkMode) document.body.classList.add('dark-mode');
+        document.querySelector('.theme-toggle').addEventListener('click', toggleDarkMode);
       } catch (error) {
         console.error('Initialization error:', error);
         showNotification('warning', 'Error', 'Failed to initialize app. Please refresh.');
@@ -631,9 +635,9 @@
             <div class="lead-header">
               <div>
                 <div class="lead-name">${lead.name}</div>
-                ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i>${lead.phone}</div>` : ''}
-                ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i>${lead.email}</div>` : ''}
-                ${lead.dob ? `<div class="lead-dob"><i class="fas fa-birthday-cake"></i>${new Date(lead.dob).toLocaleDateString()}</div>` : ''}
+              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i>${lead.phone}</div>` : ''}
+              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i>${lead.email}</div>` : ''}
+              ${lead.dob ? `<div class="lead-dob"><i class="fas fa-birthday-cake"></i>${new Date(lead.dob).toLocaleDateString()}</div>` : ''}
               </div>
               <div class="lead-status status-${lead.status.toLowerCase()}">${lead.status}</div>
             </div>
@@ -794,9 +798,9 @@
       btn.addEventListener('click', () => {
         btn.classList.add('loading');
         setTimeout(() => {
-          showNotification('success', 'Success', 'Export started (functionality placeholder).');
+          exportLeads();
           btn.classList.remove('loading');
-        }, 1000);
+        }, 500);
       });
     });
 
@@ -804,16 +808,16 @@
       btn.addEventListener('click', () => {
         btn.classList.add('loading');
         setTimeout(() => {
-          showNotification('success', 'Success', 'Print initiated (functionality placeholder).');
+          printSection();
           btn.classList.remove('loading');
-        }, 1000);
+        }, 500);
       });
     });
 
     // Floating label behavior
     document.querySelectorAll('.form-input, .form-textarea').forEach(input => {
         input.addEventListener('input', function() {
-            const label = this.nextElementSibling || this.previousElementSibling; // Adjust based on label position
+            const label = this.nextElementSibling || this.previousElementSibling;
             if (label && label.classList.contains('form-label')) {
                 if (this.value.trim() !== '') {
                     label.style.top = '-0.5rem';
@@ -855,6 +859,62 @@
             }
         });
     });
+
+    // Dark mode toggle
+    function toggleDarkMode() {
+      const body = document.body;
+      const isDarkMode = body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', isDarkMode);
+      showNotification('success', 'Theme Updated', `Switched to ${isDarkMode ? 'Dark' : 'Light'} Mode`);
+    }
+
+    // Print functionality
+    function printSection() {
+      const printContent = document.querySelector('#leads').innerHTML;
+      const originalContent = document.body.innerHTML;
+      document.body.innerHTML = `
+        <html>
+          <head>
+            <title>Print Leads</title>
+            <style>
+              body { font-family: 'Roboto', sans-serif; padding: 20px; }
+              .lead-card { margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; }
+              .lead-name { font-weight: bold; }
+            </style>
+          </head>
+          <body>${printContent}</body>
+        </html>`;
+      window.print();
+      document.body.innerHTML = originalContent;
+      location.reload(); // Reload to restore the page
+    }
+
+    // Export functionality
+    function exportLeads() {
+      const csv = [
+        ['Name', 'Phone', 'Email', 'Date of Birth', 'Notes', 'Appointment Time', 'Status'],
+        ...leads.map(lead => [
+          lead.name,
+          lead.phone || '',
+          lead.email || '',
+          lead.dob || '',
+          lead.notes || '',
+          lead.time || '',
+          lead.status || 'New'
+        ])
+      ].map(row => row.join(',')).join('\n');
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'leads.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      showNotification('success', 'Success', 'Leads exported as leads.csv');
+    }
 
     // Start the app
     init();
