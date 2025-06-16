@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Allstate CRM - Enhanced</title>
+  <title>Allstate CRM</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.css" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
@@ -40,11 +40,11 @@
         <div class="header-stats">
           <div class="stat-item">
             <i class="fas fa-users"></i>
-            <span id="totalLeads">0 Leads</span>
+            <span id="totalLeads">6 Leads</span>
           </div>
           <div class="stat-item">
             <i class="fas fa-calendar-check"></i>
-            <span id="upcomingAppts">0 Appointments</span>
+            <span id="upcomingAppts">6 Appointments</span>
           </div>
         </div>
       </div>
@@ -69,1065 +69,111 @@
           </div>
         </div>
         
-        <div class="lead-grid" id="leadGrid"></div>
-        
-        <div class="empty-state" id="emptyState" style="display: none;">
-          <i class="fas fa-user-plus"></i>
-          <h3>No leads yet</h3>
-          <p>Start by adding your first lead to get organized!</p>
-        </div>
-      </section>
-
-      <section id="calendar" class="content" style="display: none;">
-        <div id="calendarView"></div>
-      </section>
-
-      <section id="templates" class="content" style="display: none;">
-        <div class="templates-header">
-          <h1 class="templates-title">Text Templates</h1>
-          <div class="action-group">
-            <div class="search-box">
-              <i class="fas fa-search"></i>
-              <input type="text" id="templateSearchInput" placeholder="Search templates...">
+        <div class="lead-grid" id="leadGrid">
+          <div class="lead-card">
+            <div class="lead-header">
+              <div>
+                <div class="lead-name">Olusegun Adepegba</div>
+                <div class="lead-phone"><i class="fas fa-phone"></i> (240)551-5286</div>
+                <div class="lead-email"><i class="fas fa-envelope"></i> woolmanhoney@gmail.com</div>
+              </div>
+              <div class="lead-status status-new">New</div>
             </div>
-            <button class="btn btn-primary" onclick="showPopup('template')">
-              <i class="fas fa-plus"></i>
-              Add Template
-            </button>
-            <button class="btn btn-secondary export-btn"><i class="fas fa-download"></i> Export</button>
-            <button class="btn btn-secondary print-btn"><i class="fas fa-print"></i> Print</button>
+            <div class="lead-details"><strong>Notes:</strong> Current company:nationwide for home auto and 2385 for home our rate:auto 420 and home without auto is 162( we arent doing auto because were way off).notes: he has 3 other quotes from other company so he said to follow up then but i told him that too far away and ill follow up early next week to see what he thinks. give him 1k decubitus and upped his rebuild to 270000 total, he has 226000 with nationwide and morgage company is PHH</div>
+            <div class="lead-footer">
+              <div class="lead-time"><i class="fas fa-clock"></i> 6/13/2025, 1:00 PM</div>
+              <button class="btn btn-success btn-small">Sold</button>
+            </div>
           </div>
-        </div>
-        
-        <div class="template-grid" id="templateGrid"></div>
-        
-        <div class="empty-state" id="templateEmptyState" style="display: none;">
-          <i class="fas fa-sms"></i>
-          <h3>No templates yet</h3>
-          <p>Create your first text template to streamline communication!</p>
-        </div>
-      </section>
-
-      <section id="sold" class="content" style="display: none;">
-        <div class="leads-header">
-          <h1 class="leads-title">Sold Leads</h1>
-          <div class="action-group">
-            <button class="btn btn-secondary" onclick="clearSold()">Clear Sold</button>
+          <div class="lead-card">
+            <div class="lead-header">
+              <div>
+                <div class="lead-name">armentha cruise</div>
+                <div class="lead-email"><i class="fas fa-envelope"></i> (301)943-9961@yahoo.com</div>
+              </div>
+              <div class="lead-status status-new">New</div>
+            </div>
+            <div class="lead-details"><strong>Notes:</strong> Policy Number: 52110516145 Notary: current company: Noteworthy currently paying: home-52145 car-unknown our rate: home 1300 auto 167 and umbrella 50 Notes: been with nationwide for over 40 years, spoke with agent and current company touch with her over the weekend and shes not one to jump and wants to review everything line by line, wants a cb thursday morning or by monday morning she also has 2 lip with nationwide, i can build them out</div>
+            <div class="lead-footer">
+              <div class="lead-time"><i class="fas fa-clock"></i> 6/13/2025, 2:00 PM</div>
+              <button class="btn btn-success btn-small">Sold</button>
+            </div>
           </div>
-        </div>
-        <div class="lead-grid" id="soldGrid"></div>
-        <div class="empty-state" id="soldEmptyState" style="display: none;">
-          <i class="fas fa-check-circle"></i>
-          <h3>No sold leads</h3>
-          <p>Sold leads will appear here.</p>
-        </div>
-      </section>
-
-      <section id="trash" class="content" style="display: none;">
-        <div class="leads-header">
-          <h1 class="leads-title">Trash</h1>
-          <div class="action-group">
-            <button class="btn btn-secondary" onclick="clearTrash()">Clear Trash</button>
+          <div class="lead-card">
+            <div class="lead-header">
+              <div>
+                <div class="lead-name">Susan Mehling</div>
+                <div class="lead-email"><i class="fas fa-envelope"></i> 2403288058@gmail.com</div>
+              </div>
+              <div class="lead-status status-new">New</div>
+            </div>
+            <div class="lead-details"><strong>Notes:</strong> Current company: AIC Currently paying: over 300 Notes: current companies AIC her real estate is down and then 320 a month going forward Auto Renters were quote but she wants to review it over the weekend and is going to give me a call on monday morning</div>
+            <div class="lead-footer">
+              <div class="lead-time"><i class="fas fa-clock"></i> 6/17/2025, 1:00 PM</div>
+              <button class="btn btn-success btn-small">Sold</button>
+            </div>
           </div>
-        </div>
-        <div class="lead-grid" id="trashGrid"></div>
-        <div class="empty-state" id="trashEmptyState" style="display: none;">
-          <i class="fas fa-trash"></i>
-          <h3>No deleted leads</h3>
-          <p>Deleted leads will appear here for 24 hours.</p>
+          <div class="lead-card">
+            <div class="lead-header">
+              <div>
+                <div class="lead-name">Ashley Carpenter</div>
+                <div class="lead-phone"><i class="fas fa-phone"></i> (443) 220-8866</div>
+                <div class="lead-email"><i class="fas fa-envelope"></i> wazehg@gmail.com</div>
+              </div>
+              <div class="lead-status status-new">New</div>
+            </div>
+            <div class="lead-details"><strong>Notes:</strong> Notes: Yaakov mailed me her request she has home here quoted auto to her already has $570 per month and home would drop to $486.45 waiving pip and adjusting deductibles. keeps saying he appreciates me following up and told me he turned off autopay.</div>
+            <div class="lead-footer">
+              <div class="lead-time"><i class="fas fa-clock"></i> 6/16/2025, 1:40 PM</div>
+              <button class="btn btn-success btn-small">Sold</button>
+            </div>
+          </div>
+          <div class="lead-card">
+            <div class="lead-header">
+              <div>
+                <div class="lead-name">Atlantis Williams</div>
+                <div class="lead-phone"><i class="fas fa-phone"></i> (339) 371-1598</div>
+                <div class="lead-email"><i class="fas fa-envelope"></i> atwillms@gmail.com</div>
+              </div>
+              <div class="lead-status status-new">New</div>
+            </div>
+            <div class="lead-details"><strong>Notes:</strong> Policy Number: 993664534 Current company: Progressive Currently paying: 653 Products quoted: AUTO RENTERS Our rate: EITHER 528 or 486 Notes: Paying $653 with Progressive. Bill is due on the 15th. he out of money which is why he hasn’t done it yet. Two options here we sit $528 per month and “budget” is $486.45 waiving pip and adjusting deductibles. keeps saying he appreciates me following up and told me he turned off autopay.</div>
+            <div class="lead-footer">
+              <div class="lead-time"><i class="fas fa-clock"></i> 6/16/2025, 4:50 PM</div>
+              <button class="btn btn-success btn-small">Sold</button>
+            </div>
+          </div>
+          <div class="lead-card">
+            <div class="lead-header">
+              <div>
+                <div class="lead-name">Lorraine Sorrell</div>
+                <div class="lead-email"><i class="fas fa-envelope"></i> lorraine.sorrel@gmail.com</div>
+              </div>
+              <div class="lead-status status-new">New</div>
+            </div>
+            <div class="lead-details"><strong>Notes:</strong> Policy Number: 090361304 Currently paying: unknown Products quoted: auto Our rate: 1675 Notes: quoted her home and auto period total for everything would be $1675 for a year of home and 6 months of Auto period she’s been with Geico since 1960 and was very hesitant and cautious and kept asking if I was asking her current</div>
+            <div class="lead-footer">
+              <div class="lead-time"><i class="fas fa-clock"></i> 4/19/1948</div>
+              <button class="btn btn-success btn-small">Sold</button>
+            </div>
+          </div>
         </div>
       </section>
     </main>
-
-    <div class="overlay" id="overlay" onclick="closePopup()"></div>
-
-    <div class="popup" id="popup">
-      <div class="popup-header">
-        <h2 class="popup-title" id="popupTitle">Add New Lead</h2>
-        <button class="close-btn" onclick="closePopup()">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-      
-      <form id="leadForm">
-        <div class="form-group" id="leadNameGroup">
-          <input class="form-input" id="leadName" type="text" placeholder=" " required>
-          <label class="form-label" for="leadName">Full Name *</label>
-        </div>
-        
-        <div class="form-group" id="leadPhoneGroup">
-          <input class="form-input" id="leadPhone" type="tel" placeholder=" ">
-          <label class="form-label" for="leadPhone">Phone Number</label>
-        </div>
-        
-        <div class="form-group" id="leadEmailGroup">
-          <input class="form-input" id="leadEmail" type="email" placeholder=" ">
-          <label class="form-label" for="leadEmail">Email Address</label>
-        </div>
-        
-        <div class="form-group" id="leadDobGroup">
-          <input class="form-input" id="leadDob" type="date" placeholder=" ">
-          <label class="form-label" for="leadDob">Date of Birth</label>
-        </div>
-        
-        <div class="form-group" id="leadPolicyNumberGroup">
-          <input class="form-input" id="leadPolicyNumber" type="text" placeholder=" ">
-          <label class="form-label" for="leadPolicyNumber">Policy Number</label>
-        </div>
-        
-        <div class="form-group" id="leadNotesGroup">
-          <textarea class="form-textarea" id="leadNotes" placeholder=" "></textarea>
-          <label class="form-label" for="leadNotes">Notes</label>
-          <button type="button" id="speechBtn" class="speech-btn"><i class="fas fa-microphone"></i></button>
-        </div>
-        
-        <div class="form-group">
-          <label>Current company:</label>
-          <input type="text" id="leadCurrentCompany" class="form-input">
-        </div>
-        
-        <div class="form-group">
-          <label>Currently paying:</label>
-          <input type="text" id="leadCurrentlyPaying" class="form-input">
-        </div>
-        
-        <div class="form-group">
-          <label>Products quoted:</label>
-          <input type="text" id="leadProductsQuoted" class="form-input">
-        </div>
-        
-        <div class="form-group">
-          <label>Our rate:</label>
-          <input type="text" id="leadOurRate" class="form-input">
-        </div>
-        
-        <div class="form-group" id="leadTimeGroup">
-          <input class="form-input" id="leadTime" type="datetime-local" placeholder=" ">
-          <label class="form-label" for="leadTime">Appointment Date & Time</label>
-        </div>
-
-        <div class="form-group" id="templateNameGroup" style="display: none;">
-          <input class="form-input" id="templateName" type="text" placeholder=" " required>
-          <label class="form-label" for="templateName">Template Name *</label>
-        </div>
-        
-        <div class="form-group" id="templateMessageGroup" style="display: none;">
-          <textarea class="form-textarea" id="templateMessage" placeholder=" " required></textarea>
-          <label class="form-label" for="templateMessage">Message *</label>
-        </div>
-      </form>
-      
-      <div class="popup-actions">
-        <button class="btn btn-danger delete-btn" id="deleteBtn" style="display: none;" onclick="deleteItem()">
-          <i class="fas fa-trash"></i>
-          Delete
-        </button>
-        <button class="btn btn-success sold-btn" id="soldBtn" style="display: none;" onclick="sellLead()">
-          <i class="fas fa-check-circle"></i>
-          Sold
-        </button>
-        <button class="btn btn-secondary" onclick="closePopup()">Cancel</button>
-        <button class="btn btn-primary" id="saveBtn" onclick="saveItem()">
-          <i class="fas fa-save"></i>
-          <span id="saveBtnText">Save Lead</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="notification" id="notification">
-      <div class="notification-content">
-        <div class="notification-icon">
-          <i class="fas fa-check-circle"></i>
-        </div>
-        <div class="notification-text">
-          <div class="notification-title">Success!</div>
-          <div class="notification-message">Lead has been saved successfully.</div>
-        </div>
-      </div>
-    </div>
   </div>
 
   <script>
-    let leads = [];
-    let deletedLeads = [];
-    let soldLeads = [];
-    let templates = [];
-    let currentEditIndex = null;
-    let currentEditTemplateIndex = null;
-    let currentPopupMode = 'lead';
-    let calendar = null;
-    let recognition = null;
-
-    function init() {
-      loadLeads();
-      loadDeletedLeads();
-      loadSoldLeads();
-      loadTemplates();
-      renderLeads();
-      renderSoldLeads();
-      renderTrash();
-      renderTemplates();
-      updateStats();
-      initCalendar();
-      startReminderSystem();
-      const isDarkMode = localStorage.getItem('darkMode') === 'true';
-      if (isDarkMode) document.body.classList.add('dark-mode');
-      document.querySelector('.theme-toggle').addEventListener('click', toggleDarkMode);
-      initSpeechRecognition();
-      initAutoResizeTextareas();
-    }
-
-    function loadLeads() {
-      const savedLeads = localStorage.getItem('leads');
-      leads = savedLeads ? JSON.parse(savedLeads) : [];
-      if (!Array.isArray(leads)) leads = [];
-      leads = leads.filter(lead => !lead.sold);
-      localStorage.setItem('leads', JSON.stringify(leads));
-    }
-
-    function loadDeletedLeads() {
-      const savedDeleted = localStorage.getItem('deletedLeads');
-      deletedLeads = savedDeleted ? JSON.parse(savedDeleted) : [];
-      if (!Array.isArray(deletedLeads)) deletedLeads = [];
-      deletedLeads = deletedLeads.filter(lead => new Date(lead.deletedAt) > new Date(Date.now() - 24 * 60 * 60 * 1000));
-      localStorage.setItem('deletedLeads', JSON.stringify(deletedLeads));
-    }
-
-    function loadSoldLeads() {
-      const savedSold = localStorage.getItem('soldLeads');
-      soldLeads = savedSold ? JSON.parse(savedSold) : [];
-      if (!Array.isArray(soldLeads)) soldLeads = [];
-      soldLeads = soldLeads.filter(lead => lead.sold);
-      localStorage.setItem('soldLeads', JSON.stringify(soldLeads));
-    }
-
-    function loadTemplates() {
-      const savedTemplates = localStorage.getItem('templates');
-      templates = savedTemplates ? JSON.parse(savedTemplates) : [];
-      if (!Array.isArray(templates)) templates = [];
-      localStorage.setItem('templates', JSON.stringify(templates));
-    }
-
-    function saveLeads() {
-      localStorage.setItem('leads', JSON.stringify(leads));
-    }
-
-    function saveSoldLeads() {
-      localStorage.setItem('soldLeads', JSON.stringify(soldLeads));
-    }
-
-    function saveDeletedLeads() {
-      localStorage.setItem('deletedLeads', JSON.stringify(deletedLeads));
-    }
-
-    function saveTemplates() {
-      localStorage.setItem('templates', JSON.stringify(templates));
-    }
-
-    function showTab(tab) {
-      document.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.content').forEach(c => c.style.display = 'none');
-      document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
-      document.getElementById(tab).style.display = 'block';
-      document.querySelector('.breadcrumbs .current').textContent = document.querySelector(`[data-tab="${tab}"]`).textContent.trim();
-      if (tab === 'calendar' && calendar) calendar.render();
-      if (tab === 'sold') renderSoldLeads();
-      if (tab === 'trash') renderTrash();
-    }
-
     function showPopup(mode) {
-      currentPopupMode = mode;
-      currentEditIndex = null;
-      currentEditTemplateIndex = null;
       document.getElementById('overlay').style.display = 'block';
       document.getElementById('popup').style.display = 'block';
-      document.getElementById('leadForm').reset();
-
-      document.getElementById('leadNameGroup').style.display = mode === 'lead' ? 'block' : 'none';
-      document.getElementById('leadPhoneGroup').style.display = mode === 'lead' ? 'block' : 'none';
-      document.getElementById('leadEmailGroup').style.display = mode === 'lead' ? 'block' : 'none';
-      document.getElementById('leadDobGroup').style.display = mode === 'lead' ? 'block' : 'none';
-      document.getElementById('leadPolicyNumberGroup').style.display = mode === 'lead' ? 'block' : 'none';
-      document.getElementById('leadNotesGroup').style.display = mode === 'lead' ? 'block' : 'none';
-      document.getElementById('leadTimeGroup').style.display = mode === 'lead' ? 'block' : 'none';
-      document.getElementById('templateNameGroup').style.display = mode === 'template' ? 'block' : 'none';
-      document.getElementById('templateMessageGroup').style.display = mode === 'template' ? 'block' : 'none';
-
-      if (mode === 'lead') {
-        document.getElementById('popupTitle').textContent = 'Add New Lead';
-        document.getElementById('saveBtnText').textContent = 'Save Lead';
-        document.getElementById('deleteBtn').style.display = currentEditIndex !== null ? 'inline-flex' : 'none';
-        document.getElementById('soldBtn').style.display = currentEditIndex !== null ? 'inline-flex' : 'none';
-        if (recognition) recognition.stop();
-      } else {
-        document.getElementById('popupTitle').textContent = 'Add New Template';
-        document.getElementById('saveBtnText').textContent = 'Save Template';
-        document.getElementById('deleteBtn').style.display = currentEditTemplateIndex !== null ? 'inline-flex' : 'none';
-      }
-      initAutoResizeTextareas();
     }
 
     function closePopup() {
       document.getElementById('overlay').style.display = 'none';
       document.getElementById('popup').style.display = 'none';
-      currentEditIndex = null;
-      currentEditTemplateIndex = null;
-      currentPopupMode = 'lead';
-      if (recognition) recognition.stop();
-    }
-
-    function validatePhone(phone) {
-      const pattern = /^[0-9]{10}$/;
-      return !phone || pattern.test(phone.replace(/\D/g, ''));
-    }
-
-    function autoResize(textarea) {
-      textarea.style.height = 'auto';
-      textarea.style.height = `${textarea.scrollHeight}px`;
-    }
-
-    function initAutoResizeTextareas() {
-      document.querySelectorAll('.form-textarea').forEach(textarea => {
-        textarea.addEventListener('input', () => autoResize(textarea));
-        autoResize(textarea);
-      });
-    }
-
-    function saveItem() {
-      document.getElementById('saveBtn').classList.add('loading');
-      setTimeout(() => {
-        if (currentPopupMode === 'lead') {
-          const name = document.getElementById('leadName').value.trim();
-          const phone = document.getElementById('leadPhone').value.trim();
-          const email = document.getElementById('leadEmail').value.trim();
-          const notes = document.getElementById('leadNotes').value.trim();
-          const policyNumber = document.getElementById('leadPolicyNumber').value.trim();
-          const currentCompany = document.getElementById('leadCurrentCompany').value.trim();
-          const currentlyPaying = document.getElementById('leadCurrentlyPaying').value.trim();
-          const productsQuoted = document.getElementById('leadProductsQuoted').value.trim();
-          const ourRate = document.getElementById('leadOurRate').value.trim();
-          const time = document.getElementById('leadTime').value;
-
-          if (!name) {
-            showNotification('warning', 'Error', 'Name is required.');
-            return;
-          }
-
-          if (!validatePhone(phone)) {
-            showNotification('warning', 'Error', 'Invalid phone number. Use 10 digits.');
-            return;
-          }
-
-          if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            showNotification('warning', 'Error', 'Invalid email address.');
-            return;
-          }
-
-          const lead = {
-            name,
-            phone,
-            email,
-            dob: document.getElementById('leadDob').value || null,
-            policyNumber,
-            notes,
-            currentCompany,
-            currentlyPaying,
-            productsQuoted,
-            ourRate,
-            time: time ? new Date(time).toISOString() : null,
-            status: 'New',
-            sold: false
-          };
-
-          if (currentEditIndex !== null) {
-            leads[currentEditIndex] = lead;
-          } else {
-            leads.push(lead);
-          }
-
-          saveLeads();
-          renderLeads();
-          updateStats();
-          if (calendar) calendar.refetchEvents();
-          closePopup();
-          showNotification('success', 'Success', 'Lead saved successfully.');
-        } else {
-          const name = document.getElementById('templateName').value.trim();
-          const message = document.getElementById('templateMessage').value.trim();
-
-          if (!name) {
-            showNotification('warning', 'Error', 'Template name is required.');
-            return;
-          }
-
-          if (!message) {
-            showNotification('warning', 'Error', 'Message is required.');
-            return;
-          }
-
-          const template = { name, message };
-
-          if (currentEditTemplateIndex !== null) {
-            templates[currentEditTemplateIndex] = template;
-          } else {
-            templates.push(template);
-          }
-
-          saveTemplates();
-          renderTemplates();
-          closePopup();
-          showNotification('success', 'Success', 'Template saved successfully.');
-        }
-        document.getElementById('saveBtn').classList.remove('loading');
-      }, 500);
-    }
-
-    function deleteItem() {
-      document.getElementById('deleteBtn').classList.add('loading');
-      setTimeout(() => {
-        if (currentPopupMode === 'lead' && currentEditIndex !== null) {
-          const lead = leads[currentEditIndex];
-          lead.deletedAt = new Date().toISOString();
-          deletedLeads.push(lead);
-          leads.splice(currentEditIndex, 1);
-          saveLeads();
-          saveDeletedLeads();
-          renderLeads();
-          renderTrash();
-          updateStats();
-          if (calendar) calendar.refetchEvents();
-          closePopup();
-          showNotification('warning', 'Deleted', 'Lead moved to trash. Restore within 24 hours.');
-        } else if (currentPopupMode === 'template' && currentEditTemplateIndex !== null) {
-          templates.splice(currentEditTemplateIndex, 1);
-          saveTemplates();
-          renderTemplates();
-          closePopup();
-          showNotification('warning', 'Deleted', 'Template deleted.');
-        }
-        document.getElementById('deleteBtn').classList.remove('loading');
-      }, 500);
-    }
-
-    function sellLead() {
-      document.getElementById('soldBtn').classList.add('loading');
-      setTimeout(() => {
-        if (currentPopupMode === 'lead' && currentEditIndex !== null) {
-          const lead = leads[currentEditIndex];
-          lead.sold = true;
-          lead.soldDate = new Date().toISOString();
-          soldLeads.push(lead);
-          leads.splice(currentEditIndex, 1);
-          saveLeads();
-          saveSoldLeads();
-          renderLeads();
-          renderSoldLeads();
-          updateStats();
-          if (calendar) calendar.refetchEvents();
-          closePopup();
-          showNotification('success', 'Sold', 'Lead marked as sold.');
-        }
-        document.getElementById('soldBtn').classList.remove('loading');
-      }, 500);
-    }
-
-    function restoreLead(index) {
-      const lead = deletedLeads[index];
-      leads.push(lead);
-      deletedLeads.splice(index, 1);
-      saveLeads();
-      saveDeletedLeads();
-      renderLeads();
-      renderTrash();
-      updateStats();
-      if (calendar) calendar.refetchEvents();
-      showNotification('success', 'Restored', 'Lead restored successfully.');
-    }
-
-    function clearTrash() {
-      deletedLeads = [];
-      saveDeletedLeads();
-      renderTrash();
-      showNotification('success', 'Cleared', 'Trash cleared successfully.');
-    }
-
-    function clearSold() {
-      soldLeads = [];
-      saveSoldLeads();
-      renderSoldLeads();
-      showNotification('success', 'Cleared', 'Sold leads cleared successfully.');
-    }
-
-    function editLead(index) {
-      currentPopupMode = 'lead';
-      currentEditIndex = index;
-      currentEditTemplateIndex = null;
-      const lead = leads[index];
-      document.getElementById('leadName').value = lead.name;
-      document.getElementById('leadPhone').value = lead.phone || '';
-      document.getElementById('leadEmail').value = lead.email || '';
-      document.getElementById('leadDob').value = lead.dob || '';
-      document.getElementById('leadPolicyNumber').value = lead.policyNumber || '';
-      document.getElementById('leadNotes').value = lead.notes || '';
-      document.getElementById('leadCurrentCompany').value = lead.currentCompany || '';
-      document.getElementById('leadCurrentlyPaying').value = lead.currentlyPaying || '';
-      document.getElementById('leadProductsQuoted').value = lead.productsQuoted || '';
-      document.getElementById('leadOurRate').value = lead.ourRate || '';
-      document.getElementById('leadTime').value = lead.time ? lead.time.slice(0, 16) : '';
-      document.getElementById('popupTitle').textContent = 'Edit Lead';
-      document.getElementById('saveBtnText').textContent = 'Save Lead';
-      document.getElementById('deleteBtn').style.display = 'inline-flex';
-      document.getElementById('soldBtn').style.display = 'inline-flex';
-      document.getElementById('leadNameGroup').style.display = 'block';
-      document.getElementById('leadPhoneGroup').style.display = 'block';
-      document.getElementById('leadEmailGroup').style.display = 'block';
-      document.getElementById('leadDobGroup').style.display = 'block';
-      document.getElementById('leadPolicyNumberGroup').style.display = 'block';
-      document.getElementById('leadNotesGroup').style.display = 'block';
-      document.getElementById('leadTimeGroup').style.display = 'block';
-      document.getElementById('templateNameGroup').style.display = 'none';
-      document.getElementById('templateMessageGroup').style.display = 'none';
-      document.getElementById('overlay').style.display = 'block';
-      document.getElementById('popup').style.display = 'block';
-      if (recognition) recognition.stop();
-      initAutoResizeTextareas();
-    }
-
-    function editTemplate(index) {
-      currentPopupMode = 'template';
-      currentEditTemplateIndex = index;
-      currentEditIndex = null;
-      const template = templates[index];
-      document.getElementById('templateName').value = template.name;
-      document.getElementById('templateMessage').value = template.message;
-      document.getElementById('popupTitle').textContent = 'Edit Template';
-      document.getElementById('saveBtnText').textContent = 'Save Template';
-      document.getElementById('deleteBtn').style.display = 'inline-flex';
-      document.getElementById('leadNameGroup').style.display = 'none';
-      document.getElementById('leadPhoneGroup').style.display = 'none';
-      document.getElementById('leadEmailGroup').style.display = 'none';
-      document.getElementById('leadDobGroup').style.display = 'none';
-      document.getElementById('leadPolicyNumberGroup').style.display = 'none';
-      document.getElementById('leadNotesGroup').style.display = 'none';
-      document.getElementById('leadTimeGroup').style.display = 'none';
-      document.getElementById('templateNameGroup').style.display = 'block';
-      document.getElementById('templateMessageGroup').style.display = 'block';
-      document.getElementById('overlay').style.display = 'block';
-      document.getElementById('popup').style.display = 'block';
-      initAutoResizeTextareas();
-    }
-
-    function renderLeads() {
-      const grid = document.getElementById('leadGrid');
-      const emptyState = document.getElementById('emptyState');
-      grid.innerHTML = '';
-
-      if (!leads || leads.length === 0) {
-        emptyState.style.display = 'block';
-        return;
-      }
-
-      emptyState.style.display = 'none';
-
-      const sortedLeads = [...leads].sort((a, b) => {
-        if (!a.time && !b.time) return 0;
-        if (!a.time) return 1;
-        if (!b.time) return -1;
-        return new Date(a.time) - new Date(b.time);
-      });
-
-      sortedLeads.forEach((lead, index) => {
-        const originalIndex = leads.indexOf(lead);
-        const card = document.createElement('div');
-        card.className = 'lead-card';
-        card.onclick = () => editLead(originalIndex);
-        card.innerHTML = `
-          <div class="lead-header">
-            <div>
-              <div class="lead-name">${lead.name}</div>
-              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
-              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email}</div>` : ''}
-            </div>
-            <div class="lead-status status-${lead.status.toLowerCase()}">${lead.status}</div>
-          </div>
-          ${lead.currentCompany ? `<div class="lead-details"><strong>Company:</strong> ${lead.currentCompany}</div>` : ''}
-          ${lead.currentlyPaying ? `<div class="lead-details"><strong>Paying:</strong> ${lead.currentlyPaying}</div>` : ''}
-          ${lead.productsQuoted ? `<div class="lead-details"><strong>Quoted:</strong> ${lead.productsQuoted}</div>` : ''}
-          ${lead.ourRate ? `<div class="lead-details"><strong>Rate:</strong> ${lead.ourRate}</div>` : ''}
-          ${lead.notes ? `<div class="lead-notes"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
-          <div class="lead-footer">
-            <div class="lead-time">
-              ${lead.time ? `<i class="fas fa-clock"></i> ${new Date(lead.time).toLocaleString()}` : 'No appointment'}
-            </div>
-            <button class="btn btn-success btn-small" onclick="sellLead(${originalIndex}); event.stopPropagation();">Sold</button>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    function renderSoldLeads() {
-      const grid = document.getElementById('soldGrid');
-      const emptyState = document.getElementById('soldEmptyState');
-      grid.innerHTML = '';
-
-      if (!soldLeads || soldLeads.length === 0) {
-        emptyState.style.display = 'block';
-        return;
-      }
-
-      emptyState.style.display = 'none';
-
-      soldLeads.forEach((lead, index) => {
-        const card = document.createElement('div');
-        card.className = 'lead-card';
-        card.onclick = () => editLead(leads.indexOf(lead));
-        card.innerHTML = `
-          <div class="lead-header">
-            <div>
-              <div class="lead-name">${lead.name}</div>
-              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
-              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email}</div>` : ''}
-            </div>
-            <div class="lead-status status-sold">Sold</div>
-          </div>
-          ${lead.currentCompany ? `<div class="lead-details"><strong>Company:</strong> ${lead.currentCompany}</div>` : ''}
-          ${lead.currentlyPaying ? `<div class="lead-details"><strong>Paying:</strong> ${lead.currentlyPaying}</div>` : ''}
-          ${lead.productsQuoted ? `<div class="lead-details"><strong>Quoted:</strong> ${lead.productsQuoted}</div>` : ''}
-          ${lead.ourRate ? `<div class="lead-details"><strong>Rate:</strong> ${lead.ourRate}</div>` : ''}
-          ${lead.notes ? `<div class="lead-notes"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
-          <div class="lead-footer">
-            <div class="lead-time">
-              <i class="fas fa-clock"></i> Sold: ${new Date(lead.soldDate).toLocaleString()}
-            </div>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    function renderTrash() {
-      const grid = document.getElementById('trashGrid');
-      const emptyState = document.getElementById('trashEmptyState');
-      grid.innerHTML = '';
-
-      if (!deletedLeads || deletedLeads.length === 0) {
-        emptyState.style.display = 'block';
-        return;
-      }
-
-      emptyState.style.display = 'none';
-
-      deletedLeads.forEach((lead, index) => {
-        const card = document.createElement('div');
-        card.className = 'lead-card';
-        card.innerHTML = `
-          <div class="lead-header">
-            <div>
-              <div class="lead-name">${lead.name}</div>
-              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
-              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email}</div>` : ''}
-            </div>
-            <div class="lead-status status-new">Deleted</div>
-          </div>
-          ${lead.currentCompany ? `<div class="lead-details"><strong>Company:</strong> ${lead.currentCompany}</div>` : ''}
-          ${lead.currentlyPaying ? `<div class="lead-details"><strong>Paying:</strong> ${lead.currentlyPaying}</div>` : ''}
-          ${lead.productsQuoted ? `<div class="lead-details"><strong>Quoted:</strong> ${lead.productsQuoted}</div>` : ''}
-          ${lead.ourRate ? `<div class="lead-details"><strong>Rate:</strong> ${lead.ourRate}</div>` : ''}
-          ${lead.notes ? `<div class="lead-notes"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
-          <div class="lead-footer">
-            <div class="lead-time">
-              <i class="fas fa-clock"></i> Deleted: ${new Date(lead.deletedAt).toLocaleString()}
-            </div>
-            <button class="btn btn-secondary btn-small" onclick="restoreLead(${index}); event.stopPropagation();">Restore</button>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    function renderTemplates() {
-      const grid = document.getElementById('templateGrid');
-      const emptyState = document.getElementById('templateEmptyState');
-      grid.innerHTML = '';
-
-      if (!templates || templates.length === 0) {
-        emptyState.style.display = 'block';
-        return;
-      }
-
-      emptyState.style.display = 'none';
-
-      templates.forEach((template, index) => {
-        const card = document.createElement('div');
-        card.className = 'template-card';
-        card.onclick = () => editTemplate(index);
-        card.innerHTML = `
-          <div class="template-header">
-            <div>
-              <div class="template-name">${template.name}</div>
-            </div>
-          </div>
-          <div class="template-message">${template.message}</div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    function filterLeads() {
-      const search = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = leads.filter(lead => 
-        lead.name.toLowerCase().includes(search) || 
-        (lead.phone && lead.phone.includes(search)) ||
-        (lead.email && lead.email.toLowerCase().includes(search)) ||
-        (lead.policyNumber && lead.policyNumber.toLowerCase().includes(search)) ||
-        (lead.currentCompany && lead.currentCompany.toLowerCase().includes(search)) ||
-        (lead.currentlyPaying && lead.currentlyPaying.toLowerCase().includes(search)) ||
-        (lead.productsQuoted && lead.productsQuoted.toLowerCase().includes(search)) ||
-        (lead.ourRate && lead.ourRate.toLowerCase().includes(search)) ||
-        (lead.notes && lead.notes.toLowerCase().includes(search))
-      );
-      const grid = document.getElementById('leadGrid');
-      const emptyState = document.getElementById('emptyState');
-      grid.innerHTML = '';
-
-      if (filtered.length === 0) {
-        emptyState.style.display = 'block';
-        return;
-      }
-
-      emptyState.style.display = 'none';
-
-      const sortedFiltered = filtered.sort((a, b) => {
-        if (!a.time && !b.time) return 0;
-        if (!a.time) return 1;
-        if (!b.time) return -1;
-        return new Date(a.time) - new Date(b.time);
-      });
-
-      sortedFiltered.forEach(lead => {
-        const originalIndex = leads.indexOf(lead);
-        const card = document.createElement('div');
-        card.className = 'lead-card';
-        card.onclick = () => editLead(originalIndex);
-        card.innerHTML = `
-          <div class="lead-header">
-            <div>
-              <div class="lead-name">${lead.name}</div>
-              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
-              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email}</div>` : ''}
-            </div>
-            <div class="lead-status status-${lead.status.toLowerCase()}">${lead.status}</div>
-          </div>
-          ${lead.currentCompany ? `<div class="lead-details"><strong>Company:</strong> ${lead.currentCompany}</div>` : ''}
-          ${lead.currentlyPaying ? `<div class="lead-details"><strong>Paying:</strong> ${lead.currentlyPaying}</div>` : ''}
-          ${lead.productsQuoted ? `<div class="lead-details"><strong>Quoted:</strong> ${lead.productsQuoted}</div>` : ''}
-          ${lead.ourRate ? `<div class="lead-details"><strong>Rate:</strong> ${lead.ourRate}</div>` : ''}
-          ${lead.notes ? `<div class="lead-notes"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
-          <div class="lead-footer">
-            <div class="lead-time">
-              ${lead.time ? `<i class="fas fa-clock"></i> ${new Date(lead.time).toLocaleString()}` : 'No appointment'}
-            </div>
-            <button class="btn btn-success btn-small" onclick="sellLead(${originalIndex}); event.stopPropagation();">Sold</button>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    function filterTemplates() {
-      const search = document.getElementById('templateSearchInput').value.toLowerCase();
-      const filtered = templates.filter(template => 
-        template.name.toLowerCase().includes(search) || 
-        template.message.toLowerCase().includes(search)
-      );
-      const grid = document.getElementById('templateGrid');
-      const emptyState = document.getElementById('templateEmptyState');
-      grid.innerHTML = '';
-
-      if (filtered.length === 0) {
-        emptyState.style.display = 'block';
-        return;
-      }
-
-      emptyState.style.display = 'none';
-
-      filtered.forEach((template, index) => {
-        const card = document.createElement('div');
-        card.className = 'template-card';
-        card.onclick = () => editTemplate(templates.indexOf(template));
-        card.innerHTML = `
-          <div class="template-header">
-            <div>
-              <div class="template-name">${template.name}</div>
-            </div>
-          </div>
-          <div class="template-message">${template.message}</div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    function updateStats() {
-      const total = leads.length;
-      const appointments = leads.filter(lead => lead.time).length;
-      document.getElementById('totalLeads').textContent = `${total} Leads`;
-      document.getElementById('upcomingAppts').textContent = `${appointments} Appointments`;
-    }
-
-    function initCalendar() {
-      const calendarEl = document.getElementById('calendarView');
-      calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        editable: true,
-        events: function(fetchInfo, successCallback, failureCallback) {
-          const events = leads
-            .filter(lead => lead.time)
-            .map((lead, index) => ({
-              title: lead.name,
-              start: lead.time,
-              extendedProps: { index }
-            }));
-          successCallback(events);
-        },
-        eventClick: function(info) {
-          editLead(info.event.extendedProps.index);
-        },
-        eventDrop: function(info) {
-          const index = info.event.extendedProps.index;
-          leads[index].time = info.event.start.toISOString();
-          saveLeads();
-          renderLeads();
-          updateStats();
-        }
-      });
-      calendar.render();
-    }
-
-    function startReminderSystem() {
-      setInterval(() => {
-        const now = new Date();
-        leads.forEach(lead => {
-          if (lead.time && !lead.reminderSent) {
-            const apptTime = new Date(lead.time);
-            const diff = (apptTime - now) / 1000 / 60;
-            if (diff <= 60 && diff > 0) {
-              showNotification('warning', 'Reminder', `Appointment with ${lead.name} in ${Math.round(diff)} minutes.`);
-              lead.reminderSent = true;
-              saveLeads();
-            }
-          }
-        });
-      }, 60000);
-    }
-
-    function showNotification(type, title, message) {
-      const notification = document.getElementById('notification');
-      notification.className = `notification ${type}`;
-      notification.querySelector('.notification-icon i').className = `fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}`;
-      notification.querySelector('.notification-title').textContent = title;
-      notification.querySelector('.notification-message').textContent = message;
-      notification.style.display = 'block';
-      setTimeout(() => { notification.style.display = 'none'; }, 5000);
-    }
-
-    document.querySelectorAll('.nav-link').forEach(button => {
-      button.addEventListener('click', () => showTab(button.getAttribute('data-tab')));
-    });
-
-    document.getElementById('searchInput').addEventListener('input', filterLeads);
-    document.getElementById('templateSearchInput').addEventListener('input', filterTemplates);
-
-    document.querySelectorAll('.export-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        if (e.target.textContent.includes('Share')) {
-          exportLeadsLink();
-        } else {
-          btn.classList.add('loading');
-          setTimeout(() => {
-            exportLeads();
-            btn.classList.remove('loading');
-          }, 500);
-        }
-      });
-    });
-
-    document.querySelectorAll('.print-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        btn.classList.add('loading');
-        setTimeout(() => {
-          printSection();
-          btn.classList.remove('loading');
-        }, 500);
-      });
-    });
-
-    document.querySelectorAll('.form-input, .form-textarea').forEach(input => {
-      input.addEventListener('input', function() {
-        const label = this.nextElementSibling || this.previousElementSibling;
-        if (label && label.classList.contains('form-label')) {
-          if (this.value.trim() !== '') {
-            label.style.top = '-0.5rem';
-            label.style.fontSize = '0.75rem';
-            label.style.background = 'var(--card-bg)';
-            label.style.padding = '0 0.25rem';
-            label.style.color = 'var(--primary-blue)';
-          } else {
-            label.style.top = '0.75rem';
-            label.style.fontSize = '0.875rem';
-            label.style.background = 'transparent';
-            label.style.padding = '0';
-            label.style.color = 'var(--text-secondary)';
-          }
-        }
-      });
-
-      input.addEventListener('focus', function() {
-        const label = this.nextElementSibling || this.previousElementSibling;
-        if (label && label.classList.contains('form-label') && this.value.trim() === '') {
-          label.style.top = '-0.5rem';
-          label.style.fontSize = '0.75rem';
-          label.style.background = 'var(--card-bg)';
-          label.style.padding = '0 0.25rem';
-          label.style.color = 'var(--primary-blue)';
-        }
-      });
-
-      input.addEventListener('blur', function() {
-        const label = this.nextElementSibling || this.previousElementSibling;
-        if (label && label.classList.contains('form-label') && this.value.trim() === '') {
-          label.style.top = '0.75rem';
-          label.style.fontSize = '0.875rem';
-          label.style.background = 'transparent';
-          label.style.padding = '0';
-          label.style.color = 'var(--text-secondary)';
-        }
-      });
-    });
-
-    function toggleDarkMode() {
-      const body = document.body;
-      const isDarkMode = body.classList.toggle('dark-mode');
-      localStorage.setItem('darkMode', isDarkMode);
-      showNotification('success', 'Theme Updated', `Switched to ${isDarkMode ? 'Dark' : 'Light'} Mode`);
-    }
-
-    function printSection() {
-      const printContent = document.querySelector('#leads').innerHTML;
-      const originalContent = document.body.innerHTML;
-      document.body.innerHTML = `
-        <html>
-          <head>
-            <title>Print Leads</title>
-            <style>
-              body { font-family: 'Roboto', sans-serif; padding: 20px; }
-              .lead-card { margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; }
-              .lead-name { font-weight: bold; }
-            </style>
-          </head>
-          <body>${printContent}</body>
-        </html>`;
-      window.print();
-      document.body.innerHTML = originalContent;
-      location.reload();
-    }
-
-    function exportLeads() {
-      const csv = [
-        ['Name', 'Phone', 'Email', 'Date of Birth', 'Policy Number', 'Notes', 'Appointment Time', 'Status', 'Current company', 'Currently paying', 'Products quoted', 'Our rate'],
-        ...leads.map(lead => [
-          lead.name,
-          lead.phone || '',
-          lead.email || '',
-          lead.dob || '',
-          lead.policyNumber || '',
-          lead.notes || '',
-          lead.time || '',
-          lead.status || 'New',
-          lead.currentCompany || '',
-          lead.currentlyPaying || '',
-          lead.productsQuoted || '',
-          lead.ourRate || ''
-        ])
-      ].map(row => row.join(',')).join('\n');
-
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'leads.csv';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-      showNotification('success', 'Success', 'Leads exported as leads.csv');
     }
 
     function exportLeadsLink() {
-      const shareId = 'xxxxxx'.replace(/x/g, () => Math.floor(Math.random() * 16).toString(16));
-      const shareData = JSON.stringify(leads);
-      const shareUrl = `${window.location.origin}/share.html?id=${shareId}&data=${encodeURIComponent(shareData)}`;
-      localStorage.setItem(`share_${shareId}`, shareData);
-      setTimeout(() => localStorage.removeItem(`share_${shareId}`), 24 * 60 * 60 * 1000);
-      navigator.clipboard.writeText(shareUrl);
-      showNotification('success', 'Link Generated', `Share link copied to clipboard. It expires in 24 hours. Provide this to viewers.`);
+      alert('Share link generated (simulated)');
     }
-
-    function initSpeechRecognition() {
-      if ('webkitSpeechRecognition' in window) {
-        recognition = new webkitSpeechRecognition();
-        recognition.continuous = true;
-        recognition.interimResults = true;
-        recognition.lang = 'en-US';
-
-        recognition.onresult = function(event) {
-          let finalTranscript = '';
-          for (let i = event.resultIndex; i < event.results.length; i++) {
-            if (event.results[i].isFinal) {
-              finalTranscript += event.results[i][0].transcript;
-            }
-          }
-          const notesField = document.getElementById('leadNotes');
-          notesField.value = notesField.value + finalTranscript;
-          autoResize(notesField);
-          const label = notesField.nextElementSibling;
-          if (label && label.classList.contains('form-label') && notesField.value.trim() !== '') {
-            label.style.top = '-0.5rem';
-            label.style.fontSize = '0.75rem';
-            label.style.background = 'var(--card-bg)';
-            label.style.padding = '0 0.25rem';
-            label.style.color = 'var(--primary-blue)';
-          }
-        };
-
-        recognition.onerror = function(event) {
-          console.error('Speech recognition error:', event.error);
-          showNotification('warning', 'Error', 'Speech recognition failed. Please try again.');
-          document.getElementById('speechBtn').classList.remove('active');
-        };
-
-        recognition.onend = function() {
-          document.getElementById('speechBtn').classList.remove('active');
-          showNotification('success', 'Speech Stopped', 'Speech recognition has stopped.');
-        };
-
-        document.getElementById('speechBtn').addEventListener('click', function() {
-          if (recognition) {
-            if (!this.classList.contains('active')) {
-              recognition.start();
-              this.classList.add('active');
-              showNotification('success', 'Speech Started', 'Speak now to add notes.');
-            } else {
-              recognition.stop();
-              this.classList.remove('active');
-            }
-          }
-        });
-      } else {
-        console.log('Speech recognition not supported in this browser.');
-        showNotification('warning', 'Error', 'Speech recognition is not supported in your browser.');
-      }
-    }
-
-    init();
   </script>
