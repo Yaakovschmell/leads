@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shared Leads</title>
+</head>
+<body>
+  <div id="leadsView"></div>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+    const data = urlParams.get('data');
+    if (id && data && localStorage.getItem(`share_${id}`)) {
+      const leads = JSON.parse(decodeURIComponent(data));
+      const container = document.getElementById('leadsView');
+      leads.forEach(lead => {
+        container.innerHTML += `<p>${lead.name} - ${lead.phone || 'No phone'}</p>`;
+      });
+    } else {
+      document.getElementById('leadsView').innerHTML = '<p>Link expired or invalid.</p>';
+    }
+  </script>
