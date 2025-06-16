@@ -115,14 +115,14 @@ header {
   color: var(--gray);
 }
 
-.leads-header {
+.leads-header, .templates-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.leads-title {
+.leads-title, .templates-title {
   margin: 0;
   color: var(--primary-blue);
 }
@@ -167,9 +167,17 @@ header {
   color: var(--white);
 }
 
+.btn-primary:hover {
+  background-color: var(--dark-blue);
+}
+
 .btn-secondary {
   background-color: var(--light-gray);
   color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+  background-color: #b0b5b9;
 }
 
 .btn-success {
@@ -177,18 +185,46 @@ header {
   color: var(--white);
 }
 
+.btn-success:hover {
+  background-color: #128c3d;
+}
+
+.btn-danger {
+  background-color: var(--red);
+  color: var(--white);
+}
+
+.btn-danger:hover {
+  background-color: #b91c1c;
+}
+
 .btn-small {
   padding: 5px 10px;
   font-size: 0.75rem;
 }
 
-.lead-grid {
+.btn.loading::after {
+  content: '';
+  width: 14px;
+  height: 14px;
+  border: 2px solid #fff;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: 5px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.lead-grid, .template-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
 }
 
-.lead-card {
+.lead-card, .template-card {
   background-color: var(--card-bg);
   padding: 15px;
   border: 2px solid #FFDAB9;
@@ -196,13 +232,13 @@ header {
   cursor: pointer;
 }
 
-.lead-header {
+.lead-header, .template-header {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
 }
 
-.lead-name {
+.lead-name, .template-name {
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -241,4 +277,142 @@ header {
 .lead-time {
   font-size: 0.8rem;
   color: var(--gray);
+}
+
+.template-message {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-top: 10px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 0;
+  color: var(--gray);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  z-index: 1000;
+}
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--white);
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  z-index: 1001;
+  display: none;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.popup-title {
+  margin: 0;
+  color: var(--primary-blue);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--gray);
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-input, .form-textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--light-gray);
+  border-radius: 5px;
+  font-size: 0.875rem;
+  resize: none;
+}
+
+.form-label {
+  position: absolute;
+  top: 0.75rem;
+  left: 10px;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+
+.speech-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  color: var(--primary-blue);
+}
+
+.speech-btn.active {
+  color: var(--green);
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--white);
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: none;
+  z-index: 2000;
+}
+
+.notification.success { border-left: 4px solid var(--green); }
+.notification.warning { border-left: 4px solid var(--red); }
+
+.notification-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.notification-icon i {
+  font-size: 1.5rem;
+}
+
+.notification-text {
+  flex-grow: 1;
+}
+
+.notification-title {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.notification-message {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
 }
