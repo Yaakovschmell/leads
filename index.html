@@ -645,22 +645,19 @@
           <div class="lead-header">
             <div>
               <div class="lead-name">${lead.name}</div>
-              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i>${lead.phone}</div>` : ''}
-              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i>${lead.email}</div>` : ''}
-              ${lead.dob ? `<div class="lead-dob"><i class="fas fa-birthday-cake"></i>${new Date(lead.dob).toLocaleDateString()}</div>` : ''}
+              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
+              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email}</div>` : ''}
             </div>
             <div class="lead-status status-${lead.status.toLowerCase()}">${lead.status}</div>
           </div>
-          ${lead.policyNumber ? `<div class="lead-notes"><strong>Policy Number:</strong> ${lead.policyNumber}</div>` : ''}
-          ${lead.currentCompany ? `<div class="lead-notes"><strong>Current company:</strong> ${lead.currentCompany}</div>` : ''}
-          ${lead.currentlyPaying ? `<div class="lead-notes"><strong>Currently paying:</strong> ${lead.currentlyPaying}</div>` : ''}
-          ${lead.productsQuoted ? `<div class="lead-notes"><strong>Products quoted:</strong> ${lead.productsQuoted}</div>` : ''}
-          ${lead.ourRate ? `<div class="lead-notes"><strong>Our rate:</strong> ${lead.ourRate}</div>` : ''}
+          ${lead.currentCompany ? `<div class="lead-details"><strong>Company:</strong> ${lead.currentCompany}</div>` : ''}
+          ${lead.currentlyPaying ? `<div class="lead-details"><strong>Paying:</strong> ${lead.currentlyPaying}</div>` : ''}
+          ${lead.productsQuoted ? `<div class="lead-details"><strong>Quoted:</strong> ${lead.productsQuoted}</div>` : ''}
+          ${lead.ourRate ? `<div class="lead-details"><strong>Rate:</strong> ${lead.ourRate}</div>` : ''}
           ${lead.notes ? `<div class="lead-notes"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
           <div class="lead-footer">
             <div class="lead-time">
-              <i class="fas fa-clock"></i>
-              ${lead.time ? new Date(lead.time).toLocaleString() : 'No appointment'}
+              ${lead.time ? `<i class="fas fa-clock"></i> ${new Date(lead.time).toLocaleString()}` : 'No appointment'}
             </div>
             <button class="btn btn-success btn-small" onclick="sellLead(${originalIndex}); event.stopPropagation();">Sold</button>
           </div>
@@ -689,22 +686,19 @@
           <div class="lead-header">
             <div>
               <div class="lead-name">${lead.name}</div>
-              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i>${lead.phone}</div>` : ''}
-              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i>${lead.email}</div>` : ''}
-              ${lead.dob ? `<div class="lead-dob"><i class="fas fa-birthday-cake"></i>${new Date(lead.dob).toLocaleDateString()}</div>` : ''}
+              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
+              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email}</div>` : ''}
             </div>
             <div class="lead-status status-sold">Sold</div>
           </div>
-          ${lead.policyNumber ? `<div class="lead-notes"><strong>Policy Number:</strong> ${lead.policyNumber}</div>` : ''}
-          ${lead.currentCompany ? `<div class="lead-notes"><strong>Current company:</strong> ${lead.currentCompany}</div>` : ''}
-          ${lead.currentlyPaying ? `<div class="lead-notes"><strong>Currently paying:</strong> ${lead.currentlyPaying}</div>` : ''}
-          ${lead.productsQuoted ? `<div class="lead-notes"><strong>Products quoted:</strong> ${lead.productsQuoted}</div>` : ''}
-          ${lead.ourRate ? `<div class="lead-notes"><strong>Our rate:</strong> ${lead.ourRate}</div>` : ''}
+          ${lead.currentCompany ? `<div class="lead-details"><strong>Company:</strong> ${lead.currentCompany}</div>` : ''}
+          ${lead.currentlyPaying ? `<div class="lead-details"><strong>Paying:</strong> ${lead.currentlyPaying}</div>` : ''}
+          ${lead.productsQuoted ? `<div class="lead-details"><strong>Quoted:</strong> ${lead.productsQuoted}</div>` : ''}
+          ${lead.ourRate ? `<div class="lead-details"><strong>Rate:</strong> ${lead.ourRate}</div>` : ''}
           ${lead.notes ? `<div class="lead-notes"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
           <div class="lead-footer">
             <div class="lead-time">
-              <i class="fas fa-clock"></i>
-              Sold: ${new Date(lead.soldDate).toLocaleString()}
+              <i class="fas fa-clock"></i> Sold: ${new Date(lead.soldDate).toLocaleString()}
             </div>
           </div>
         `;
@@ -731,22 +725,19 @@
           <div class="lead-header">
             <div>
               <div class="lead-name">${lead.name}</div>
-              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i>${lead.phone}</div>` : ''}
-              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i>${lead.email}</div>` : ''}
-              ${lead.dob ? `<div class="lead-dob"><i class="fas fa-birthday-cake"></i>${new Date(lead.dob).toLocaleDateString()}</div>` : ''}
+              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
+              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email}</div>` : ''}
             </div>
             <div class="lead-status status-new">Deleted</div>
           </div>
-          ${lead.policyNumber ? `<div class="lead-notes"><strong>Policy Number:</strong> ${lead.policyNumber}</div>` : ''}
-          ${lead.currentCompany ? `<div class="lead-notes"><strong>Current company:</strong> ${lead.currentCompany}</div>` : ''}
-          ${lead.currentlyPaying ? `<div class="lead-notes"><strong>Currently paying:</strong> ${lead.currentlyPaying}</div>` : ''}
-          ${lead.productsQuoted ? `<div class="lead-notes"><strong>Products quoted:</strong> ${lead.productsQuoted}</div>` : ''}
-          ${lead.ourRate ? `<div class="lead-notes"><strong>Our rate:</strong> ${lead.ourRate}</div>` : ''}
+          ${lead.currentCompany ? `<div class="lead-details"><strong>Company:</strong> ${lead.currentCompany}</div>` : ''}
+          ${lead.currentlyPaying ? `<div class="lead-details"><strong>Paying:</strong> ${lead.currentlyPaying}</div>` : ''}
+          ${lead.productsQuoted ? `<div class="lead-details"><strong>Quoted:</strong> ${lead.productsQuoted}</div>` : ''}
+          ${lead.ourRate ? `<div class="lead-details"><strong>Rate:</strong> ${lead.ourRate}</div>` : ''}
           ${lead.notes ? `<div class="lead-notes"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
           <div class="lead-footer">
             <div class="lead-time">
-              <i class="fas fa-clock"></i>
-              Deleted: ${new Date(lead.deletedAt).toLocaleString()}
+              <i class="fas fa-clock"></i> Deleted: ${new Date(lead.deletedAt).toLocaleString()}
             </div>
             <button class="btn btn-secondary btn-small" onclick="restoreLead(${index}); event.stopPropagation();">Restore</button>
           </div>
@@ -823,22 +814,19 @@
           <div class="lead-header">
             <div>
               <div class="lead-name">${lead.name}</div>
-              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i>${lead.phone}</div>` : ''}
-              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i>${lead.email}</div>` : ''}
-              ${lead.dob ? `<div class="lead-dob"><i class="fas fa-birthday-cake"></i>${new Date(lead.dob).toLocaleDateString()}</div>` : ''}
+              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
+              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email}</div>` : ''}
             </div>
             <div class="lead-status status-${lead.status.toLowerCase()}">${lead.status}</div>
           </div>
-          ${lead.policyNumber ? `<div class="lead-notes"><strong>Policy Number:</strong> ${lead.policyNumber}</div>` : ''}
-          ${lead.currentCompany ? `<div class="lead-notes"><strong>Current company:</strong> ${lead.currentCompany}</div>` : ''}
-          ${lead.currentlyPaying ? `<div class="lead-notes"><strong>Currently paying:</strong> ${lead.currentlyPaying}</div>` : ''}
-          ${lead.productsQuoted ? `<div class="lead-notes"><strong>Products quoted:</strong> ${lead.productsQuoted}</div>` : ''}
-          ${lead.ourRate ? `<div class="lead-notes"><strong>Our rate:</strong> ${lead.ourRate}</div>` : ''}
+          ${lead.currentCompany ? `<div class="lead-details"><strong>Company:</strong> ${lead.currentCompany}</div>` : ''}
+          ${lead.currentlyPaying ? `<div class="lead-details"><strong>Paying:</strong> ${lead.currentlyPaying}</div>` : ''}
+          ${lead.productsQuoted ? `<div class="lead-details"><strong>Quoted:</strong> ${lead.productsQuoted}</div>` : ''}
+          ${lead.ourRate ? `<div class="lead-details"><strong>Rate:</strong> ${lead.ourRate}</div>` : ''}
           ${lead.notes ? `<div class="lead-notes"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
           <div class="lead-footer">
             <div class="lead-time">
-              <i class="fas fa-clock"></i>
-              ${lead.time ? new Date(lead.time).toLocaleString() : 'No appointment'}
+              ${lead.time ? `<i class="fas fa-clock"></i> ${new Date(lead.time).toLocaleString()}` : 'No appointment'}
             </div>
             <button class="btn btn-success btn-small" onclick="sellLead(${originalIndex}); event.stopPropagation();">Sold</button>
           </div>
