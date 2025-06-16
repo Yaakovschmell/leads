@@ -514,10 +514,10 @@ header {
     left: 50%;
     transform: translate(-50%, -50%);
     background: var(--card-bg);
-    width: 400px; /* Increased from 350px */
-    max-width: 95vw; /* Increased from 90vw */
-    max-height: 75vh; /* Adjusted for more height */
-    overflow-y: auto; /* Enable scrolling if content exceeds max-height */
+    width: 400px;
+    max-width: 95vw;
+    max-height: 75vh;
+    overflow-y: auto;
     border-radius: var(--radius);
     box-shadow: var(--shadow-xl);
     padding: 1.5rem;
@@ -541,7 +541,7 @@ header {
 }
 
 .popup-title {
-    font-size: 0.875rem; /* Standardized */
+    font-size: 0.875rem;
     font-weight: 700;
     color: var(--text-primary);
     letter-spacing: 0.02em;
@@ -550,7 +550,7 @@ header {
 .close-btn {
     background: none;
     border: none;
-    font-size: 0.875rem; /* Standardized */
+    font-size: 0.875rem;
     color: var(--text-secondary);
     cursor: pointer;
     padding: 0.25rem;
@@ -570,9 +570,9 @@ header {
 
 .form-label {
     position: absolute;
-    top: 0.5rem; /* Adjusted for smaller height */
+    top: 0.5rem;
     left: 0.75rem;
-    font-size: 0.875rem; /* Standardized */
+    font-size: 0.875rem;
     color: var(--text-secondary);
     transition: all 0.3s ease;
     pointer-events: none;
@@ -581,17 +581,17 @@ header {
 
 .form-input, .form-textarea {
     width: 100%;
-    padding: 0.5rem 1rem; /* Reduced padding */
+    padding: 0.5rem 1rem;
     border: var(--border);
     border-radius: var(--radius);
-    font-size: 0.875rem; /* Standardized */
+    font-size: 0.875rem;
     font-family: inherit;
     background: var(--card-bg);
     color: var(--text-primary);
     transition: all 0.3s ease;
     position: relative;
     z-index: 0;
-    height: 1.5rem; /* Reduced to ~1.2x font size (14px) */
+    height: 1.5rem;
 }
 
 .form-input:focus, .form-textarea:focus {
@@ -617,27 +617,27 @@ header {
 
 .form-input:not(:placeholder-shown),
 .form-textarea:not(:placeholder-shown) {
-    padding-top: 1rem; /* Adjusted for smaller height */
+    padding-top: 1rem;
 }
 
 .form-textarea {
-    resize: vertical;
-    min-height: 40px; /* Reduced to ~2.8x font size (14px) */
-    height: auto; /* Allow textarea to adjust */
+    height: auto;
+    min-height: 40px;
+    resize: none; /* Prevent manual resizing for dynamic expansion */
     position: relative;
 }
 
 .speech-btn {
     position: absolute;
     right: 0.75rem;
-    bottom: -2rem; /* Moved below the textarea */
-    transform: translateY(0); /* Remove vertical centering */
+    bottom: -2rem;
+    transform: translateY(0);
     background: linear-gradient(135deg, #3b82f6 0%, var(--primary-blue) 100%);
     border: 2px solid rgba(255, 255, 255, 0.2);
     border-radius: 50%;
-    width: 1.75rem; /* Reduced size */
-    height: 1.75rem; /* Reduced size */
-    font-size: 0.75rem; /* Adjusted font size */
+    width: 1.75rem;
+    height: 1.75rem;
+    font-size: 0.75rem;
     color: #fff;
     cursor: pointer;
     box-shadow: var(--shadow-md);
