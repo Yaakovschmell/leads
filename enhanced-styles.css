@@ -90,11 +90,10 @@ body {
 }
 
 .logo {
-    height: 80px;
-    width: 80px;
-    border-radius: 50% !important;
-    object-fit: cover;
-    margin-bottom: 0.5rem;
+  max-width: 100%; /* Prevent stretching */
+  height: auto; /* Maintain aspect ratio */
+  display: inline-block; /* Ensure it behaves as an image */
+  vertical-align: middle; /* Align with text */
 }
 
 .tagline {
