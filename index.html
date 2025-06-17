@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Allstate CRM</title>
+  <title>Allstate CRM - Enhanced</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.css" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
@@ -40,11 +40,11 @@
         <div class="header-stats">
           <div class="stat-item">
             <i class="fas fa-users"></i>
-            <span id="totalLeads">6 Leads</span>
+            <span id="totalLeads">0 Leads</span>
           </div>
           <div class="stat-item">
             <i class="fas fa-calendar-check"></i>
-            <span id="upcomingAppts">6 Appointments</span>
+            <span id="upcomingAppts">0 Appointments</span>
           </div>
         </div>
       </div>
@@ -59,117 +59,27 @@
               <i class="fas fa-search"></i>
               <input type="text" id="searchInput" placeholder="Search leads...">
             </div>
-            <button class="btn btn-primary" id="addLeadBtn">
+            <button class="btn btn-primary" onclick="showPopup('lead')">
               <i class="fas fa-plus"></i>
               Add Lead
             </button>
-            <button class="btn btn-secondary export-btn" id="shareLeadsBtn"><i class="fas fa-share"></i> Share Leads</button>
-            <button class="btn btn-secondary export-btn" id="exportLeadsBtn"><i class="fas fa-download"></i> Export</button>
-            <button class="btn btn-secondary print-btn" id="printBtn"><i class="fas fa-print"></i> Print</button>
+            <button class="btn btn-secondary export-btn" onclick="exportLeadsLink()"><i class="fas fa-share"></i> Share Leads</button>
+            <button class="btn btn-secondary export-btn"><i class="fas fa-download"></i> Export</button>
+            <button class="btn btn-secondary print-btn"><i class="fas fa-print"></i> Print</button>
           </div>
         </div>
         
-        <div class="lead-grid" id="leadGrid">
-          <div class="lead-card">
-            <div class="lead-header">
-              <div>
-                <div class="lead-name">Olusegun Adepegba</div>
-                <div class="lead-phone"><i class="fas fa-phone"></i> (240)551-5286</div>
-                <div class="lead-email"><i class="fas fa-envelope"></i> woolmanhoney@gmail.com</div>
-              </div>
-              <div class="lead-status status-new">New</div>
-            </div>
-            <div class="lead-details"><strong>Notes:</strong> Current company:nationwide for home auto and 2385 for home our rate:auto 420 and home without auto is 162( we arent doing auto because were way off).notes: he has 3 other quotes from other company so he said to follow up then but i told him that too far away and ill follow up early next week to see what he thinks. give him 1k decubitus and upped his rebuild to 270000 total, he has 226000 with nationwide and morgage company is PHH</div>
-            <div class="lead-footer">
-              <div class="lead-time"><i class="fas fa-clock"></i> 6/13/2025, 1:00 PM</div>
-              <button class="btn btn-success btn-small sold-btn">Sold</button>
-            </div>
-          </div>
-          <div class="lead-card">
-            <div class="lead-header">
-              <div>
-                <div class="lead-name">armentha cruise</div>
-                <div class="lead-email"><i class="fas fa-envelope"></i> (301)943-9961@yahoo.com</div>
-              </div>
-              <div class="lead-status status-new">New</div>
-            </div>
-            <div class="lead-details"><strong>Notes:</strong> Policy Number: 52110516145 Notary: current company: Noteworthy currently paying: home-52145 car-unknown our rate: home 1300 auto 167 and umbrella 50 Notes: been with nationwide for over 40 years, spoke with agent and current company touch with her over the weekend and shes not one to jump and wants to review everything line by line, wants a cb thursday morning or by monday morning she also has 2 lip with nationwide, i can build them out</div>
-            <div class="lead-footer">
-              <div class="lead-time"><i class="fas fa-clock"></i> 6/13/2025, 2:00 PM</div>
-              <button class="btn btn-success btn-small sold-btn">Sold</button>
-            </div>
-          </div>
-          <div class="lead-card">
-            <div class="lead-header">
-              <div>
-                <div class="lead-name">Susan Mehling</div>
-                <div class="lead-email"><i class="fas fa-envelope"></i> 2403288058@gmail.com</div>
-              </div>
-              <div class="lead-status status-new">New</div>
-            </div>
-            <div class="lead-details"><strong>Notes:</strong> Current company: AIC Currently paying: over 300 Notes: current companies AIC her real estate is down and then 320 a month going forward Auto Renters were quote but she wants to review it over the weekend and is going to give me a call on monday morning</div>
-            <div class="lead-footer">
-              <div class="lead-time"><i class="fas fa-clock"></i> 6/17/2025, 1:00 PM</div>
-              <button class="btn btn-success btn-small sold-btn">Sold</button>
-            </div>
-          </div>
-          <div class="lead-card">
-            <div class="lead-header">
-              <div>
-                <div class="lead-name">Ashley Carpenter</div>
-                <div class="lead-phone"><i class="fas fa-phone"></i> (443) 220-8866</div>
-                <div class="lead-email"><i class="fas fa-envelope"></i> wazehg@gmail.com</div>
-              </div>
-              <div class="lead-status status-new">New</div>
-            </div>
-            <div class="lead-details"><strong>Notes:</strong> Notes: Yaakov mailed me her request she has home here quoted auto to her already has $570 per month and home would drop to $486.45 waiving pip and adjusting deductibles. keeps saying he appreciates me following up and told me he turned off autopay.</div>
-            <div class="lead-footer">
-              <div class="lead-time"><i class="fas fa-clock"></i> 6/16/2025, 1:40 PM</div>
-              <button class="btn btn-success btn-small sold-btn">Sold</button>
-            </div>
-          </div>
-          <div class="lead-card">
-            <div class="lead-header">
-              <div>
-                <div class="lead-name">Atlantis Williams</div>
-                <div class="lead-phone"><i class="fas fa-phone"></i> (339) 371-1598</div>
-                <div class="lead-email"><i class="fas fa-envelope"></i> atwillms@gmail.com</div>
-              </div>
-              <div class="lead-status status-new">New</div>
-            </div>
-            <div class="lead-details"><strong>Notes:</strong> Policy Number: 993664534 Current company: Progressive Currently paying: 653 Products quoted: AUTO RENTERS Our rate: EITHER 528 or 486 Notes: Paying $653 with Progressive. Bill is due on the 15th. he out of money which is why he hasn’t done it yet. Two options here we sit $528 per month and “budget” is $486.45 waiving pip and adjusting deductibles. keeps saying he appreciates me following up and told me he turned off autopay.</div>
-            <div class="lead-footer">
-              <div class="lead-time"><i class="fas fa-clock"></i> 6/16/2025, 4:50 PM</div>
-              <button class="btn btn-success btn-small sold-btn">Sold</button>
-            </div>
-          </div>
-          <div class="lead-card">
-            <div class="lead-header">
-              <div>
-                <div class="lead-name">Lorraine Sorrell</div>
-                <div class="lead-email"><i class="fas fa-envelope"></i> lorraine.sorrel@gmail.com</div>
-              </div>
-              <div class="lead-status status-new">New</div>
-            </div>
-            <div class="lead-details"><strong>Notes:</strong> Policy Number: 090361304 Currently paying: unknown Products quoted: auto Our rate: 1675 Notes: quoted her home and auto period total for everything would be $1675 for a year of home and 6 months of Auto period she’s been with Geico since 1960 and was very hesitant and cautious and kept asking if I was asking her current</div>
-            <div class="lead-footer">
-              <div class="lead-time"><i class="fas fa-clock"></i> 4/19/1948</div>
-              <button class="btn btn-success btn-small sold-btn">Sold</button>
-            </div>
-          </div>
-        </div>
+        <div class="lead-grid" id="leadGrid"></div>
+        
         <div class="empty-state" id="emptyState" style="display: none;">
-          <i class="fas fa-info-circle"></i>
-          <p>No leads available.</p>
+          <i class="fas fa-user-plus"></i>
+          <h3>No leads yet</h3>
+          <p>Start by adding your first lead to get organized!</p>
         </div>
       </section>
 
       <section id="calendar" class="content" style="display: none;">
         <div id="calendarView"></div>
-        <div class="empty-state" id="calendarEmptyState" style="display: none;">
-          <i class="fas fa-info-circle"></i>
-          <p>No appointments scheduled.</p>
-        </div>
       </section>
 
       <section id="templates" class="content" style="display: none;">
@@ -180,18 +90,21 @@
               <i class="fas fa-search"></i>
               <input type="text" id="templateSearchInput" placeholder="Search templates...">
             </div>
-            <button class="btn btn-primary" id="addTemplateBtn">
+            <button class="btn btn-primary" onclick="showPopup('template')">
               <i class="fas fa-plus"></i>
               Add Template
             </button>
-            <button class="btn btn-secondary export-btn" id="exportTemplatesBtn"><i class="fas fa-download"></i> Export</button>
-            <button class="btn btn-secondary print-btn" id="printTemplatesBtn"><i class="fas fa-print"></i> Print</button>
+            <button class="btn btn-secondary export-btn"><i class="fas fa-download"></i> Export</button>
+            <button class="btn btn-secondary print-btn"><i class="fas fa-print"></i> Print</button>
           </div>
         </div>
+        
         <div class="template-grid" id="templateGrid"></div>
+        
         <div class="empty-state" id="templateEmptyState" style="display: none;">
-          <i class="fas fa-info-circle"></i>
-          <p>No templates available.</p>
+          <i class="fas fa-sms"></i>
+          <h3>No templates yet</h3>
+          <p>Create your first text template to streamline communication!</p>
         </div>
       </section>
 
@@ -199,13 +112,14 @@
         <div class="leads-header">
           <h1 class="leads-title">Sold Leads</h1>
           <div class="action-group">
-            <button class="btn btn-secondary" id="clearSoldBtn">Clear Sold</button>
+            <button class="btn btn-secondary" onclick="clearSold()">Clear Sold</button>
           </div>
         </div>
         <div class="lead-grid" id="soldGrid"></div>
         <div class="empty-state" id="soldEmptyState" style="display: none;">
-          <i class="fas fa-info-circle"></i>
-          <p>No sold leads available.</p>
+          <i class="fas fa-check-circle"></i>
+          <h3>No sold leads</h3>
+          <p>Sold leads will appear here.</p>
         </div>
       </section>
 
@@ -213,13 +127,14 @@
         <div class="leads-header">
           <h1 class="leads-title">Trash</h1>
           <div class="action-group">
-            <button class="btn btn-secondary" id="clearTrashBtn">Clear Trash</button>
+            <button class="btn btn-secondary" onclick="clearTrash()">Clear Trash</button>
           </div>
         </div>
         <div class="lead-grid" id="trashGrid"></div>
         <div class="empty-state" id="trashEmptyState" style="display: none;">
-          <i class="fas fa-info-circle"></i>
-          <p>No deleted leads available.</p>
+          <i class="fas fa-trash"></i>
+          <h3>No deleted leads</h3>
+          <p>Deleted leads will appear here for 24 hours.</p>
         </div>
       </section>
     </main>
@@ -311,8 +226,8 @@
           <i class="fas fa-check-circle"></i>
           Sold
         </button>
-        <button class="btn btn-secondary" id="cancelBtn">Cancel</button>
-        <button class="btn btn-primary" id="saveBtn">
+        <button class="btn btn-secondary" onclick="closePopup()">Cancel</button>
+        <button class="btn btn-primary" id="saveBtn" onclick="saveItem()">
           <i class="fas fa-save"></i>
           <span id="saveBtnText">Save Lead</span>
         </button>
@@ -333,14 +248,7 @@
   </div>
 
   <script>
-    let leads = [
-      { name: "Olusegun Adepegba", phone: "(240)551-5286", email: "woolmanhoney@gmail.com", notes: "Current company:nationwide for home auto and 2385 for home our rate:auto 420 and home without auto is 162( we arent doing auto because were way off).notes: he has 3 other quotes from other company so he said to follow up then but i told him that too far away and ill follow up early next week to see what he thinks. give him 1k decubitus and upped his rebuild to 270000 total, he has 226000 with nationwide and morgage company is PHH", time: "2025-06-13T13:00:00", status: "New" },
-      { name: "armentha cruise", email: "(301)943-9961@yahoo.com", notes: "Policy Number: 52110516145 Notary: current company: Noteworthy currently paying: home-52145 car-unknown our rate: home 1300 auto 167 and umbrella 50 Notes: been with nationwide for over 40 years, spoke with agent and current company touch with her over the weekend and shes not one to jump and wants to review everything line by line, wants a cb thursday morning or by monday morning she also has 2 lip with nationwide, i can build them out", time: "2025-06-13T14:00:00", status: "New" },
-      { name: "Susan Mehling", email: "2403288058@gmail.com", notes: "Current company: AIC Currently paying: over 300 Notes: current companies AIC her real estate is down and then 320 a month going forward Auto Renters were quote but she wants to review it over the weekend and is going to give me a call on monday morning", time: "2025-06-17T13:00:00", status: "New" },
-      { name: "Ashley Carpenter", phone: "(443) 220-8866", email: "wazehg@gmail.com", notes: "Notes: Yaakov mailed me her request she has home here quoted auto to her already has $570 per month and home would drop to $486.45 waiving pip and adjusting deductibles. keeps saying he appreciates me following up and told me he turned off autopay.", time: "2025-06-16T13:40:00", status: "New" },
-      { name: "Atlantis Williams", phone: "(339) 371-1598", email: "atwillms@gmail.com", notes: "Policy Number: 993664534 Current company: Progressive Currently paying: 653 Products quoted: AUTO RENTERS Our rate: EITHER 528 or 486 Notes: Paying $653 with Progressive. Bill is due on the 15th. he out of money which is why he hasn’t done it yet. Two options here we sit $528 per month and “budget” is $486.45 waiving pip and adjusting deductibles. keeps saying he appreciates me following up and told me he turned off autopay.", time: "2025-06-16T16:50:00", status: "New" },
-      { name: "Lorraine Sorrell", email: "lorraine.sorrel@gmail.com", notes: "Policy Number: 090361304 Currently paying: unknown Products quoted: auto Our rate: 1675 Notes: quoted her home and auto period total for everything would be $1675 for a year of home and 6 months of Auto period she’s been with Geico since 1960 and was very hesitant and cautious and kept asking if I was asking her current", time: "1948-04-19T00:00:00", status: "New" }
-    ];
+    let leads = [];
     let deletedLeads = [];
     let soldLeads = [];
     let templates = [];
@@ -350,7 +258,7 @@
     let calendar = null;
     let recognition = null;
 
-    document.addEventListener('DOMContentLoaded', () => {
+    function init() {
       loadLeads();
       loadDeletedLeads();
       loadSoldLeads();
@@ -362,54 +270,16 @@
       updateStats();
       initCalendar();
       startReminderSystem();
-      const addLeadBtn = document.getElementById('addLeadBtn');
-      if (addLeadBtn) addLeadBtn.addEventListener('click', () => showPopup('lead'));
-      const shareLeadsBtn = document.getElementById('shareLeadsBtn');
-      if (shareLeadsBtn) shareLeadsBtn.addEventListener('click', exportLeadsLink);
-      const exportLeadsBtn = document.getElementById('exportLeadsBtn');
-      if (exportLeadsBtn) exportLeadsBtn.addEventListener('click', exportLeads);
-      const printBtn = document.getElementById('printBtn');
-      if (printBtn) printBtn.addEventListener('click', printSection);
-      const addTemplateBtn = document.getElementById('addTemplateBtn');
-      if (addTemplateBtn) addTemplateBtn.addEventListener('click', () => showPopup('template'));
-      const exportTemplatesBtn = document.getElementById('exportTemplatesBtn');
-      if (exportTemplatesBtn) exportTemplatesBtn.addEventListener('click', exportTemplates);
-      const printTemplatesBtn = document.getElementById('printTemplatesBtn');
-      if (printTemplatesBtn) printTemplatesBtn.addEventListener('click', printTemplates);
-      const clearSoldBtn = document.getElementById('clearSoldBtn');
-      if (clearSoldBtn) clearSoldBtn.addEventListener('click', clearSold);
-      const clearTrashBtn = document.getElementById('clearTrashBtn');
-      if (clearTrashBtn) clearTrashBtn.addEventListener('click', clearTrash);
-      const cancelBtn = document.getElementById('cancelBtn');
-      if (cancelBtn) cancelBtn.addEventListener('click', closePopup);
-      const saveBtn = document.getElementById('saveBtn');
-      if (saveBtn) saveBtn.addEventListener('click', saveItem);
-      const deleteBtn = document.getElementById('deleteBtn');
-      if (deleteBtn) deleteBtn.addEventListener('click', deleteItem);
-      const soldBtn = document.getElementById('soldBtn');
-      if (soldBtn) soldBtn.addEventListener('click', sellLead);
-      const navLinks = document.querySelectorAll('.nav-link');
-      if (navLinks) navLinks.forEach(button => {
-        button.addEventListener('click', () => showTab(button.getAttribute('data-tab')));
-      });
-      const searchInput = document.getElementById('searchInput');
-      if (searchInput) searchInput.addEventListener('input', filterLeads);
-      const templateSearchInput = document.getElementById('templateSearchInput');
-      if (templateSearchInput) templateSearchInput.addEventListener('input', filterTemplates);
-      const soldButtons = document.querySelectorAll('.sold-btn');
-      if (soldButtons) soldButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          sellLeadFromCard(Array.from(document.querySelectorAll('.lead-card')).indexOf(e.target.closest('.lead-card')));
-        });
-      });
+      const isDarkMode = localStorage.getItem('darkMode') === 'true';
+      if (isDarkMode) document.body.classList.add('dark-mode');
+      document.querySelector('.theme-toggle').addEventListener('click', toggleDarkMode);
       initSpeechRecognition();
       initAutoResizeTextareas();
-    });
+    }
 
     function loadLeads() {
       const savedLeads = localStorage.getItem('leads');
-      leads = savedLeads ? JSON.parse(savedLeads) : leads;
+      leads = savedLeads ? JSON.parse(savedLeads) : [];
       if (!Array.isArray(leads)) leads = [];
       leads = leads.filter(lead => !lead.sold);
       localStorage.setItem('leads', JSON.stringify(leads));
@@ -438,22 +308,28 @@
       localStorage.setItem('templates', JSON.stringify(templates));
     }
 
-    function saveLeads() { localStorage.setItem('leads', JSON.stringify(leads)); }
-    function saveDeletedLeads() { localStorage.setItem('deletedLeads', JSON.stringify(deletedLeads)); }
-    function saveSoldLeads() { localStorage.setItem('soldLeads', JSON.stringify(soldLeads)); }
-    function saveTemplates() { localStorage.setItem('templates', JSON.stringify(templates)); }
+    function saveLeads() {
+      localStorage.setItem('leads', JSON.stringify(leads));
+    }
+
+    function saveSoldLeads() {
+      localStorage.setItem('soldLeads', JSON.stringify(soldLeads));
+    }
+
+    function saveDeletedLeads() {
+      localStorage.setItem('deletedLeads', JSON.stringify(deletedLeads));
+    }
+
+    function saveTemplates() {
+      localStorage.setItem('templates', JSON.stringify(templates));
+    }
 
     function showTab(tab) {
-      const navLinks = document.querySelectorAll('.nav-link');
-      if (navLinks) navLinks.forEach(t => t.classList.remove('active'));
-      const contents = document.querySelectorAll('.content');
-      if (contents) contents.forEach(c => c.style.display = 'none');
-      const activeTab = document.querySelector(`[data-tab="${tab}"]`);
-      if (activeTab) activeTab.classList.add('active');
-      const content = document.getElementById(tab);
-      if (content) content.style.display = 'block';
-      const currentCrumb = document.querySelector('.breadcrumbs .current');
-      if (currentCrumb) currentCrumb.textContent = activeTab ? activeTab.textContent.trim() : 'Leads';
+      document.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.content').forEach(c => c.style.display = 'none');
+      document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+      document.getElementById(tab).style.display = 'block';
+      document.querySelector('.breadcrumbs .current').textContent = document.querySelector(`[data-tab="${tab}"]`).textContent.trim();
       if (tab === 'calendar' && calendar) calendar.render();
       if (tab === 'sold') renderSoldLeads();
       if (tab === 'trash') renderTrash();
@@ -463,51 +339,37 @@
       currentPopupMode = mode;
       currentEditIndex = null;
       currentEditTemplateIndex = null;
-      const overlay = document.getElementById('overlay');
-      const popup = document.getElementById('popup');
-      if (overlay && popup) {
-        overlay.style.display = 'block';
-        popup.style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('popup').style.display = 'block';
+      document.getElementById('leadForm').reset();
+
+      document.getElementById('leadNameGroup').style.display = mode === 'lead' ? 'block' : 'none';
+      document.getElementById('leadPhoneGroup').style.display = mode === 'lead' ? 'block' : 'none';
+      document.getElementById('leadEmailGroup').style.display = mode === 'lead' ? 'block' : 'none';
+      document.getElementById('leadDobGroup').style.display = mode === 'lead' ? 'block' : 'none';
+      document.getElementById('leadPolicyNumberGroup').style.display = mode === 'lead' ? 'block' : 'none';
+      document.getElementById('leadNotesGroup').style.display = mode === 'lead' ? 'block' : 'none';
+      document.getElementById('leadTimeGroup').style.display = mode === 'lead' ? 'block' : 'none';
+      document.getElementById('templateNameGroup').style.display = mode === 'template' ? 'block' : 'none';
+      document.getElementById('templateMessageGroup').style.display = mode === 'template' ? 'block' : 'none';
+
+      if (mode === 'lead') {
+        document.getElementById('popupTitle').textContent = 'Add New Lead';
+        document.getElementById('saveBtnText').textContent = 'Save Lead';
+        document.getElementById('deleteBtn').style.display = currentEditIndex !== null ? 'inline-flex' : 'none';
+        document.getElementById('soldBtn').style.display = currentEditIndex !== null ? 'inline-flex' : 'none';
+        if (recognition) recognition.stop();
+      } else {
+        document.getElementById('popupTitle').textContent = 'Add New Template';
+        document.getElementById('saveBtnText').textContent = 'Save Template';
+        document.getElementById('deleteBtn').style.display = currentEditTemplateIndex !== null ? 'inline-flex' : 'none';
       }
-      const form = document.getElementById('leadForm');
-      if (form) form.reset();
-      const leadNameGroup = document.getElementById('leadNameGroup');
-      const leadPhoneGroup = document.getElementById('leadPhoneGroup');
-      const leadEmailGroup = document.getElementById('leadEmailGroup');
-      const leadDobGroup = document.getElementById('leadDobGroup');
-      const leadPolicyNumberGroup = document.getElementById('leadPolicyNumberGroup');
-      const leadNotesGroup = document.getElementById('leadNotesGroup');
-      const leadTimeGroup = document.getElementById('leadTimeGroup');
-      const templateNameGroup = document.getElementById('templateNameGroup');
-      const templateMessageGroup = document.getElementById('templateMessageGroup');
-      if (leadNameGroup) leadNameGroup.style.display = mode === 'lead' ? 'block' : 'none';
-      if (leadPhoneGroup) leadPhoneGroup.style.display = mode === 'lead' ? 'block' : 'none';
-      if (leadEmailGroup) leadEmailGroup.style.display = mode === 'lead' ? 'block' : 'none';
-      if (leadDobGroup) leadDobGroup.style.display = mode === 'lead' ? 'block' : 'none';
-      if (leadPolicyNumberGroup) leadPolicyNumberGroup.style.display = mode === 'lead' ? 'block' : 'none';
-      if (leadNotesGroup) leadNotesGroup.style.display = mode === 'lead' ? 'block' : 'none';
-      if (leadTimeGroup) leadTimeGroup.style.display = mode === 'lead' ? 'block' : 'none';
-      if (templateNameGroup) templateNameGroup.style.display = mode === 'template' ? 'block' : 'none';
-      if (templateMessageGroup) templateMessageGroup.style.display = mode === 'template' ? 'block' : 'none';
-      const popupTitle = document.getElementById('popupTitle');
-      const saveBtnText = document.getElementById('saveBtnText');
-      const deleteBtn = document.getElementById('deleteBtn');
-      const soldBtn = document.getElementById('soldBtn');
-      if (popupTitle) popupTitle.textContent = mode === 'lead' ? 'Add New Lead' : 'Add New Template';
-      if (saveBtnText) saveBtnText.textContent = mode === 'lead' ? 'Save Lead' : 'Save Template';
-      if (deleteBtn) deleteBtn.style.display = currentEditIndex !== null || currentEditTemplateIndex !== null ? 'inline-flex' : 'none';
-      if (soldBtn) soldBtn.style.display = currentEditIndex !== null ? 'inline-flex' : 'none';
-      if (recognition) recognition.stop();
       initAutoResizeTextareas();
     }
 
     function closePopup() {
-      const overlay = document.getElementById('overlay');
-      const popup = document.getElementById('popup');
-      if (overlay && popup) {
-        overlay.style.display = 'none';
-        popup.style.display = 'none';
-      }
+      document.getElementById('overlay').style.display = 'none';
+      document.getElementById('popup').style.display = 'none';
       currentEditIndex = null;
       currentEditTemplateIndex = null;
       currentPopupMode = 'lead';
@@ -520,37 +382,31 @@
     }
 
     function autoResize(textarea) {
-      if (textarea) {
-        textarea.style.height = 'auto';
-        textarea.style.height = `${textarea.scrollHeight}px`;
-      }
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`;
     }
 
     function initAutoResizeTextareas() {
-      const textareas = document.querySelectorAll('.form-textarea');
-      if (textareas) {
-        textareas.forEach(textarea => {
-          textarea.addEventListener('input', () => autoResize(textarea));
-          autoResize(textarea);
-        });
-      }
+      document.querySelectorAll('.form-textarea').forEach(textarea => {
+        textarea.addEventListener('input', () => autoResize(textarea));
+        autoResize(textarea);
+      });
     }
 
     function saveItem() {
-      const saveBtn = document.getElementById('saveBtn');
-      if (saveBtn) saveBtn.classList.add('loading');
+      document.getElementById('saveBtn').classList.add('loading');
       setTimeout(() => {
         if (currentPopupMode === 'lead') {
-          const name = document.getElementById('leadName')?.value.trim();
-          const phone = document.getElementById('leadPhone')?.value.trim();
-          const email = document.getElementById('leadEmail')?.value.trim();
-          const notes = document.getElementById('leadNotes')?.value.trim();
-          const policyNumber = document.getElementById('leadPolicyNumber')?.value.trim();
-          const currentCompany = document.getElementById('leadCurrentCompany')?.value.trim();
-          const currentlyPaying = document.getElementById('leadCurrentlyPaying')?.value.trim();
-          const productsQuoted = document.getElementById('leadProductsQuoted')?.value.trim();
-          const ourRate = document.getElementById('leadOurRate')?.value.trim();
-          const time = document.getElementById('leadTime')?.value;
+          const name = document.getElementById('leadName').value.trim();
+          const phone = document.getElementById('leadPhone').value.trim();
+          const email = document.getElementById('leadEmail').value.trim();
+          const notes = document.getElementById('leadNotes').value.trim();
+          const policyNumber = document.getElementById('leadPolicyNumber').value.trim();
+          const currentCompany = document.getElementById('leadCurrentCompany').value.trim();
+          const currentlyPaying = document.getElementById('leadCurrentlyPaying').value.trim();
+          const productsQuoted = document.getElementById('leadProductsQuoted').value.trim();
+          const ourRate = document.getElementById('leadOurRate').value.trim();
+          const time = document.getElementById('leadTime').value;
 
           if (!name) {
             showNotification('warning', 'Error', 'Name is required.');
@@ -568,8 +424,19 @@
           }
 
           const lead = {
-            name, phone, email, dob: document.getElementById('leadDob')?.value || null, policyNumber, notes, currentCompany,
-            currentlyPaying, productsQuoted, ourRate, time: time ? new Date(time).toISOString() : null, status: 'New', sold: false
+            name,
+            phone,
+            email,
+            dob: document.getElementById('leadDob').value || null,
+            policyNumber,
+            notes,
+            currentCompany,
+            currentlyPaying,
+            productsQuoted,
+            ourRate,
+            time: time ? new Date(time).toISOString() : null,
+            status: 'New',
+            sold: false
           };
 
           if (currentEditIndex !== null) {
@@ -585,8 +452,8 @@
           closePopup();
           showNotification('success', 'Success', 'Lead saved successfully.');
         } else {
-          const name = document.getElementById('templateName')?.value.trim();
-          const message = document.getElementById('templateMessage')?.value.trim();
+          const name = document.getElementById('templateName').value.trim();
+          const message = document.getElementById('templateMessage').value.trim();
 
           if (!name) {
             showNotification('warning', 'Error', 'Template name is required.');
@@ -611,13 +478,12 @@
           closePopup();
           showNotification('success', 'Success', 'Template saved successfully.');
         }
-        if (saveBtn) saveBtn.classList.remove('loading');
+        document.getElementById('saveBtn').classList.remove('loading');
       }, 500);
     }
 
     function deleteItem() {
-      const deleteBtn = document.getElementById('deleteBtn');
-      if (deleteBtn) deleteBtn.classList.add('loading');
+      document.getElementById('deleteBtn').classList.add('loading');
       setTimeout(() => {
         if (currentPopupMode === 'lead' && currentEditIndex !== null) {
           const lead = leads[currentEditIndex];
@@ -639,13 +505,12 @@
           closePopup();
           showNotification('warning', 'Deleted', 'Template deleted.');
         }
-        if (deleteBtn) deleteBtn.classList.remove('loading');
+        document.getElementById('deleteBtn').classList.remove('loading');
       }, 500);
     }
 
     function sellLead() {
-      const soldBtn = document.getElementById('soldBtn');
-      if (soldBtn) soldBtn.classList.add('loading');
+      document.getElementById('soldBtn').classList.add('loading');
       setTimeout(() => {
         if (currentPopupMode === 'lead' && currentEditIndex !== null) {
           const lead = leads[currentEditIndex];
@@ -662,13 +527,8 @@
           closePopup();
           showNotification('success', 'Sold', 'Lead marked as sold.');
         }
-        if (soldBtn) soldBtn.classList.remove('loading');
+        document.getElementById('soldBtn').classList.remove('loading');
       }, 500);
-    }
-
-    function sellLeadFromCard(index) {
-      currentEditIndex = index;
-      sellLead();
     }
 
     function restoreLead(index) {
@@ -703,60 +563,32 @@
       currentEditIndex = index;
       currentEditTemplateIndex = null;
       const lead = leads[index];
-      const leadName = document.getElementById('leadName');
-      const leadPhone = document.getElementById('leadPhone');
-      const leadEmail = document.getElementById('leadEmail');
-      const leadDob = document.getElementById('leadDob');
-      const leadPolicyNumber = document.getElementById('leadPolicyNumber');
-      const leadNotes = document.getElementById('leadNotes');
-      const leadCurrentCompany = document.getElementById('leadCurrentCompany');
-      const leadCurrentlyPaying = document.getElementById('leadCurrentlyPaying');
-      const leadProductsQuoted = document.getElementById('leadProductsQuoted');
-      const leadOurRate = document.getElementById('leadOurRate');
-      const leadTime = document.getElementById('leadTime');
-      const popupTitle = document.getElementById('popupTitle');
-      const saveBtnText = document.getElementById('saveBtnText');
-      const deleteBtn = document.getElementById('deleteBtn');
-      const soldBtn = document.getElementById('soldBtn');
-      const leadNameGroup = document.getElementById('leadNameGroup');
-      const leadPhoneGroup = document.getElementById('leadPhoneGroup');
-      const leadEmailGroup = document.getElementById('leadEmailGroup');
-      const leadDobGroup = document.getElementById('leadDobGroup');
-      const leadPolicyNumberGroup = document.getElementById('leadPolicyNumberGroup');
-      const leadNotesGroup = document.getElementById('leadNotesGroup');
-      const leadTimeGroup = document.getElementById('leadTimeGroup');
-      const templateNameGroup = document.getElementById('templateNameGroup');
-      const templateMessageGroup = document.getElementById('templateMessageGroup');
-      const overlay = document.getElementById('overlay');
-      const popup = document.getElementById('popup');
-      if (leadName) leadName.value = lead.name;
-      if (leadPhone) leadPhone.value = lead.phone || '';
-      if (leadEmail) leadEmail.value = lead.email || '';
-      if (leadDob) leadDob.value = lead.dob || '';
-      if (leadPolicyNumber) leadPolicyNumber.value = lead.policyNumber || '';
-      if (leadNotes) leadNotes.value = lead.notes || '';
-      if (leadCurrentCompany) leadCurrentCompany.value = lead.currentCompany || '';
-      if (leadCurrentlyPaying) leadCurrentlyPaying.value = lead.currentlyPaying || '';
-      if (leadProductsQuoted) leadProductsQuoted.value = lead.productsQuoted || '';
-      if (leadOurRate) leadOurRate.value = lead.ourRate || '';
-      if (leadTime) leadTime.value = lead.time ? lead.time.slice(0, 16) : '';
-      if (popupTitle) popupTitle.textContent = 'Edit Lead';
-      if (saveBtnText) saveBtnText.textContent = 'Save Lead';
-      if (deleteBtn) deleteBtn.style.display = 'inline-flex';
-      if (soldBtn) soldBtn.style.display = 'inline-flex';
-      if (leadNameGroup) leadNameGroup.style.display = 'block';
-      if (leadPhoneGroup) leadPhoneGroup.style.display = 'block';
-      if (leadEmailGroup) leadEmailGroup.style.display = 'block';
-      if (leadDobGroup) leadDobGroup.style.display = 'block';
-      if (leadPolicyNumberGroup) leadPolicyNumberGroup.style.display = 'block';
-      if (leadNotesGroup) leadNotesGroup.style.display = 'block';
-      if (leadTimeGroup) leadTimeGroup.style.display = 'block';
-      if (templateNameGroup) templateNameGroup.style.display = 'none';
-      if (templateMessageGroup) templateMessageGroup.style.display = 'none';
-      if (overlay && popup) {
-        overlay.style.display = 'block';
-        popup.style.display = 'block';
-      }
+      document.getElementById('leadName').value = lead.name;
+      document.getElementById('leadPhone').value = lead.phone || '';
+      document.getElementById('leadEmail').value = lead.email || '';
+      document.getElementById('leadDob').value = lead.dob || '';
+      document.getElementById('leadPolicyNumber').value = lead.policyNumber || '';
+      document.getElementById('leadNotes').value = lead.notes || '';
+      document.getElementById('leadCurrentCompany').value = lead.currentCompany || '';
+      document.getElementById('leadCurrentlyPaying').value = lead.currentlyPaying || '';
+      document.getElementById('leadProductsQuoted').value = lead.productsQuoted || '';
+      document.getElementById('leadOurRate').value = lead.ourRate || '';
+      document.getElementById('leadTime').value = lead.time ? lead.time.slice(0, 16) : '';
+      document.getElementById('popupTitle').textContent = 'Edit Lead';
+      document.getElementById('saveBtnText').textContent = 'Save Lead';
+      document.getElementById('deleteBtn').style.display = 'inline-flex';
+      document.getElementById('soldBtn').style.display = 'inline-flex';
+      document.getElementById('leadNameGroup').style.display = 'block';
+      document.getElementById('leadPhoneGroup').style.display = 'block';
+      document.getElementById('leadEmailGroup').style.display = 'block';
+      document.getElementById('leadDobGroup').style.display = 'block';
+      document.getElementById('leadPolicyNumberGroup').style.display = 'block';
+      document.getElementById('leadNotesGroup').style.display = 'block';
+      document.getElementById('leadTimeGroup').style.display = 'block';
+      document.getElementById('templateNameGroup').style.display = 'none';
+      document.getElementById('templateMessageGroup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('popup').style.display = 'block';
       if (recognition) recognition.stop();
       initAutoResizeTextareas();
     }
@@ -766,58 +598,44 @@
       currentEditTemplateIndex = index;
       currentEditIndex = null;
       const template = templates[index];
-      const templateName = document.getElementById('templateName');
-      const templateMessage = document.getElementById('templateMessage');
-      const popupTitle = document.getElementById('popupTitle');
-      const saveBtnText = document.getElementById('saveBtnText');
-      const deleteBtn = document.getElementById('deleteBtn');
-      const leadNameGroup = document.getElementById('leadNameGroup');
-      const leadPhoneGroup = document.getElementById('leadPhoneGroup');
-      const leadEmailGroup = document.getElementById('leadEmailGroup');
-      const leadDobGroup = document.getElementById('leadDobGroup');
-      const leadPolicyNumberGroup = document.getElementById('leadPolicyNumberGroup');
-      const leadNotesGroup = document.getElementById('leadNotesGroup');
-      const leadTimeGroup = document.getElementById('leadTimeGroup');
-      const templateNameGroup = document.getElementById('templateNameGroup');
-      const templateMessageGroup = document.getElementById('templateMessageGroup');
-      const overlay = document.getElementById('overlay');
-      const popup = document.getElementById('popup');
-      if (templateName) templateName.value = template.name;
-      if (templateMessage) templateMessage.value = template.message;
-      if (popupTitle) popupTitle.textContent = 'Edit Template';
-      if (saveBtnText) saveBtnText.textContent = 'Save Template';
-      if (deleteBtn) deleteBtn.style.display = 'inline-flex';
-      if (leadNameGroup) leadNameGroup.style.display = 'none';
-      if (leadPhoneGroup) leadPhoneGroup.style.display = 'none';
-      if (leadEmailGroup) leadEmailGroup.style.display = 'none';
-      if (leadDobGroup) leadDobGroup.style.display = 'none';
-      if (leadPolicyNumberGroup) leadPolicyNumberGroup.style.display = 'none';
-      if (leadNotesGroup) leadNotesGroup.style.display = 'none';
-      if (leadTimeGroup) leadTimeGroup.style.display = 'none';
-      if (templateNameGroup) templateNameGroup.style.display = 'block';
-      if (templateMessageGroup) templateMessageGroup.style.display = 'block';
-      if (overlay && popup) {
-        overlay.style.display = 'block';
-        popup.style.display = 'block';
-      }
+      document.getElementById('templateName').value = template.name;
+      document.getElementById('templateMessage').value = template.message;
+      document.getElementById('popupTitle').textContent = 'Edit Template';
+      document.getElementById('saveBtnText').textContent = 'Save Template';
+      document.getElementById('deleteBtn').style.display = 'inline-flex';
+      document.getElementById('leadNameGroup').style.display = 'none';
+      document.getElementById('leadPhoneGroup').style.display = 'none';
+      document.getElementById('leadEmailGroup').style.display = 'none';
+      document.getElementById('leadDobGroup').style.display = 'none';
+      document.getElementById('leadPolicyNumberGroup').style.display = 'none';
+      document.getElementById('leadNotesGroup').style.display = 'none';
+      document.getElementById('leadTimeGroup').style.display = 'none';
+      document.getElementById('templateNameGroup').style.display = 'block';
+      document.getElementById('templateMessageGroup').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('popup').style.display = 'block';
       initAutoResizeTextareas();
     }
 
     function renderLeads() {
       const grid = document.getElementById('leadGrid');
       const emptyState = document.getElementById('emptyState');
-      if (grid) grid.innerHTML = '';
-      if (emptyState) emptyState.style.display = 'none';
+      grid.innerHTML = '';
+
       if (!leads || leads.length === 0) {
-        if (emptyState) emptyState.style.display = 'block';
+        emptyState.style.display = 'block';
         return;
       }
+
+      emptyState.style.display = 'none';
+
       const sortedLeads = [...leads].sort((a, b) => {
         if (!a.time && !b.time) return 0;
         if (!a.time) return 1;
         if (!b.time) return -1;
         return new Date(a.time) - new Date(b.time);
       });
+
       sortedLeads.forEach((lead, index) => {
         const originalIndex = leads.indexOf(lead);
         const card = document.createElement('div');
@@ -827,32 +645,42 @@
           <div class="lead-header">
             <div>
               <div class="lead-name">${lead.name}</div>
-              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
-              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email}</div>` : ''}
+              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i>${lead.phone}</div>` : ''}
+              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i>${lead.email}</div>` : ''}
+              ${lead.dob ? `<div class="lead-dob"><i class="fas fa-birthday-cake"></i>${new Date(lead.dob).toLocaleDateString()}</div>` : ''}
             </div>
             <div class="lead-status status-${lead.status.toLowerCase()}">${lead.status}</div>
           </div>
-          ${lead.notes ? `<div class="lead-details"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
+          ${lead.policyNumber ? `<div class="lead-notes"><strong>Policy Number:</strong> ${lead.policyNumber}</div>` : ''}
+          ${lead.currentCompany ? `<div class="lead-notes"><strong>Current company:</strong> ${lead.currentCompany}</div>` : ''}
+          ${lead.currentlyPaying ? `<div class="lead-notes"><strong>Currently paying:</strong> ${lead.currentlyPaying}</div>` : ''}
+          ${lead.productsQuoted ? `<div class="lead-notes"><strong>Products quoted:</strong> ${lead.productsQuoted}</div>` : ''}
+          ${lead.ourRate ? `<div class="lead-notes"><strong>Our rate:</strong> ${lead.ourRate}</div>` : ''}
+          ${lead.notes ? `<div class="lead-notes"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
           <div class="lead-footer">
             <div class="lead-time">
-              ${lead.time ? `<i class="fas fa-clock"></i> ${new Date(lead.time).toLocaleString()}` : 'No appointment'}
+              <i class="fas fa-clock"></i>
+              ${lead.time ? new Date(lead.time).toLocaleString() : 'No appointment'}
             </div>
-            <button class="btn btn-success btn-small sold-btn">Sold</button>
+            <button class="btn btn-success btn-small" onclick="sellLead(${originalIndex}); event.stopPropagation();">Sold</button>
           </div>
         `;
-        if (grid) grid.appendChild(card);
+        grid.appendChild(card);
       });
     }
 
     function renderSoldLeads() {
       const grid = document.getElementById('soldGrid');
       const emptyState = document.getElementById('soldEmptyState');
-      if (grid) grid.innerHTML = '';
-      if (emptyState) emptyState.style.display = 'none';
+      grid.innerHTML = '';
+
       if (!soldLeads || soldLeads.length === 0) {
-        if (emptyState) emptyState.style.display = 'block';
+        emptyState.style.display = 'block';
         return;
       }
+
+      emptyState.style.display = 'none';
+
       soldLeads.forEach((lead, index) => {
         const card = document.createElement('div');
         card.className = 'lead-card';
@@ -861,31 +689,41 @@
           <div class="lead-header">
             <div>
               <div class="lead-name">${lead.name}</div>
-              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
-              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email}</div>` : ''}
+              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i>${lead.phone}</div>` : ''}
+              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i>${lead.email}</div>` : ''}
+              ${lead.dob ? `<div class="lead-dob"><i class="fas fa-birthday-cake"></i>${new Date(lead.dob).toLocaleDateString()}</div>` : ''}
             </div>
             <div class="lead-status status-sold">Sold</div>
           </div>
-          ${lead.notes ? `<div class="lead-details"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
+          ${lead.policyNumber ? `<div class="lead-notes"><strong>Policy Number:</strong> ${lead.policyNumber}</div>` : ''}
+          ${lead.currentCompany ? `<div class="lead-notes"><strong>Current company:</strong> ${lead.currentCompany}</div>` : ''}
+          ${lead.currentlyPaying ? `<div class="lead-notes"><strong>Currently paying:</strong> ${lead.currentlyPaying}</div>` : ''}
+          ${lead.productsQuoted ? `<div class="lead-notes"><strong>Products quoted:</strong> ${lead.productsQuoted}</div>` : ''}
+          ${lead.ourRate ? `<div class="lead-notes"><strong>Our rate:</strong> ${lead.ourRate}</div>` : ''}
+          ${lead.notes ? `<div class="lead-notes"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
           <div class="lead-footer">
             <div class="lead-time">
-              <i class="fas fa-clock"></i> Sold: ${new Date(lead.soldDate).toLocaleString()}
+              <i class="fas fa-clock"></i>
+              Sold: ${new Date(lead.soldDate).toLocaleString()}
             </div>
           </div>
         `;
-        if (grid) grid.appendChild(card);
+        grid.appendChild(card);
       });
     }
 
     function renderTrash() {
       const grid = document.getElementById('trashGrid');
       const emptyState = document.getElementById('trashEmptyState');
-      if (grid) grid.innerHTML = '';
-      if (emptyState) emptyState.style.display = 'none';
+      grid.innerHTML = '';
+
       if (!deletedLeads || deletedLeads.length === 0) {
-        if (emptyState) emptyState.style.display = 'block';
+        emptyState.style.display = 'block';
         return;
       }
+
+      emptyState.style.display = 'none';
+
       deletedLeads.forEach((lead, index) => {
         const card = document.createElement('div');
         card.className = 'lead-card';
@@ -893,32 +731,42 @@
           <div class="lead-header">
             <div>
               <div class="lead-name">${lead.name}</div>
-              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
-              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email}</div>` : ''}
+              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i>${lead.phone}</div>` : ''}
+              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i>${lead.email}</div>` : ''}
+              ${lead.dob ? `<div class="lead-dob"><i class="fas fa-birthday-cake"></i>${new Date(lead.dob).toLocaleDateString()}</div>` : ''}
             </div>
             <div class="lead-status status-new">Deleted</div>
           </div>
-          ${lead.notes ? `<div class="lead-details"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
+          ${lead.policyNumber ? `<div class="lead-notes"><strong>Policy Number:</strong> ${lead.policyNumber}</div>` : ''}
+          ${lead.currentCompany ? `<div class="lead-notes"><strong>Current company:</strong> ${lead.currentCompany}</div>` : ''}
+          ${lead.currentlyPaying ? `<div class="lead-notes"><strong>Currently paying:</strong> ${lead.currentlyPaying}</div>` : ''}
+          ${lead.productsQuoted ? `<div class="lead-notes"><strong>Products quoted:</strong> ${lead.productsQuoted}</div>` : ''}
+          ${lead.ourRate ? `<div class="lead-notes"><strong>Our rate:</strong> ${lead.ourRate}</div>` : ''}
+          ${lead.notes ? `<div class="lead-notes"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
           <div class="lead-footer">
             <div class="lead-time">
-              <i class="fas fa-clock"></i> Deleted: ${new Date(lead.deletedAt).toLocaleString()}
+              <i class="fas fa-clock"></i>
+              Deleted: ${new Date(lead.deletedAt).toLocaleString()}
             </div>
             <button class="btn btn-secondary btn-small" onclick="restoreLead(${index}); event.stopPropagation();">Restore</button>
           </div>
         `;
-        if (grid) grid.appendChild(card);
+        grid.appendChild(card);
       });
     }
 
     function renderTemplates() {
       const grid = document.getElementById('templateGrid');
       const emptyState = document.getElementById('templateEmptyState');
-      if (grid) grid.innerHTML = '';
-      if (emptyState) emptyState.style.display = 'none';
+      grid.innerHTML = '';
+
       if (!templates || templates.length === 0) {
-        if (emptyState) emptyState.style.display = 'block';
+        emptyState.style.display = 'block';
         return;
       }
+
+      emptyState.style.display = 'none';
+
       templates.forEach((template, index) => {
         const card = document.createElement('div');
         card.className = 'template-card';
@@ -931,33 +779,41 @@
           </div>
           <div class="template-message">${template.message}</div>
         `;
-        if (grid) grid.appendChild(card);
+        grid.appendChild(card);
       });
     }
 
     function filterLeads() {
-      const searchInput = document.getElementById('searchInput');
-      const search = searchInput ? searchInput.value.toLowerCase() : '';
+      const search = document.getElementById('searchInput').value.toLowerCase();
       const filtered = leads.filter(lead => 
         lead.name.toLowerCase().includes(search) || 
         (lead.phone && lead.phone.includes(search)) ||
         (lead.email && lead.email.toLowerCase().includes(search)) ||
+        (lead.policyNumber && lead.policyNumber.toLowerCase().includes(search)) ||
+        (lead.currentCompany && lead.currentCompany.toLowerCase().includes(search)) ||
+        (lead.currentlyPaying && lead.currentlyPaying.toLowerCase().includes(search)) ||
+        (lead.productsQuoted && lead.productsQuoted.toLowerCase().includes(search)) ||
+        (lead.ourRate && lead.ourRate.toLowerCase().includes(search)) ||
         (lead.notes && lead.notes.toLowerCase().includes(search))
       );
       const grid = document.getElementById('leadGrid');
       const emptyState = document.getElementById('emptyState');
-      if (grid) grid.innerHTML = '';
-      if (emptyState) emptyState.style.display = 'none';
+      grid.innerHTML = '';
+
       if (filtered.length === 0) {
-        if (emptyState) emptyState.style.display = 'block';
+        emptyState.style.display = 'block';
         return;
       }
+
+      emptyState.style.display = 'none';
+
       const sortedFiltered = filtered.sort((a, b) => {
         if (!a.time && !b.time) return 0;
         if (!a.time) return 1;
         if (!b.time) return -1;
         return new Date(a.time) - new Date(b.time);
       });
+
       sortedFiltered.forEach(lead => {
         const originalIndex = leads.indexOf(lead);
         const card = document.createElement('div');
@@ -967,38 +823,47 @@
           <div class="lead-header">
             <div>
               <div class="lead-name">${lead.name}</div>
-              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
-              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email}</div>` : ''}
+              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i>${lead.phone}</div>` : ''}
+              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i>${lead.email}</div>` : ''}
+              ${lead.dob ? `<div class="lead-dob"><i class="fas fa-birthday-cake"></i>${new Date(lead.dob).toLocaleDateString()}</div>` : ''}
             </div>
             <div class="lead-status status-${lead.status.toLowerCase()}">${lead.status}</div>
           </div>
-          ${lead.notes ? `<div class="lead-details"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
+          ${lead.policyNumber ? `<div class="lead-notes"><strong>Policy Number:</strong> ${lead.policyNumber}</div>` : ''}
+          ${lead.currentCompany ? `<div class="lead-notes"><strong>Current company:</strong> ${lead.currentCompany}</div>` : ''}
+          ${lead.currentlyPaying ? `<div class="lead-notes"><strong>Currently paying:</strong> ${lead.currentlyPaying}</div>` : ''}
+          ${lead.productsQuoted ? `<div class="lead-notes"><strong>Products quoted:</strong> ${lead.productsQuoted}</div>` : ''}
+          ${lead.ourRate ? `<div class="lead-notes"><strong>Our rate:</strong> ${lead.ourRate}</div>` : ''}
+          ${lead.notes ? `<div class="lead-notes"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
           <div class="lead-footer">
             <div class="lead-time">
-              ${lead.time ? `<i class="fas fa-clock"></i> ${new Date(lead.time).toLocaleString()}` : 'No appointment'}
+              <i class="fas fa-clock"></i>
+              ${lead.time ? new Date(lead.time).toLocaleString() : 'No appointment'}
             </div>
-            <button class="btn btn-success btn-small sold-btn">Sold</button>
+            <button class="btn btn-success btn-small" onclick="sellLead(${originalIndex}); event.stopPropagation();">Sold</button>
           </div>
         `;
-        if (grid) grid.appendChild(card);
+        grid.appendChild(card);
       });
     }
 
     function filterTemplates() {
-      const templateSearchInput = document.getElementById('templateSearchInput');
-      const search = templateSearchInput ? templateSearchInput.value.toLowerCase() : '';
+      const search = document.getElementById('templateSearchInput').value.toLowerCase();
       const filtered = templates.filter(template => 
         template.name.toLowerCase().includes(search) || 
         template.message.toLowerCase().includes(search)
       );
       const grid = document.getElementById('templateGrid');
       const emptyState = document.getElementById('templateEmptyState');
-      if (grid) grid.innerHTML = '';
-      if (emptyState) emptyState.style.display = 'none';
+      grid.innerHTML = '';
+
       if (filtered.length === 0) {
-        if (emptyState) emptyState.style.display = 'block';
+        emptyState.style.display = 'block';
         return;
       }
+
+      emptyState.style.display = 'none';
+
       filtered.forEach((template, index) => {
         const card = document.createElement('div');
         card.className = 'template-card';
@@ -1011,33 +876,44 @@
           </div>
           <div class="template-message">${template.message}</div>
         `;
-        if (grid) grid.appendChild(card);
+        grid.appendChild(card);
       });
     }
 
     function updateStats() {
-      const totalLeads = document.getElementById('totalLeads');
-      const upcomingAppts = document.getElementById('upcomingAppts');
-      if (totalLeads) totalLeads.textContent = `${leads.length} Leads`;
-      if (upcomingAppts) upcomingAppts.textContent = `${leads.filter(lead => lead.time).length} Appointments`;
+      const total = leads.length;
+      const appointments = leads.filter(lead => lead.time).length;
+      document.getElementById('totalLeads').textContent = `${total} Leads`;
+      document.getElementById('upcomingAppts').textContent = `${appointments} Appointments`;
     }
 
     function initCalendar() {
       const calendarEl = document.getElementById('calendarView');
-      if (calendarEl) {
-        calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: 'dayGridMonth',
-          events: leads.filter(lead => lead.time).map((lead, index) => ({
-            title: lead.name,
-            start: lead.time,
-            extendedProps: { index }
-          })),
-          eventClick: function(info) {
-            editLead(info.event.extendedProps.index);
-          }
-        });
-        calendar.render();
-      }
+      calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        editable: true,
+        events: function(fetchInfo, successCallback, failureCallback) {
+          const events = leads
+            .filter(lead => lead.time)
+            .map((lead, index) => ({
+              title: lead.name,
+              start: lead.time,
+              extendedProps: { index }
+            }));
+          successCallback(events);
+        },
+        eventClick: function(info) {
+          editLead(info.event.extendedProps.index);
+        },
+        eventDrop: function(info) {
+          const index = info.event.extendedProps.index;
+          leads[index].time = info.event.start.toISOString();
+          saveLeads();
+          renderLeads();
+          updateStats();
+        }
+      });
+      calendar.render();
     }
 
     function startReminderSystem() {
@@ -1059,42 +935,134 @@
 
     function showNotification(type, title, message) {
       const notification = document.getElementById('notification');
-      if (notification) {
-        notification.className = `notification ${type}`;
-        const icon = notification.querySelector('.notification-icon i');
-        if (icon) icon.className = `fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}`;
-        const notifTitle = notification.querySelector('.notification-title');
-        if (notifTitle) notifTitle.textContent = title;
-        const notifMessage = notification.querySelector('.notification-message');
-        if (notifMessage) notifMessage.textContent = message;
-        notification.style.display = 'block';
-        setTimeout(() => { if (notification) notification.style.display = 'none'; }, 5000);
-      }
+      notification.className = `notification ${type}`;
+      notification.querySelector('.notification-icon i').className = `fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}`;
+      notification.querySelector('.notification-title').textContent = title;
+      notification.querySelector('.notification-message').textContent = message;
+      notification.style.display = 'block';
+      setTimeout(() => { notification.style.display = 'none'; }, 5000);
+    }
+
+    document.querySelectorAll('.nav-link').forEach(button => {
+      button.addEventListener('click', () => showTab(button.getAttribute('data-tab')));
+    });
+
+    document.getElementById('searchInput').addEventListener('input', filterLeads);
+    document.getElementById('templateSearchInput').addEventListener('input', filterTemplates);
+
+    document.querySelectorAll('.export-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        if (e.target.textContent.includes('Share')) {
+          exportLeadsLink();
+        } else {
+          btn.classList.add('loading');
+          setTimeout(() => {
+            exportLeads();
+            btn.classList.remove('loading');
+          }, 500);
+        }
+      });
+    });
+
+    document.querySelectorAll('.print-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.classList.add('loading');
+        setTimeout(() => {
+          printSection();
+          btn.classList.remove('loading');
+        }, 500);
+      });
+    });
+
+    document.querySelectorAll('.form-input, .form-textarea').forEach(input => {
+      input.addEventListener('input', function() {
+        const label = this.nextElementSibling || this.previousElementSibling;
+        if (label && label.classList.contains('form-label')) {
+          if (this.value.trim() !== '') {
+            label.style.top = '-0.5rem';
+            label.style.fontSize = '0.75rem';
+            label.style.background = 'var(--card-bg)';
+            label.style.padding = '0 0.25rem';
+            label.style.color = 'var(--primary-blue)';
+          } else {
+            label.style.top = '0.75rem';
+            label.style.fontSize = '0.875rem';
+            label.style.background = 'transparent';
+            label.style.padding = '0';
+            label.style.color = 'var(--text-secondary)';
+          }
+        }
+      });
+
+      input.addEventListener('focus', function() {
+        const label = this.nextElementSibling || this.previousElementSibling;
+        if (label && label.classList.contains('form-label') && this.value.trim() === '') {
+          label.style.top = '-0.5rem';
+          label.style.fontSize = '0.75rem';
+          label.style.background = 'var(--card-bg)';
+          label.style.padding = '0 0.25rem';
+          label.style.color = 'var(--primary-blue)';
+        }
+      });
+
+      input.addEventListener('blur', function() {
+        const label = this.nextElementSibling || this.previousElementSibling;
+        if (label && label.classList.contains('form-label') && this.value.trim() === '') {
+          label.style.top = '0.75rem';
+          label.style.fontSize = '0.875rem';
+          label.style.background = 'transparent';
+          label.style.padding = '0';
+          label.style.color = 'var(--text-secondary)';
+        }
+      });
+    });
+
+    function toggleDarkMode() {
+      const body = document.body;
+      const isDarkMode = body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', isDarkMode);
+      showNotification('success', 'Theme Updated', `Switched to ${isDarkMode ? 'Dark' : 'Light'} Mode`);
     }
 
     function printSection() {
+      const printContent = document.querySelector('#leads').innerHTML;
+      const originalContent = document.body.innerHTML;
+      document.body.innerHTML = `
+        <html>
+          <head>
+            <title>Print Leads</title>
+            <style>
+              body { font-family: 'Roboto', sans-serif; padding: 20px; }
+              .lead-card { margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; }
+              .lead-name { font-weight: bold; }
+            </style>
+          </head>
+          <body>${printContent}</body>
+        </html>`;
       window.print();
-    }
-
-    function printTemplates() {
-      const templatesSection = document.getElementById('templates');
-      if (templatesSection) {
-        const printWindow = window.open('', '', 'height=600,width=800');
-        printWindow.document.write('<html><head><title>Print Templates</title>');
-        printWindow.document.write('<link rel="stylesheet" href="enhanced-styles.css">');
-        printWindow.document.write('</head><body>');
-        printWindow.document.write(templatesSection.outerHTML);
-        printWindow.document.write('</body></html>');
-        printWindow.document.close();
-        printWindow.print();
-      }
+      document.body.innerHTML = originalContent;
+      location.reload();
     }
 
     function exportLeads() {
       const csv = [
-        ['Name', 'Phone', 'Email', 'Notes', 'Appointment Time', 'Status'],
-        ...leads.map(lead => [lead.name, lead.phone || '', lead.email || '', lead.notes || '', lead.time || '', lead.status || 'New'])
+        ['Name', 'Phone', 'Email', 'Date of Birth', 'Policy Number', 'Notes', 'Appointment Time', 'Status', 'Current company', 'Currently paying', 'Products quoted', 'Our rate'],
+        ...leads.map(lead => [
+          lead.name,
+          lead.phone || '',
+          lead.email || '',
+          lead.dob || '',
+          lead.policyNumber || '',
+          lead.notes || '',
+          lead.time || '',
+          lead.status || 'New',
+          lead.currentCompany || '',
+          lead.currentlyPaying || '',
+          lead.productsQuoted || '',
+          lead.ourRate || ''
+        ])
       ].map(row => row.join(',')).join('\n');
+
       const blob = new Blob([csv], { type: 'text/csv' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -1107,23 +1075,6 @@
       showNotification('success', 'Success', 'Leads exported as leads.csv');
     }
 
-    function exportTemplates() {
-      const csv = [
-        ['Name', 'Message'],
-        ...templates.map(template => [template.name, template.message])
-      ].map(row => row.join(',')).join('\n');
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'templates.csv';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-      showNotification('success', 'Success', 'Templates exported as templates.csv');
-    }
-
     function exportLeadsLink() {
       const shareId = 'xxxxxx'.replace(/x/g, () => Math.floor(Math.random() * 16).toString(16));
       const shareData = JSON.stringify(leads);
@@ -1131,7 +1082,7 @@
       localStorage.setItem(`share_${shareId}`, shareData);
       setTimeout(() => localStorage.removeItem(`share_${shareId}`), 24 * 60 * 60 * 1000);
       navigator.clipboard.writeText(shareUrl);
-      showNotification('success', 'Link Generated', 'Share link copied to clipboard. It expires in 24 hours.');
+      showNotification('success', 'Link Generated', `Share link copied to clipboard. It expires in 24 hours. Provide this to viewers.`);
     }
 
     function initSpeechRecognition() {
@@ -1140,6 +1091,7 @@
         recognition.continuous = true;
         recognition.interimResults = true;
         recognition.lang = 'en-US';
+
         recognition.onresult = function(event) {
           let finalTranscript = '';
           for (let i = event.resultIndex; i < event.results.length; i++) {
@@ -1147,32 +1099,47 @@
               finalTranscript += event.results[i][0].transcript;
             }
           }
-          const leadNotes = document.getElementById('leadNotes');
-          if (leadNotes) {
-            leadNotes.value += finalTranscript;
-            autoResize(leadNotes);
+          const notesField = document.getElementById('leadNotes');
+          notesField.value = notesField.value + finalTranscript;
+          autoResize(notesField);
+          const label = notesField.nextElementSibling;
+          if (label && label.classList.contains('form-label') && notesField.value.trim() !== '') {
+            label.style.top = '-0.5rem';
+            label.style.fontSize = '0.75rem';
+            label.style.background = 'var(--card-bg)';
+            label.style.padding = '0 0.25rem';
+            label.style.color = 'var(--primary-blue)';
           }
         };
+
         recognition.onerror = function(event) {
           console.error('Speech recognition error:', event.error);
-          showNotification('warning', 'Error', 'Speech recognition failed.');
+          showNotification('warning', 'Error', 'Speech recognition failed. Please try again.');
+          document.getElementById('speechBtn').classList.remove('active');
         };
+
         recognition.onend = function() {
-          const speechBtn = document.getElementById('speechBtn');
-          if (speechBtn) speechBtn.classList.remove('active');
+          document.getElementById('speechBtn').classList.remove('active');
+          showNotification('success', 'Speech Stopped', 'Speech recognition has stopped.');
         };
-        const speechBtn = document.getElementById('speechBtn');
-        if (speechBtn) {
-          speechBtn.addEventListener('click', function() {
+
+        document.getElementById('speechBtn').addEventListener('click', function() {
+          if (recognition) {
             if (!this.classList.contains('active')) {
               recognition.start();
               this.classList.add('active');
+              showNotification('success', 'Speech Started', 'Speak now to add notes.');
             } else {
               recognition.stop();
               this.classList.remove('active');
             }
-          });
-        }
+          }
+        });
+      } else {
+        console.log('Speech recognition not supported in this browser.');
+        showNotification('warning', 'Error', 'Speech recognition is not supported in your browser.');
       }
     }
+
+    init();
   </script>
