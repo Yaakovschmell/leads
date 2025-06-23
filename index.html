@@ -1,1264 +1,1119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Allstate CRM App</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.15/main.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.15/main.min.js"></script>
-    <link rel="stylesheet" href="enhanced-styles.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Allstate CRM - Enhanced</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="enhanced-styles.css" />
 </head>
 <body>
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <img src="image.png" alt="Allstate Logo" class="logo" width="50" height="50" onerror="this.src='https://via.placeholder.com/50'; this.onerror=null;">
-            <p class="tagline">You're in good hands.</p>
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <img src="image.png" alt="Allstate Logo" class="logo">
+      <p class="tagline">Professional Insurance Solutions</p>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-link active" data-tab="leads"><i class="fas fa-users"></i> Leads</button>
+      <button class="nav-link" data-tab="calendar"><i class="fas fa-calendar-alt"></i> Schedule</button>
+      <button class="nav-link" data-tab="templates"><i class="fas fa-sms"></i> Text Templates</button>
+      <button class="nav-link" data-tab="trash"><i class="fas fa-trash"></i> Trash</button>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="theme-toggle"><i class="fas fa-moon"></i> Toggle Dark Mode</button>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <header>
+      <div class="breadcrumbs">
+        <span>Home</span> / <span class="current">Leads</span>
+      </div>
+      <div class="header-content">
+        <div class="logo">
+          <img src="image.png" alt="Allstate Logo">
+          Allstate CRM
         </div>
-        <nav class="sidebar-nav">
-            <button class="nav-link active" data-tab="leads"><i class="fas fa-users"></i> Leads</button>
-            <button class="nav-link" data-tab="calendar"><i class="fas fa-calendar-alt"></i> Schedule</button>
-            <button class="nav-link" data-tab="templates"><i class="fas fa-sms"></i> Text Templates</button>
-            <button class="nav-link" data-tab="sold"><i class="fas fa-check-circle"></i> Sold</button>
-            <button class="nav-link" data-tab="neglected"><i class="fas fa-exclamation-triangle"></i> Neglected</button>
-            <button class="nav-link" data-tab="trash"><i class="fas fa-trash"></i> Trash</button>
-        </nav>
-        <div class="sidebar-footer">
-            <button class="theme-toggle"><i class="fas fa-moon"></i> Toggle Dark Mode</button>
+        <div class="header-stats">
+          <div class="stat-item">
+            <i class="fas fa-users"></i>
+            <span id="totalLeads">0 Leads</span>
+          </div>
+          <div class="stat-item">
+            <i class="fas fa-calendar-check"></i>
+            <span id="upcomingAppts">0 Appointments</span>
+          </div>
         </div>
+      </div>
+    </header>
+
+    <main>
+      <section id="leads" class="content">
+        <div class="leads-header">
+          <h1 class="leads-title">Lead Management</h1>
+          <div class="action-group">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" id="searchInput" placeholder="Search leads...">
+            </div>
+            <button class="btn btn-primary" onclick="showPopup('lead')">
+              <i class="fas fa-plus"></i>
+              Add Lead
+            </button>
+            <button class="btn btn-secondary export-btn"><i class="fas fa-download"></i> Export</button>
+            <button class="btn btn-secondary print-btn"><i class="fas fa-print"></i> Print</button>
+          </div>
+        </div>
+        
+        <div class="lead-grid" id="leadGrid"></div>
+        
+        <div class="empty-state" id="emptyState" style="display: none;">
+          <i class="fas fa-user-plus"></i>
+          <h3>No leads yet</h3>
+          <p>Start by adding your first lead to get organized!</p>
+        </div>
+      </section>
+
+      <section id="calendar" class="content" style="display: none;">
+        <div id="calendarView"></div>
+      </section>
+
+      <section id="templates" class="content" style="display: none;">
+        <div class="templates-header">
+          <h1 class="templates-title">Text Templates</h1>
+          <div class="action-group">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" id="templateSearchInput" placeholder="Search templates...">
+            </div>
+            <button class="btn btn-primary" onclick="showPopup('template')">
+              <i class="fas fa-plus"></i>
+              Add Template
+            </button>
+            <button class="btn btn-secondary export-btn"><i class="fas fa-download"></i> Export</button>
+            <button class="btn btn-secondary print-btn"><i class="fas fa-print"></i> Print</button>
+          </div>
+        </div>
+        
+        <div class="template-grid" id="templateGrid"></div>
+        
+        <div class="empty-state" id="templateEmptyState" style="display: none;">
+          <i class="fas fa-sms"></i>
+          <h3>No templates yet</h3>
+          <p>Create your first text template to streamline communication!</p>
+        </div>
+      </section>
+
+      <section id="trash" class="content" style="display: none;">
+        <div class="leads-header">
+          <h1 class="leads-title">Trash</h1>
+          <div class="action-group">
+            <button class="btn btn-secondary" onclick="clearTrash()">Clear Trash</button>
+          </div>
+        </div>
+        <div class="lead-grid" id="trashGrid"></div>
+        <div class="empty-state" id="trashEmptyState" style="display: none;">
+          <i class="fas fa-trash"></i>
+          <h3>No deleted leads</h3>
+          <p>Deleted leads will appear here for 24 hours.</p>
+        </div>
+      </section>
+    </main>
+
+    <div class="overlay" id="overlay" onclick="closePopup()"></div>
+
+    <div class="popup" id="popup">
+      <div class="popup-header">
+        <h2 class="popup-title" id="popupTitle">Add New Lead</h2>
+        <button class="close-btn" onclick="closePopup()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <form id="leadForm">
+        <div class="form-group" id="leadNameGroup">
+          <input class="form-input" id="leadName" type="text" placeholder=" " required>
+          <label class="form-label" for="leadName">Full Name *</label>
+        </div>
+        
+        <div class="form-group" id="leadPhoneGroup">
+          <input class="form-input" id="leadPhone" type="tel" placeholder=" ">
+          <label class="form-label" for="leadPhone">Phone Number</label>
+        </div>
+        
+        <div class="form-group" id="leadEmailGroup">
+          <input class="form-input" id="leadEmail" type="email" placeholder=" ">
+          <label class="form-label" for="leadEmail">Email Address</label>
+        </div>
+        
+        <div class="form-group" id="leadDobGroup">
+          <input class="form-input" id="leadDob" type="date" placeholder=" ">
+          <label class="form-label" for="leadDob">Date of Birth</label>
+        </div>
+        
+        <div class="form-group" id="leadNotesGroup">
+          <textarea class="form-textarea" id="leadNotes" placeholder=" "></textarea>
+          <label class="form-label" for="leadNotes">Notes</label>
+          <button type="button" id="speechBtn" class="speech-btn"><i class="fas fa-microphone"></i></button>
+        </div>
+        
+        <div class="form-group" id="leadTimeGroup">
+          <input class="form-input" id="leadTime" type="datetime-local" placeholder=" ">
+          <label class="form-label" for="leadTime">Appointment Date & Time</label>
+        </div>
+
+        <div class="form-group" id="templateNameGroup" style="display: none;">
+          <input class="form-input" id="templateName" type="text" placeholder=" " required>
+          <label class="form-label" for="templateName">Template Name *</label>
+        </div>
+        
+        <div class="form-group" id="templateMessageGroup" style="display: none;">
+          <textarea class="form-textarea" id="templateMessage" placeholder=" " required></textarea>
+          <label class="form-label" for="templateMessage">Message *</label>
+        </div>
+      </form>
+      
+      <div class="popup-actions">
+        <button class="btn btn-danger delete-btn" id="deleteBtn" style="display: none;" onclick="deleteItem()">
+          <i class="fas fa-trash"></i>
+          Delete
+        </button>
+        <button class="btn btn-secondary" onclick="closePopup()">Cancel</button>
+        <button class="btn btn-primary" id="saveBtn" onclick="saveItem()">
+          <i class="fas fa-save"></i>
+          <span id="saveBtnText">Save Lead</span>
+        </button>
+      </div>
     </div>
 
-    <div class="main-content">
-        <header>
-            <div class="breadcrumbs">
-                <span>Home</span> / <span class="current">Leads</span>
-            </div>
-            <div class="header-content">
-                <div class="logo">
-                    <img src="image.png" alt="Allstate Logo" class="logo" width="100" height="100" onerror="this.src='https://via.placeholder.com/100'; this.onerror=null;">
-                    Allstate CRM
-                </div>
-                <div class="header-stats">
-                    <div class="stat-item">
-                        <i class="fas fa-users"></i>
-                        <span id="totalLeads">0 Leads</span>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fas fa-calendar-check"></i>
-                        <span id="upcomingAppts">0 Appointments</span>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <main>
-            <section id="leads" class="content">
-                <div class="leads-header">
-                    <h1 class="leads-title">Lead Management</h1>
-                    <div class="action-group">
-                        <div class="search-box">
-                            <i class="fas fa-search"></i>
-                            <input type="text" id="searchInput" placeholder="Search leads...">
-                        </div>
-                        <button class="btn btn-primary" id="addLeadBtn">
-                            <i class="fas fa-plus"></i>
-                            Add Lead
-                        </button>
-                        <button class="btn btn-secondary export-btn" id="shareLeadsBtn"><i class="fas fa-share"></i> Share Leads</button>
-                        <button class="btn btn-secondary export-btn" id="exportLeadsBtn"><i class="fas fa-download"></i> Export</button>
-                        <button class="btn btn-secondary print-btn" id="printBtn"><i class="fas fa-print"></i> Print</button>
-                    </div>
-                </div>
-                
-                <div class="lead-grid" id="leadGrid"></div>
-                
-                <div class="empty-state" id="emptyState" style="display: none;">
-                    <i class="fas fa-user-plus"></i>
-                    <h3>No leads yet</h3>
-                    <p>Start by adding your first lead to get organized!</p>
-                </div>
-            </section>
-
-            <section id="calendar" class="content" style="display: none;">
-                <div id="calendarView"></div>
-                <div class="empty-state" id="calendarEmptyState" style="display: none;">
-                    <i class="fas fa-info-circle"></i>
-                    <p>No appointments scheduled.</p>
-                </div>
-            </section>
-
-            <section id="templates" class="content" style="display: none;">
-                <div class="templates-header">
-                    <h1 class="templates-title">Text Templates</h1>
-                    <div class="action-group">
-                        <div class="search-box">
-                            <i class="fas fa-search"></i>
-                            <input type="text" id="templateSearchInput" placeholder="Search templates...">
-                        </div>
-                        <button class="btn btn-primary" id="addTemplateBtn">
-                            <i class="fas fa-plus"></i>
-                            Add Template
-                        </button>
-                        <button class="btn btn-secondary export-btn" id="exportTemplatesBtn"><i class="fas fa-download"></i> Export</button>
-                        <button class="btn btn-secondary print-btn" id="printTemplatesBtn"><i class="fas fa-print"></i> Print</button>
-                    </div>
-                </div>
-                
-                <div class="template-grid" id="templateGrid"></div>
-                
-                <div class="empty-state" id="templateEmptyState" style="display: none;">
-                    <i class="fas fa-sms"></i>
-                    <h3>No templates yet</h3>
-                    <p>Create your first text template to streamline communication!</p>
-                </div>
-            </section>
-
-            <section id="sold" class="content" style="display: none;">
-                <div class="leads-header">
-                    <h1 class="leads-title">Sold Leads</h1>
-                    <div class="action-group">
-                        <button class="btn btn-secondary" id="clearSoldBtn">Clear Sold</button>
-                    </div>
-                </div>
-                <div class="lead-grid" id="soldGrid"></div>
-                <div class="empty-state" id="soldEmptyState" style="display: none;">
-                    <i class="fas fa-check-circle"></i>
-                    <h3>No sold leads</h3>
-                    <p>Sold leads will appear here.</p>
-                </div>
-            </section>
-
-            <section id="neglected" class="content" style="display: none;">
-                <div class="leads-header">
-                    <h1 class="leads-title">Neglected Leads</h1>
-                    <div class="action-group">
-                        <button class="btn btn-secondary" id="clearNeglectedBtn">Clear Neglected</button>
-                    </div>
-                </div>
-                <div class="lead-grid" id="neglectedGrid"></div>
-                <div class="empty-state" id="neglectedEmptyState" style="display: none;">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <h3>No neglected leads</h3>
-                    <p>Overdue appointments will appear here.</p>
-                </div>
-            </section>
-
-            <section id="trash" class="content" style="display: none;">
-                <div class="leads-header">
-                    <h1 class="leads-title">Trash</h1>
-                    <div class="action-group">
-                        <button class="btn btn-secondary" id="clearTrashBtn">Clear Trash</button>
-                    </div>
-                </div>
-                <div class="lead-grid" id="trashGrid"></div>
-                <div class="empty-state" id="trashEmptyState" style="display: none;">
-                    <i class="fas fa-trash"></i>
-                    <h3>No deleted leads</h3>
-                    <p>Deleted leads will appear here for 24 hours.</p>
-                </div>
-            </section>
-        </main>
-
-        <div class="overlay" id="overlay" onclick="closePopup()"></div>
-
-        <div class="popup" id="popup">
-            <div class="popup-header">
-                <h2 class="popup-title" id="popupTitle">Add New Lead</h2>
-                <button class="close-btn" onclick="closePopup()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <form id="leadForm">
-                <div id="dynamicFormFields"></div>
-                
-                <div class="form-group" id="templateNameGroup" style="display: none;">
-                    <input class="form-input" id="templateName" type="text" placeholder=" " required>
-                    <label class="form-label" for="templateName">Template Name *</label>
-                </div>
-                
-                <div class="form-group" id="templateMessageGroup" style="display: none;">
-                    <textarea class="form-textarea" id="templateMessage" placeholder=" " required></textarea>
-                    <label class="form-label" for="templateMessage">Message *</label>
-                </div>
-            </form>
-            
-            <div class="popup-actions">
-                <button class="btn btn-danger delete-btn" id="deleteBtn" style="display: none;" onclick="deleteItem()">
-                    <i class="fas fa-trash"></i>
-                    Delete
-                </button>
-                <button class="btn btn-success sold-btn" id="soldBtn" style="display: none;" onclick="sellLead()">
-                    <i class="fas fa-check-circle"></i>
-                    Sold
-                </button>
-                <button class="btn btn-secondary" id="cancelBtn">Cancel</button>
-                <button class="btn btn-primary" id="saveBtn">
-                    <i class="fas fa-save"></i>
-                    <span id="saveBtnText">Save Lead</span>
-                </button>
-            </div>
+    <div class="notification" id="notification">
+      <div class="notification-content">
+        <div class="notification-icon">
+          <i class="fas fa-check-circle"></i>
         </div>
-
-        <div class="notification" id="notification">
-            <div class="notification-content">
-                <div class="notification-icon">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <div class="notification-text">
-                    <div class="notification-title">Success!</div>
-                    <div class="notification-message">Lead has been saved successfully.</div>
-                </div>
-            </div>
+        <div class="notification-text">
+          <div class="notification-title">Success!</div>
+          <div class="notification-message">Lead has been saved successfully.</div>
         </div>
+      </div>
     </div>
+  </div>
 
-    <script>
-        let leads = [];
-        let deletedLeads = [];
-        let soldLeads = [];
-        let neglectedLeads = [];
-        let templates = [];
-        let currentEditIndex = null;
-        let currentEditTemplateIndex = null;
-        let currentPopupMode = 'lead';
-        let calendar = null;
-        let recognition = null;
+  <script>
+    let leads = [];
+    let deletedLeads = [];
+    let templates = [];
+    let currentEditIndex = null;
+    let currentEditTemplateIndex = null;
+    let currentPopupMode = 'lead';
+    let calendar = null;
+    let recognition = null;
 
-        const leadFields = [
-            { id: 'leadName', label: 'Full Name *', type: 'text', required: true },
-            { id: 'leadPhone', label: 'Phone Number', type: 'tel' },
-            { id: 'leadEmail', label: 'Email Address', type: 'email' },
-            { id: 'leadDob', label: 'Date of Birth', type: 'date' },
-            { id: 'leadPolicyNumber', label: 'Policy Number', type: 'text' },
-            { id: 'leadNotes', label: 'Notes', type: 'textarea', speech: true },
-            { id: 'leadCurrentCompany', label: 'Current Company', type: 'text' },
-            { id: 'leadCurrentlyPaying', label: 'Currently Paying', type: 'text' },
-            { id: 'leadProductsQuoted', label: 'Products Quoted', type: 'text' },
-            { id: 'leadOurRate', label: 'Our Rate', type: 'text' },
-            { id: 'leadTime', label: 'Appointment Date & Time', type: 'datetime-local' }
-        ];
+    function init() {
+      try {
+        console.log('Initializing app...');
+        loadLeads();
+        loadDeletedLeads();
+        loadTemplates();
+        renderLeads();
+        renderTrash();
+        renderTemplates();
+        updateStats();
+        initCalendar();
+        startReminderSystem();
+        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+        if (isDarkMode) document.body.classList.add('dark-mode');
+        document.querySelector('.theme-toggle').addEventListener('click', toggleDarkMode);
+        initSpeechRecognition();
+      } catch (error) {
+        console.error('Initialization error:', error);
+        showNotification('warning', 'Error', 'Failed to initialize app. Please refresh.');
+      }
+    }
 
-        document.addEventListener('DOMContentLoaded', init);
+    function loadLeads() {
+      try {
+        const savedLeads = localStorage.getItem('leads');
+        leads = savedLeads ? JSON.parse(savedLeads) : [];
+        if (!Array.isArray(leads)) leads = [];
+        leads = leads.filter(lead => {
+          if (!lead || typeof lead !== 'object') return false;
+          if (!lead.name || typeof lead.name !== 'string') return false;
+          if (lead.time && isNaN(new Date(lead.time).getTime())) return false;
+          return true;
+        });
+        localStorage.setItem('leads', JSON.stringify(leads));
+        console.log('Loaded leads:', leads.length);
+      } catch (error) {
+        console.error('Error loading leads:', error);
+        leads = [];
+        localStorage.setItem('leads', JSON.stringify(leads));
+        showNotification('warning', 'Error', 'Failed to load leads.');
+      }
+    }
 
-        function init() {
-            loadLeads();
-            loadDeletedLeads();
-            loadSoldLeads();
-            loadNeglectedLeads();
-            loadTemplates();
-            renderLeads();
-            renderSoldLeads();
-            renderNeglectedLeads();
-            renderTrash();
-            renderTemplates();
-            updateStats();
-            initCalendar();
-            startReminderSystem();
-            const isDarkMode = localStorage.getItem('darkMode') === 'true';
-            if (isDarkMode) document.body.classList.add('dark-mode');
-            document.querySelector('.theme-toggle').addEventListener('click', toggleDarkMode);
-            document.getElementById('addLeadBtn').addEventListener('click', () => showPopup('lead'));
-            document.getElementById('shareLeadsBtn').addEventListener('click', exportLeadsLink);
-            document.getElementById('exportLeadsBtn').addEventListener('click', exportLeads);
-            document.getElementById('printBtn').addEventListener('click', printSection);
-            document.getElementById('addTemplateBtn').addEventListener('click', () => showPopup('template'));
-            document.getElementById('exportTemplatesBtn').addEventListener('click', exportTemplates);
-            document.getElementById('printTemplatesBtn').addEventListener('click', printTemplates);
-            document.getElementById('clearSoldBtn').addEventListener('click', clearSold);
-            document.getElementById('clearNeglectedBtn').addEventListener('click', clearNeglected);
-            document.getElementById('clearTrashBtn').addEventListener('click', clearTrash);
-            document.getElementById('cancelBtn').addEventListener('click', closePopup);
-            document.getElementById('saveBtn').addEventListener('click', saveItem);
-            document.querySelectorAll('.nav-link').forEach(button => {
-                button.addEventListener('click', () => showTab(button.getAttribute('data-tab')));
-            });
-            document.getElementById('searchInput').addEventListener('input', filterLeads);
-            document.getElementById('templateSearchInput').addEventListener('input', filterTemplates);
-            initSpeechRecognition();
-            initAutoResizeTextareas();
+    function loadDeletedLeads() {
+      try {
+        const savedDeleted = localStorage.getItem('deletedLeads');
+        deletedLeads = savedDeleted ? JSON.parse(savedDeleted) : [];
+        if (!Array.isArray(deletedLeads)) deletedLeads = [];
+        deletedLeads = deletedLeads.filter(lead => {
+          if (!lead || typeof lead !== 'object') return false;
+          if (!lead.name || typeof lead.name !== 'string') return false;
+          if (!lead.deletedAt || isNaN(new Date(lead.deletedAt).getTime())) return false;
+          return new Date(lead.deletedAt) > new Date(Date.now() - 24 * 60 * 60 * 1000); // Keep for 24 hours
+        });
+        localStorage.setItem('deletedLeads', JSON.stringify(deletedLeads));
+        console.log('Loaded deleted leads:', deletedLeads.length);
+      } catch (error) {
+        console.error('Error loading deleted leads:', error);
+        deletedLeads = [];
+        localStorage.setItem('deletedLeads', JSON.stringify(deletedLeads));
+        showNotification('warning', 'Error', 'Failed to load deleted leads.');
+      }
+    }
+
+    function loadTemplates() {
+      try {
+        const savedTemplates = localStorage.getItem('templates');
+        templates = savedTemplates ? JSON.parse(savedTemplates) : [];
+        if (!Array.isArray(templates)) templates = [];
+        templates = templates.filter(template => {
+          if (!template || typeof template !== 'object') return false;
+          if (!template.name || typeof template.name !== 'string') return false;
+          if (!template.message || typeof template.message !== 'string') return false;
+          return true;
+        });
+        localStorage.setItem('templates', JSON.stringify(templates));
+        console.log('Loaded templates:', templates.length);
+      } catch (error) {
+        console.error('Error loading templates:', error);
+        templates = [];
+        localStorage.setItem('templates', JSON.stringify(templates));
+        showNotification('warning', 'Error', 'Failed to load templates.');
+      }
+    }
+
+    function saveLeads() {
+      try {
+        localStorage.setItem('leads', JSON.stringify(leads));
+        console.log('Saved leads:', leads.length);
+      } catch (error) {
+        console.error('Error saving leads:', error);
+        showNotification('warning', 'Error', 'Failed to save leads.');
+      }
+    }
+
+    function saveDeletedLeads() {
+      try {
+        localStorage.setItem('deletedLeads', JSON.stringify(deletedLeads));
+        console.log('Saved deleted leads:', deletedLeads.length);
+      } catch (error) {
+        console.error('Error saving deleted leads:', error);
+        showNotification('warning', 'Error', 'Failed to save deleted leads.');
+      }
+    }
+
+    function saveTemplates() {
+      try {
+        localStorage.setItem('templates', JSON.stringify(templates));
+        console.log('Saved templates:', templates.length);
+      } catch (error) {
+        console.error('Error saving templates:', error);
+        showNotification('warning', 'Error', 'Failed to save templates.');
+      }
+    }
+
+    function showTab(tab) {
+      try {
+        document.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.content').forEach(c => c.style.display = 'none');
+        document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+        document.getElementById(tab).style.display = 'block';
+        document.querySelector('.breadcrumbs .current').textContent = document.querySelector(`[data-tab="${tab}"]`).textContent.trim();
+        if (tab === 'calendar' && calendar) calendar.render();
+        if (tab === 'trash') renderTrash();
+      } catch (error) {
+        console.error('Error switching tab:', error);
+        showNotification('warning', 'Error', 'Failed to switch tab.');
+      }
+    }
+
+    function showPopup(mode) {
+      try {
+        currentPopupMode = mode;
+        currentEditIndex = null;
+        currentEditTemplateIndex = null;
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('popup').style.display = 'block';
+        document.getElementById('leadForm').reset();
+
+        document.getElementById('leadNameGroup').style.display = mode === 'lead' ? 'block' : 'none';
+        document.getElementById('leadPhoneGroup').style.display = mode === 'lead' ? 'block' : 'none';
+        document.getElementById('leadEmailGroup').style.display = mode === 'lead' ? 'block' : 'none';
+        document.getElementById('leadDobGroup').style.display = mode === 'lead' ? 'block' : 'none';
+        document.getElementById('leadNotesGroup').style.display = mode === 'lead' ? 'block' : 'none';
+        document.getElementById('leadTimeGroup').style.display = mode === 'lead' ? 'block' : 'none';
+        document.getElementById('templateNameGroup').style.display = mode === 'template' ? 'block' : 'none';
+        document.getElementById('templateMessageGroup').style.display = mode === 'template' ? 'block' : 'none';
+
+        if (mode === 'lead') {
+          document.getElementById('popupTitle').textContent = 'Add New Lead';
+          document.getElementById('saveBtnText').textContent = 'Save Lead';
+          document.getElementById('deleteBtn').style.display = currentEditIndex !== null ? 'inline-flex' : 'none';
+          if (recognition) recognition.stop(); // Stop any ongoing recognition
+        } else {
+          document.getElementById('popupTitle').textContent = 'Add New Template';
+          document.getElementById('saveBtnText').textContent = 'Save Template';
+          document.getElementById('deleteBtn').style.display = currentEditTemplateIndex !== null ? 'inline-flex' : 'none';
         }
+      } catch (error) {
+        console.error('Error showing popup:', error);
+        showNotification('warning', 'Error', 'Failed to show popup.');
+      }
+    }
 
-        function loadLeads() {
-            const savedLeads = localStorage.getItem('leads');
-            try {
-                if (savedLeads) {
-                    leads = JSON.parse(savedLeads);
-                    console.log('Loaded leads from localStorage:', leads);
-                } else {
-                    console.log('No leads in localStorage, initializing with empty array');
-                    leads = [];
-                }
-            } catch (e) {
-                console.error('Error parsing leads from localStorage:', e);
-                leads = [];
+    function closePopup() {
+      try {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('popup').style.display = 'none';
+        currentEditIndex = null;
+        currentEditTemplateIndex = null;
+        currentPopupMode = 'lead';
+        if (recognition) recognition.stop(); // Stop recognition when closing popup
+      } catch (error) {
+        console.error('Error closing popup:', error);
+      }
+    }
+
+    function validatePhone(phone) {
+      const pattern = /^[0-9]{10}$/;
+      return !phone || pattern.test(phone.replace(/\D/g, ''));
+    }
+
+    function saveItem() {
+      try {
+        document.getElementById('saveBtn').classList.add('loading');
+        setTimeout(() => {
+          if (currentPopupMode === 'lead') {
+            const name = document.getElementById('leadName').value.trim();
+            const phone = document.getElementById('leadPhone').value.trim();
+            const email = document.getElementById('leadEmail').value.trim();
+            const notes = document.getElementById('leadNotes').value.trim();
+            const time = document.getElementById('leadTime').value;
+
+            if (!name) {
+              showNotification('warning', 'Error', 'Name is required.');
+              return;
             }
-            if (!Array.isArray(leads)) {
-                console.error('Leads is not an array, resetting to empty array');
-                leads = [];
+
+            if (!validatePhone(phone)) {
+              showNotification('warning', 'Error', 'Invalid phone number. Use 10 digits.');
+              return;
             }
-            // Remove invalid leads and log them
-            leads = leads.filter((lead, index) => {
-                if (!lead || typeof lead !== 'object' || !lead.name) {
-                    console.warn(`Invalid lead at index ${index}:`, lead);
-                    return false;
-                }
-                return true;
-            });
-            saveLeads();
-        }
 
-        function loadDeletedLeads() {
-            const savedDeleted = localStorage.getItem('deletedLeads');
-            try {
-                deletedLeads = savedDeleted ? JSON.parse(savedDeleted) : [];
-            } catch (e) {
-                console.error('Error parsing deleted leads from localStorage:', e);
-                deletedLeads = [];
+            if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+              showNotification('warning', 'Error', 'Invalid email address.');
+              return;
             }
-            if (!Array.isArray(deletedLeads)) deletedLeads = [];
-            deletedLeads = deletedLeads.filter(lead => new Date(lead.deletedAt) > new Date(Date.now() - 24 * 60 * 60 * 1000));
-            saveDeletedLeads();
-        }
 
-        function loadSoldLeads() {
-            const savedSold = localStorage.getItem('soldLeads');
-            try {
-                soldLeads = savedSold ? JSON.parse(savedSold) : [];
-            } catch (e) {
-                console.error('Error parsing sold leads from localStorage:', e);
-                soldLeads = [];
+            const lead = {
+              name,
+              phone,
+              email,
+              dob: document.getElementById('leadDob').value || null,
+              notes,
+              time: time ? new Date(time).toISOString() : null,
+              status: 'New'
+            };
+
+            if (currentEditIndex !== null) {
+              leads[currentEditIndex] = lead;
+            } else {
+              leads.push(lead);
             }
-            if (!Array.isArray(soldLeads)) soldLeads = [];
-            saveSoldLeads();
-        }
 
-        function loadNeglectedLeads() {
-            const savedNeglected = localStorage.getItem('neglectedLeads');
-            try {
-                neglectedLeads = savedNeglected ? JSON.parse(savedNeglected) : [];
-            } catch (e) {
-                console.error('Error parsing neglected leads from localStorage:', e);
-                neglectedLeads = [];
-            }
-            if (!Array.isArray(neglectedLeads)) neglectedLeads = [];
-            saveNeglectedLeads();
-        }
-
-        function loadTemplates() {
-            const savedTemplates = localStorage.getItem('templates');
-            try {
-                templates = savedTemplates ? JSON.parse(savedTemplates) : [];
-            } catch (e) {
-                console.error('Error parsing templates from localStorage:', e);
-                templates = [];
-            }
-            if (!Array.isArray(templates)) templates = [];
-            saveTemplates();
-        }
-
-        function saveLeads() { localStorage.setItem('leads', JSON.stringify(leads)); }
-        function saveDeletedLeads() { localStorage.setItem('deletedLeads', JSON.stringify(deletedLeads)); }
-        function saveSoldLeads() { localStorage.setItem('soldLeads', JSON.stringify(soldLeads)); }
-        function saveNeglectedLeads() { localStorage.setItem('neglectedLeads', JSON.stringify(neglectedLeads)); }
-        function saveTemplates() { localStorage.setItem('templates', JSON.stringify(templates)); }
-
-        function showTab(tab) {
-            document.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.content').forEach(c => c.style.display = 'none');
-            const activeTab = document.querySelector(`[data-tab="${tab}"]`);
-            if (activeTab) activeTab.classList.add('active');
-            const section = document.getElementById(tab);
-            if (section) section.style.display = 'block';
-            const currentCrumb = document.querySelector('.breadcrumbs .current');
-            if (currentCrumb && activeTab) currentCrumb.textContent = activeTab.textContent.trim();
-            if (tab === 'calendar' && calendar) calendar.render();
-            if (tab === 'sold') renderSoldLeads();
-            if (tab === 'neglected') renderNeglectedLeads();
-            if (tab === 'trash') renderTrash();
-        }
-
-        function showPopup(mode) {
-            console.log('Opening popup in mode:', mode);
-            currentPopupMode = mode;
-            currentEditIndex = null;
-            currentEditTemplateIndex = null;
-            const overlay = document.getElementById('overlay');
-            const popup = document.getElementById('popup');
-            if (overlay && popup) {
-                overlay.style.display = 'block';
-                popup.style.display = 'block';
-            }
-            const form = document.getElementById('leadForm');
-            const dynamicFormFields = document.getElementById('dynamicFormFields');
-            if (form) form.reset();
-            if (dynamicFormFields) dynamicFormFields.innerHTML = '';
-            document.getElementById('templateNameGroup').style.display = mode === 'template' ? 'block' : 'none';
-            document.getElementById('templateMessageGroup').style.display = mode === 'template' ? 'block' : 'none';
-            if (mode === 'lead') {
-                console.log('Generating lead fields in order:', leadFields.map(f => f.id));
-                leadFields.forEach(field => {
-                    const formGroup = document.createElement('div');
-                    formGroup.className = 'form-group';
-                    formGroup.id = `${field.id}Group`;
-                    let input;
-                    if (field.type === 'textarea') {
-                        input = document.createElement('textarea');
-                        input.className = 'form-textarea';
-                        if (field.speech) {
-                            const speechBtn = document.createElement('button');
-                            speechBtn.type = 'button';
-                            speechBtn.id = 'speechBtn';
-                            speechBtn.className = 'speech-btn';
-                            speechBtn.innerHTML = '<i class="fas fa-microphone"></i>';
-                            formGroup.appendChild(speechBtn);
-                        }
-                    } else {
-                        input = document.createElement('input');
-                        input.className = 'form-input';
-                        input.type = field.type;
-                    }
-                    input.id = field.id;
-                    input.placeholder = ' ';
-                    if (field.required) input.required = true;
-                    const label = document.createElement('label');
-                    label.className = 'form-label';
-                    label.setAttribute('for', field.id);
-                    label.textContent = field.label;
-                    formGroup.appendChild(input);
-                    formGroup.appendChild(label);
-                    dynamicFormFields.appendChild(formGroup);
-                });
-                console.log('Lead fields appended to DOM');
-            }
-            const popupTitle = document.getElementById('popupTitle');
-            const saveBtnText = document.getElementById('saveBtnText');
-            const deleteBtn = document.getElementById('deleteBtn');
-            const soldBtn = document.getElementById('soldBtn');
-            if (popupTitle) popupTitle.textContent = mode === 'lead' ? 'Add New Lead' : 'Add New Template';
-            if (saveBtnText) saveBtnText.textContent = mode === 'lead' ? 'Save Lead' : 'Save Template';
-            if (deleteBtn) deleteBtn.style.display = 'none';
-            if (soldBtn) soldBtn.style.display = 'none';
-            if (recognition) recognition.stop();
-            initAutoResizeTextareas();
-        }
-
-        function closePopup() {
-            const overlay = document.getElementById('overlay');
-            const popup = document.getElementById('popup');
-            if (overlay && popup) {
-                overlay.style.display = 'none';
-                popup.style.display = 'none';
-            }
-            currentEditIndex = null;
-            currentEditTemplateIndex = null;
-            currentPopupMode = 'lead';
-            if (recognition) recognition.stop();
-        }
-
-        function validatePhoneNumber(phone) {
-            const phonePattern = /^[0-9]{10}$/;
-            return !phone || phonePattern.test(phone.replace(/\D/g, ''));
-        }
-
-        function autoResizeTextarea(textarea) {
-            if (textarea) {
-                textarea.style.height = 'auto';
-                textarea.style.height = `${textarea.scrollHeight}px`;
-            }
-        }
-
-        function initAutoResizeTextareas() {
-            const textareas = document.querySelectorAll('.form-textarea');
-            textareas.forEach(area => {
-                area.addEventListener('input', () => autoResizeTextarea(area));
-                autoResizeTextarea(area);
-            });
-        }
-
-        function saveItem() {
-            const saveBtn = document.getElementById('saveBtn');
-            if (saveBtn) saveBtn.classList.add('loading');
-            setTimeout(() => {
-                if (currentPopupMode === 'lead') {
-                    const newLead = {};
-                    let isValid = true;
-                    leadFields.forEach(field => {
-                        const input = document.getElementById(field.id);
-                        const value = input ? input.value.trim() : '';
-                        if (field.required && !value) {
-                            showNotification('warning', 'Error', `${field.label} is required.`);
-                            isValid = false;
-                            return;
-                        }
-                        if (field.id === 'leadPhone' && value && !validatePhoneNumber(value)) {
-                            showNotification('warning', 'Error', 'Invalid phone number. Use 10 digits.');
-                            isValid = false;
-                            return;
-                        }
-                        if (field.id === 'leadEmail' && value && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)) {
-                            showNotification('warning', 'Error', 'Invalid email address.');
-                            isValid = false;
-                            return;
-                        }
-                        if (field.id === 'leadTime' && value && isNaN(new Date(value).valueOf())) {
-                            showNotification('warning', 'Error', 'Invalid appointment date/time.');
-                            isValid = false;
-                            return;
-                        }
-                        newLead[field.id.replace('lead', '').toLowerCase()] = field.type === 'datetime-local' && value ? new Date(value).toISOString() : value;
-                    });
-                    if (!isValid) {
-                        if (saveBtn) saveBtn.classList.remove('loading');
-                        return;
-                    }
-                    newLead.status = 'New';
-                    newLead.sold = false;
-
-                    if (currentEditIndex !== null) {
-                        let sourceArray = leads;
-                        if (leads[currentEditIndex]) {
-                            sourceArray = leads;
-                        } else {
-                            sourceArray = neglectedLeads;
-                        }
-                        sourceArray[currentEditIndex] = newLead;
-                    } else {
-                        leads.push(newLead);
-                    }
-
-                    if (newLead.time && new Date(newLead.time) < new Date()) {
-                        neglectedLeads.push(newLead);
-                        leads.splice(leads.indexOf(newLead), 1);
-                        saveNeglectedLeads();
-                    }
-
-                    saveLeads();
-                    renderLeads();
-                    renderNeglectedLeads();
-                    updateStats();
-                    if (calendar) calendar.refetchEvents();
-                    closePopup();
-                    showNotification('success', 'Success', 'Lead saved successfully.');
-                } else {
-                    const templateName = document.getElementById('templateName').value.trim();
-                    const templateMessage = document.getElementById('templateMessage').value.trim();
-
-                    if (!templateName) {
-                        showNotification('warning', 'Error', 'Template name is required.');
-                        if (saveBtn) saveBtn.classList.remove('loading');
-                        return;
-                    }
-                    if (!templateMessage) {
-                        showNotification('warning', 'Error', 'Message is required.');
-                        if (saveBtn) saveBtn.classList.remove('loading');
-                        return;
-                    }
-
-                    const newTemplate = { name: templateName, message: templateMessage };
-
-                    if (currentEditTemplateIndex !== null) {
-                        templates[currentEditTemplateIndex] = newTemplate;
-                    } else {
-                        templates.push(newTemplate);
-                    }
-
-                    saveTemplates();
-                    renderTemplates();
-                    closePopup();
-                    showNotification('success', 'Success', 'Template saved successfully.');
-                }
-                if (saveBtn) saveBtn.classList.remove('loading');
-            }, 500);
-        }
-
-        function deleteItem() {
-            const deleteBtn = document.getElementById('deleteBtn');
-            if (deleteBtn) deleteBtn.classList.add('loading');
-            setTimeout(() => {
-                if (currentPopupMode === 'lead' && currentEditIndex !== null) {
-                    let lead;
-                    let sourceArray = leads;
-                    if (leads[currentEditIndex]) {
-                        lead = leads[currentEditIndex];
-                        sourceArray = leads;
-                    } else {
-                        lead = neglectedLeads[currentEditIndex];
-                        sourceArray = neglectedLeads;
-                    }
-                    lead.deletedAt = new Date().toISOString();
-                    deletedLeads.push(lead);
-                    sourceArray.splice(currentEditIndex, 1);
-                    saveLeads();
-                    saveNeglectedLeads();
-                    saveDeletedLeads();
-                    renderLeads();
-                    renderNeglectedLeads();
-                    renderTrash();
-                    updateStats();
-                    if (calendar) calendar.refetchEvents();
-                    closePopup();
-                    showNotification('warning', 'Deleted', 'Lead moved to trash. Restore within 24 hours.');
-                } else if (currentPopupMode === 'template' && currentEditTemplateIndex !== null) {
-                    templates.splice(currentEditTemplateIndex, 1);
-                    saveTemplates();
-                    renderTemplates();
-                    closePopup();
-                    showNotification('warning', 'Deleted', 'Template deleted.');
-                }
-                if (deleteBtn) deleteBtn.classList.remove('loading');
-            }, 500);
-        }
-
-        function sellLead() {
-            const soldBtn = document.getElementById('soldBtn');
-            if (soldBtn) soldBtn.classList.add('loading');
-            setTimeout(() => {
-                if (currentEditIndex !== null) {
-                    let lead;
-                    let sourceArray = leads;
-                    if (leads[currentEditIndex]) {
-                        lead = leads[currentEditIndex];
-                        sourceArray = leads;
-                    } else {
-                        lead = neglectedLeads[currentEditIndex];
-                        sourceArray = neglectedLeads;
-                    }
-                    if (lead) {
-                        lead.sold = true;
-                        lead.soldDate = new Date().toISOString();
-                        soldLeads.push(lead);
-                        sourceArray.splice(currentEditIndex, 1);
-                        saveLeads();
-                        saveNeglectedLeads();
-                        saveSoldLeads();
-                        renderLeads();
-                        renderNeglectedLeads();
-                        renderSoldLeads();
-                        updateStats();
-                        if (calendar) calendar.refetchEvents();
-                        closePopup();
-                        showNotification('success', 'Sold', 'Lead marked as sold.');
-                    }
-                }
-                if (soldBtn) soldBtn.classList.remove('loading');
-            }, 500);
-        }
-
-        function sellLeadFromCard(index, source) {
-            currentEditIndex = index;
-            sellLead();
-        }
-
-        function restoreLead(index, source = 'trash') {
-            let lead;
-            if (source === 'trash') {
-                lead = deletedLeads[index];
-                deletedLeads.splice(index, 1);
-                saveDeletedLeads();
-            } else if (source === 'neglected') {
-                lead = neglectedLeads[index];
-                neglectedLeads.splice(index, 1);
-                saveNeglectedLeads();
-            }
-            leads.push(lead);
             saveLeads();
             renderLeads();
-            if (source === 'trash') renderTrash();
-            if (source === 'neglected') renderNeglectedLeads();
             updateStats();
             if (calendar) calendar.refetchEvents();
-            showNotification('success', 'Restored', 'Lead restored successfully.');
-        }
+            closePopup();
+            showNotification('success', 'Success', 'Lead saved successfully.');
+          } else {
+            const name = document.getElementById('templateName').value.trim();
+            const message = document.getElementById('templateMessage').value.trim();
 
-        function clearTrash() {
-            deletedLeads = [];
-            saveDeletedLeads();
-            renderTrash();
-            showNotification('success', 'Cleared', 'Trash cleared successfully.');
-        }
-
-        function clearSold() {
-            soldLeads = [];
-            saveSoldLeads();
-            renderSoldLeads();
-            showNotification('success', 'Cleared', 'Sold leads cleared successfully.');
-        }
-
-        function clearNeglected() {
-            neglectedLeads = [];
-            saveNeglectedLeads();
-            renderNeglectedLeads();
-            showNotification('success', 'Cleared', 'Neglected leads cleared successfully.');
-        }
-
-        function editLead(index, source = 'leads') {
-            console.log('Editing lead index:', index, 'from source:', source);
-            currentPopupMode = 'lead';
-            currentEditIndex = index;
-            currentEditTemplateIndex = null;
-            let lead;
-            if (source === 'leads') {
-                lead = leads[index];
-            } else if (source === 'neglected') {
-                lead = neglectedLeads[index];
+            if (!name) {
+              showNotification('warning', 'Error', 'Template name is required.');
+              return;
             }
-            if (!lead) {
-                console.error('Lead not found at index:', index, 'in source:', source);
-                showNotification('warning', 'Error', 'Lead not found.');
-                return;
+
+            if (!message) {
+              showNotification('warning', 'Error', 'Message is required.');
+              return;
             }
-            console.log('Lead data:', lead);
-            const dynamicFormFields = document.getElementById('dynamicFormFields');
-            if (dynamicFormFields) dynamicFormFields.innerHTML = '';
-            leadFields.forEach(field => {
-                const formGroup = document.createElement('div');
-                formGroup.className = 'form-group';
-                formGroup.id = `${field.id}Group`;
-                let input;
-                if (field.type === 'textarea') {
-                    input = document.createElement('textarea');
-                    input.className = 'form-textarea';
-                    if (field.speech) {
-                        const speechBtn = document.createElement('button');
-                        speechBtn.type = 'button';
-                        speechBtn.id = 'speechBtn';
-                        speechBtn.className = 'speech-btn';
-                        speechBtn.innerHTML = '<i class="fas fa-microphone"></i>';
-                        formGroup.appendChild(speechBtn);
-                    }
-                } else {
-                    input = document.createElement('input');
-                    input.className = 'form-input';
-                    input.type = field.type;
-                }
-                input.id = field.id;
-                input.placeholder = ' ';
-                if (field.required) input.required = true;
-                const fieldKey = field.id.replace('lead', '').toLowerCase();
-                input.value = lead[fieldKey] || (field.type === 'datetime-local' && lead[fieldKey] ? lead[fieldKey].slice(0, 16) : '');
-                console.log(`Field ${field.id} set to value:`, input.value);
-                const label = document.createElement('label');
-                label.className = 'form-label';
-                label.setAttribute('for', field.id);
-                label.textContent = field.label;
-                formGroup.appendChild(input);
-                formGroup.appendChild(label);
-                dynamicFormFields.appendChild(formGroup);
-            });
-            document.getElementById('popupTitle').textContent = 'Edit Lead';
-            document.getElementById('saveBtnText').textContent = 'Save Lead';
-            document.getElementById('deleteBtn').style.display = 'inline-flex';
-            document.getElementById('soldBtn').style.display = 'inline-flex';
-            document.getElementById('overlay').style.display = 'block';
-            document.getElementById('popup').style.display = 'block';
-            console.log('Edit lead popup opened');
-            if (recognition) recognition.stop();
-            initAutoResizeTextareas();
-        }
 
-        function editTemplate(index) {
-            currentPopupMode = 'template';
-            currentEditTemplateIndex = index;
-            currentEditIndex = null;
-            const template = templates[index];
-            document.getElementById('templateName').value = template.name || '';
-            document.getElementById('templateMessage').value = template.message || '';
-            document.getElementById('popupTitle').textContent = 'Edit Template';
-            document.getElementById('saveBtnText').textContent = 'Save Template';
-            document.getElementById('deleteBtn').style.display = 'inline-flex';
-            document.getElementById('soldBtn').style.display = 'none';
-            document.getElementById('dynamicFormFields').innerHTML = '';
-            document.getElementById('templateNameGroup').style.display = 'block';
-            document.getElementById('templateMessageGroup').style.display = 'block';
-            document.getElementById('overlay').style.display = 'block';
-            document.getElementById('popup').style.display = 'block';
-            initAutoResizeTextareas();
-        }
+            const template = { name, message };
 
-        function renderLeads() {
-            const grid = document.getElementById('leadGrid');
-            const emptyState = document.getElementById('emptyState');
-            if (!grid || !emptyState) {
-                console.error('Lead grid or empty state element not found');
-                return;
-            }
-            grid.innerHTML = '';
-            emptyState.style.display = 'none';
-            if (!leads || leads.length === 0) {
-                emptyState.style.display = 'block';
-                console.log('No leads to render');
-                return;
-            }
-            console.log('Rendering leads:', leads);
-            const sortedLeads = [...leads].sort((a, b) => {
-                if (!a.time && !b.time) return 0;
-                if (!a.time) return 1;
-                if (!b.time) return -1;
-                return new Date(a.time) - new Date(b.time);
-            });
-            sortedLeads.forEach((lead, index) => {
-                if (!lead || typeof lead !== 'object') {
-                    console.warn('Invalid lead at index:', index, lead);
-                    return;
-                }
-                const card = document.createElement('div');
-                card.className = 'lead-card';
-                card.onclick = () => editLead(index, 'leads');
-                card.innerHTML = `
-                    <div class="lead-header">
-                        <div>
-                            <div class="lead-name">${lead.name || 'Unnamed Lead'}</div>
-                            ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
-                            ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email}</div>` : ''}
-                            ${lead.dob ? `<div class="lead-dob"><i class="fas fa-birthday-cake"></i> ${lead.dob}</div>` : ''}
-                            ${lead.policyNumber ? `<div class="lead-policy"><i class="fas fa-shield-alt"></i> ${lead.policyNumber}</div>` : ''}
-                            ${lead.currentCompany ? `<div class="lead-currentcompany"><i class="fas fa-building"></i> ${lead.currentCompany}</div>` : ''}
-                            ${lead.currentlyPaying ? `<div class="lead-currentlypaying"><i class="fas fa-dollar-sign"></i> ${lead.currentlyPaying}</div>` : ''}
-                            ${lead.productsQuoted ? `<div class="lead-productsquoted"><i class="fas fa-list"></i> ${lead.productsQuoted}</div>` : ''}
-                            ${lead.ourRate ? `<div class="lead-ourrate"><i class="fas fa-tag"></i> ${lead.ourRate}</div>` : ''}
-                        </div>
-                        <div class="lead-status status-${(lead.status || 'New').toLowerCase()}">${lead.status || 'New'}</div>
-                    </div>
-                    ${lead.notes ? `<div class="lead-notes">${lead.notes}</div>` : ''}
-                    <div class="lead-footer">
-                        <div class="lead-time">
-                            ${lead.time ? `<i class="fas fa-clock"></i> ${new Date(lead.time).toLocaleString()}` : 'No appointment'}
-                        </div>
-                        <button class="btn btn-success btn-small sold-btn" onclick="sellLeadFromCard(${index}, 'leads'); event.stopPropagation();">Sold</button>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function renderSoldLeads() {
-            const grid = document.getElementById('soldGrid');
-            const emptyState = document.getElementById('soldEmptyState');
-            if (!grid || !emptyState) return;
-            grid.innerHTML = '';
-            emptyState.style.display = 'none';
-            if (!soldLeads || soldLeads.length === 0) {
-                emptyState.style.display = 'block';
-                return;
-            }
-            soldLeads.forEach(lead => {
-                const card = document.createElement('div');
-                card.className = 'lead-card';
-                card.innerHTML = `
-                    <div class="lead-header">
-                        <div>
-                            <div class="lead-name">${lead.name || 'Unnamed Lead'}</div>
-                            ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
-                            ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email}</div>` : ''}
-                            ${lead.dob ? `<div class="lead-dob"><i class="fas fa-birthday-cake"></i> ${lead.dob}</div>` : ''}
-                            ${lead.policyNumber ? `<div class="lead-policy"><i class="fas fa-shield-alt"></i> ${lead.policyNumber}</div>` : ''}
-                            ${lead.currentCompany ? `<div class="lead-currentcompany"><i class="fas fa-building"></i> ${lead.currentCompany}</div>` : ''}
-                            ${lead.currentlyPaying ? `<div class="lead-currentlypaying"><i class="fas fa-dollar-sign"></i> ${lead.currentlyPaying}</div>` : ''}
-                            ${lead.productsQuoted ? `<div class="lead-productsquoted"><i class="fas fa-list"></i> ${lead.productsQuoted}</div>` : ''}
-                            ${lead.ourRate ? `<div class="lead-ourrate"><i class="fas fa-tag"></i> ${lead.ourRate}</div>` : ''}
-                        </div>
-                        <div class="lead-status status-sold">Sold</div>
-                    </div>
-                    ${lead.notes ? `<div class="lead-notes">${lead.notes}</div>` : ''}
-                    <div class="lead-footer">
-                        <div class="lead-time">
-                            <i class="fas fa-clock"></i> Sold: ${new Date(lead.soldDate).toLocaleString()}
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function renderNeglectedLeads() {
-            const grid = document.getElementById('neglectedGrid');
-            const emptyState = document.getElementById('neglectedEmptyState');
-            if (!grid || !emptyState) return;
-            grid.innerHTML = '';
-            emptyState.style.display = 'none';
-            if (!neglectedLeads || neglectedLeads.length === 0) {
-                emptyState.style.display = 'block';
-                return;
-            }
-            neglectedLeads.forEach((lead, index) => {
-                const card = document.createElement('div');
-                card.className = 'lead-card';
-                card.onclick = () => editLead(index, 'neglected');
-                card.innerHTML = `
-                    <div class="lead-header">
-                        <div>
-                            <div class="lead-name">${lead.name || 'Unnamed Lead'}</div>
-                            ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
-                            ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email}</div>` : ''}
-                            ${lead.dob ? `<div class="lead-dob"><i class="fas fa-birthday-cake"></i> ${lead.dob}</div>` : ''}
-                            ${lead.policyNumber ? `<div class="lead-policy"><i class="fas fa-shield-alt"></i> ${lead.policyNumber}</div>` : ''}
-                            ${lead.currentCompany ? `<div class="lead-currentcompany"><i class="fas fa-building"></i> ${lead.currentCompany}</div>` : ''}
-                            ${lead.currentlyPaying ? `<div class="lead-currentlypaying"><i class="fas fa-dollar-sign"></i> ${lead.currentlyPaying}</div>` : ''}
-                            ${lead.productsQuoted ? `<div class="lead-productsquoted"><i class="fas fa-list"></i> ${lead.productsQuoted}</div>` : ''}
-                            ${lead.ourRate ? `<div class="lead-ourrate"><i class="fas fa-tag"></i> ${lead.ourRate}</div>` : ''}
-                        </div>
-                        <div class="lead-status status-neglected">Neglected</div>
-                    </div>
-                    ${lead.notes ? `<div class="lead-notes">${lead.notes}</div>` : ''}
-                    <div class="lead-footer">
-                        <div class="lead-time">
-                            <i class="fas fa-clock"></i> Overdue: ${new Date(lead.time).toLocaleString()}
-                        </div>
-                        <button class="btn btn-secondary btn-small" onclick="restoreLead(${index}, 'neglected'); event.stopPropagation();">Restore</button>
-                        <button class="btn btn-success btn-small sold-btn" onclick="sellLeadFromCard(${index}, 'neglected'); event.stopPropagation();">Sold</button>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function renderTrash() {
-            const grid = document.getElementById('trashGrid');
-            const emptyState = document.getElementById('trashEmptyState');
-            if (!grid || !emptyState) return;
-            grid.innerHTML = '';
-            emptyState.style.display = 'none';
-            if (!deletedLeads || deletedLeads.length === 0) {
-                emptyState.style.display = 'block';
-                return;
-            }
-            deletedLeads.forEach((lead, index) => {
-                const card = document.createElement('div');
-                card.className = 'lead-card';
-                card.innerHTML = `
-                    <div class="lead-header">
-                        <div>
-                            <div class="lead-name">${lead.name || 'Unnamed Lead'}</div>
-                            ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
-                            ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email}</div>` : ''}
-                            ${lead.dob ? `<div class="lead-dob"><i class="fas fa-birthday-cake"></i> ${lead.dob}</div>` : ''}
-                            ${lead.policyNumber ? `<div class="lead-policy"><i class="fas fa-shield-alt"></i> ${lead.policyNumber}</div>` : ''}
-                            ${lead.currentCompany ? `<div class="lead-currentcompany"><i class="fas fa-building"></i> ${lead.currentCompany}</div>` : ''}
-                            ${lead.currentlyPaying ? `<div class="lead-currentlypaying"><i class="fas fa-dollar-sign"></i> ${lead.currentlyPaying}</div>` : ''}
-                            ${lead.productsQuoted ? `<div class="lead-productsquoted"><i class="fas fa-list"></i> ${lead.productsQuoted}</div>` : ''}
-                            ${lead.ourRate ? `<div class="lead-ourrate"><i class="fas fa-tag"></i> ${lead.ourRate}</div>` : ''}
-                        </div>
-                        <div class="lead-status status-deleted">Deleted</div>
-                    </div>
-                    ${lead.notes ? `<div class="lead-notes">${lead.notes}</div>` : ''}
-                    <div class="lead-footer">
-                        <div class="lead-time">
-                            <i class="fas fa-clock"></i> Deleted: ${new Date(lead.deletedAt).toLocaleString()}
-                        </div>
-                        <button class="btn btn-secondary btn-small" onclick="restoreLead(${index}, 'trash'); event.stopPropagation();">Restore</button>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function renderTemplates() {
-            const grid = document.getElementById('templateGrid');
-            const emptyState = document.getElementById('templateEmptyState');
-            if (!grid || !emptyState) return;
-            grid.innerHTML = '';
-            emptyState.style.display = 'none';
-            if (!templates || templates.length === 0) {
-                emptyState.style.display = 'block';
-                return;
-            }
-            templates.forEach((template, index) => {
-                const card = document.createElement('div');
-                card.className = 'template-card';
-                card.onclick = () => editTemplate(index);
-                card.innerHTML = `
-                    <div class="template-header">
-                        <div>
-                            <div class="template-name">${template.name}</div>
-                        </div>
-                    </div>
-                    <div class="template-message">${template.message}</div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function filterLeads() {
-            const searchInput = document.getElementById('searchInput');
-            const query = searchInput ? searchInput.value.toLowerCase() : '';
-            const filteredLeads = leads.filter(lead =>
-                (lead.name || '').toLowerCase().includes(query) ||
-                (lead.phone || '').includes(query) ||
-                (lead.email || '').toLowerCase().includes(query) ||
-                (lead.notes || '').toLowerCase().includes(query) ||
-                (lead.currentCompany || '').toLowerCase().includes(query) ||
-                (lead.currentlyPaying || '').toLowerCase().includes(query) ||
-                (lead.productsQuoted || '').toLowerCase().includes(query) ||
-                (lead.ourRate || '').toLowerCase().includes(query)
-            );
-            const grid = document.getElementById('leadGrid');
-            const emptyState = document.getElementById('emptyState');
-            if (!grid || !emptyState) return;
-            grid.innerHTML = '';
-            emptyState.style.display = 'none';
-            if (filteredLeads.length === 0) {
-                emptyState.style.display = 'block';
-                return;
-            }
-            const sortedLeads = filteredLeads.sort((a, b) => {
-                if (!a.time && !b.time) return 0;
-                if (!a.time) return 1;
-                if (!b.time) return -1;
-                return new Date(a.time) - new Date(b.time);
-            });
-            sortedLeads.forEach((lead, index) => {
-                const card = document.createElement('div');
-                card.className = 'lead-card';
-                card.onclick = () => editLead(index, 'leads');
-                card.innerHTML = `
-                    <div class="lead-header">
-                        <div>
-                            <div class="lead-name">${lead.name || 'Unnamed Lead'}</div>
-                            ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
-                            ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email}</div>` : ''}
-                            ${lead.dob ? `<div class="lead-dob"><i class="fas fa-birthday-cake"></i> ${lead.dob}</div>` : ''}
-                            ${lead.policyNumber ? `<div class="lead-policy"><i class="fas fa-shield-alt"></i> ${lead.policyNumber}</div>` : ''}
-                            ${lead.currentCompany ? `<div class="lead-currentcompany"><i class="fas fa-building"></i> ${lead.currentCompany}</div>` : ''}
-                            ${lead.currentlyPaying ? `<div class="lead-currentlypaying"><i class="fas fa-dollar-sign"></i> ${lead.currentlyPaying}</div>` : ''}
-                            ${lead.productsQuoted ? `<div class="lead-productsquoted"><i class="fas fa-list"></i> ${lead.productsQuoted}</div>` : ''}
-                            ${lead.ourRate ? `<div class="lead-ourrate"><i class="fas fa-tag"></i> ${lead.ourRate}</div>` : ''}
-                        </div>
-                        <div class="lead-status status-${(lead.status || 'New').toLowerCase()}">${lead.status || 'New'}</div>
-                    </div>
-                    ${lead.notes ? `<div class="lead-notes">${lead.notes}</div>` : ''}
-                    <div class="lead-footer">
-                        <div class="lead-time">
-                            ${lead.time ? `<i class="fas fa-clock"></i> ${new Date(lead.time).toLocaleString()}` : 'No appointment'}
-                        </div>
-                        <button class="btn btn-success btn-small sold-btn" onclick="sellLeadFromCard(${index}, 'leads'); event.stopPropagation();">Sold</button>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function filterTemplates() {
-            const searchInput = document.getElementById('templateSearchInput');
-            const query = searchInput ? searchInput.value.toLowerCase() : '';
-            const filteredTemplates = templates.filter(template =>
-                (template.name || '').toLowerCase().includes(query) ||
-                (template.message || '').toLowerCase().includes(query)
-            );
-            const grid = document.getElementById('templateGrid');
-            const emptyState = document.getElementById('templateEmptyState');
-            if (!grid || !emptyState) return;
-            grid.innerHTML = '';
-            emptyState.style.display = 'none';
-            if (filteredTemplates.length === 0) {
-                emptyState.style.display = 'block';
-                return;
-            }
-            filteredTemplates.forEach(template => {
-                const index = templates.indexOf(template);
-                const card = document.createElement('div');
-                card.className = 'template-card';
-                card.onclick = () => editTemplate(index);
-                card.innerHTML = `
-                    <div class="template-header">
-                        <div>
-                            <div class="template-name">${template.name}</div>
-                        </div>
-                    </div>
-                    <div class="template-message">${template.message}</div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function updateStats() {
-            const totalLeads = document.getElementById('totalLeads');
-            const upcomingAppts = document.getElementById('upcomingAppts');
-            if (totalLeads) totalLeads.textContent = `${leads.length} Leads`;
-            if (upcomingAppts) upcomingAppts.textContent = `${leads.filter(lead => lead.time && new Date(lead.time) > new Date()).length} Appointments`;
-        }
-
-        function initCalendar() {
-            const calendarEl = document.getElementById('calendarView');
-            if (calendarEl) {
-                calendar = new FullCalendar.Calendar(calendarEl, {
-                    initialView: 'dayGridMonth',
-                    events: leads.filter(lead => lead.time && new Date(lead.time) > new Date()).map((lead, index) => ({
-                        title: lead.name,
-                        start: lead.time,
-                        extendedProps: { index }
-                    })),
-                    eventClick: function(info) {
-                        editLead(info.event.extendedProps.index, 'leads');
-                    }
-                });
-                calendar.render();
-            }
-        }
-
-        function startReminderSystem() {
-            setInterval(() => {
-                const now = new Date();
-                leads.forEach(lead => {
-                    if (lead.time && !lead.reminderSent) {
-                        const apptTime = new Date(lead.time);
-                        const timeDiff = (apptTime - now) / 1000 / 60;
-                        if (timeDiff <= 60 && timeDiff > 0) {
-                            showNotification('warning', 'Reminder', `Appointment with ${lead.name} in ${Math.round(timeDiff)} minutes.`);
-                            lead.reminderSent = true;
-                            saveLeads();
-                        }
-                    }
-                });
-                const overdueLeads = leads.filter(lead => lead.time && new Date(lead.time) < now && !lead.sold);
-                if (overdueLeads.length > 0) {
-                    neglectedLeads.push(...overdueLeads);
-                    leads = leads.filter(lead => !overdueLeads.includes(lead));
-                    saveLeads();
-                    saveNeglectedLeads();
-                    renderLeads();
-                    renderNeglectedLeads();
-                }
-            }, 60000);
-        }
-
-        function showNotification(type, title, message) {
-            const notification = document.getElementById('notification');
-            if (notification) {
-                notification.className = `notification ${type}`;
-                const icon = notification.querySelector('.notification-icon i');
-                if (icon) icon.className = `fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}`;
-                const titleEl = notification.querySelector('.notification-title');
-                if (titleEl) titleEl.textContent = title;
-                const messageEl = notification.querySelector('.notification-message');
-                if (messageEl) messageEl.textContent = message;
-                notification.style.display = 'block';
-                setTimeout(() => { if (notification) notification.style.display = 'none'; }, 5000);
-            }
-        }
-
-        function printSection() {
-            window.print();
-        }
-
-        function printTemplates() {
-            const templatesSection = document.getElementById('templates');
-            if (templatesSection) {
-                const printWindow = window.open('', '', 'height=600,width=800');
-                printWindow.document.write('<html><head><title>Print Templates</title>');
-                printWindow.document.write('<link rel="stylesheet" href="enhanced-styles.css">');
-                printWindow.document.write('</head><body>');
-                printWindow.document.write(templatesSection.outerHTML);
-                printWindow.document.write('</body></html>');
-                printWindow.document.close();
-                printWindow.print();
-            }
-        }
-
-        function exportLeads() {
-            const csv = [
-                ['Name', 'Phone', 'Email', 'Date of Birth', 'Policy Number', 'Notes', 'Current Company', 'Currently Paying', 'Products Quoted', 'Our Rate', 'Appointment Time', 'Status'],
-                ...leads.map(lead => [
-                    lead.name || '',
-                    lead.phone || '',
-                    lead.email || '',
-                    lead.dob || '',
-                    lead.policyNumber || '',
-                    lead.notes || '',
-                    lead.currentCompany || '',
-                    lead.currentlyPaying || '',
-                    lead.productsQuoted || '',
-                    lead.ourRate || '',
-                    lead.time || '',
-                    lead.status || 'New'
-                ])
-            ].map(row => row.join(',')).join('\n');
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'leads.csv';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-            showNotification('success', 'Success', 'Leads exported as leads.csv');
-        }
-
-        function exportTemplates() {
-            const csv = [
-                ['Name', 'Message'],
-                ...templates.map(template => [template.name, template.message])
-            ].map(row => row.join(',')).join('\n');
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'templates.csv';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-            showNotification('success', 'Success', 'Templates exported as templates.csv');
-        }
-
-        function exportLeadsLink() {
-            const shareId = 'xxxxxxxx'.replace(/x/g, () => Math.floor(Math.random() * 16).toString(16));
-            const shareData = JSON.stringify(leads);
-            const shareUrl = `${window.location.origin}/share.html?id=${shareId}&data=${encodeURIComponent(shareData)}`;
-            localStorage.setItem(`share_${shareId}`, shareData);
-            setTimeout(() => localStorage.removeItem(`share_${shareId}`), 24 * 60 * 60 * 1000);
-            navigator.clipboard.writeText(shareUrl).then(() => {
-                showNotification('success', 'Link Generated', 'Share link copied to clipboard.');
-            }).catch(err => {
-                console.error('Clipboard write failed:', err);
-                showNotification('warning', 'Error', 'Failed to copy share link.');
-            });
-        }
-
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-        }
-
-        function initSpeechRecognition() {
-            if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
-                recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-                recognition.continuous = false;
-                recognition.lang = 'en-US';
-                recognition.onresult = function(event) {
-                    const transcript = event.results[0][0].transcript;
-                    const textarea = document.getElementById('leadNotes');
-                    if (textarea) {
-                        textarea.value += transcript;
-                        autoResizeTextarea(textarea);
-                    }
-                };
-                recognition.onerror = function(event) {
-                    console.error('Speech recognition error:', event.error);
-                    showNotification('warning', 'Error', 'Speech recognition failed.');
-                };
-                recognition.onend = function() {
-                    const speechBtn = document.getElementById('speechBtn');
-                    if (speechBtn) speechBtn.classList.remove('active');
-                };
-                const speechBtn = document.getElementById('speechBtn');
-                if (speechBtn) {
-                    speechBtn.addEventListener('click', function() {
-                        if (!this.classList.contains('active')) {
-                            recognition.start();
-                            this.classList.add('active');
-                        } else {
-                            recognition.stop();
-                            this.classList.remove('active');
-                        }
-                    });
-                }
+            if (currentEditTemplateIndex !== null) {
+              templates[currentEditTemplateIndex] = template;
             } else {
-                console.warn('Speech recognition not supported.');
-                showNotification('warning', 'Error', 'Speech recognition not supported in this browser.');
+              templates.push(template);
             }
+
+            saveTemplates();
+            renderTemplates();
+            closePopup();
+            showNotification('success', 'Success', 'Template saved successfully.');
+          }
+          document.getElementById('saveBtn').classList.remove('loading');
+        }, 500);
+      } catch (error) {
+        console.error('Error saving item:', error);
+        showNotification('warning', 'Error', `Failed to save ${currentPopupMode}.`);
+        document.getElementById('saveBtn').classList.remove('loading');
+      }
+    }
+
+    function deleteItem() {
+      try {
+        document.getElementById('deleteBtn').classList.add('loading');
+        setTimeout(() => {
+          if (currentPopupMode === 'lead' && currentEditIndex !== null) {
+            const lead = leads[currentEditIndex];
+            lead.deletedAt = new Date().toISOString();
+            deletedLeads.push(lead);
+            leads.splice(currentEditIndex, 1);
+            saveLeads();
+            saveDeletedLeads();
+            renderLeads();
+            renderTrash();
+            updateStats();
+            if (calendar) calendar.refetchEvents();
+            closePopup();
+            showNotification('warning', 'Deleted', 'Lead moved to trash. Restore within 24 hours.');
+          } else if (currentPopupMode === 'template' && currentEditTemplateIndex !== null) {
+            templates.splice(currentEditTemplateIndex, 1);
+            saveTemplates();
+            renderTemplates();
+            closePopup();
+            showNotification('warning', 'Deleted', 'Template deleted.');
+          }
+          document.getElementById('deleteBtn').classList.remove('loading');
+        }, 500);
+      } catch (error) {
+        console.error('Error deleting item:', error);
+        showNotification('warning', 'Error', `Failed to delete ${currentPopupMode}.`);
+        document.getElementById('deleteBtn').classList.remove('loading');
+      }
+    }
+
+    function restoreLead(index) {
+      try {
+        const lead = deletedLeads[index];
+        leads.push(lead);
+        deletedLeads.splice(index, 1);
+        saveLeads();
+        saveDeletedLeads();
+        renderLeads();
+        renderTrash();
+        updateStats();
+        if (calendar) calendar.refetchEvents();
+        showNotification('success', 'Restored', 'Lead restored successfully.');
+      } catch (error) {
+        console.error('Error restoring lead:', error);
+        showNotification('warning', 'Error', 'Failed to restore lead.');
+      }
+    }
+
+    function clearTrash() {
+      try {
+        deletedLeads = [];
+        saveDeletedLeads();
+        renderTrash();
+        showNotification('success', 'Cleared', 'Trash cleared successfully.');
+      } catch (error) {
+        console.error('Error clearing trash:', error);
+        showNotification('warning', 'Error', 'Failed to clear trash.');
+      }
+    }
+
+    function editLead(index) {
+      try {
+        currentPopupMode = 'lead';
+        currentEditIndex = index;
+        currentEditTemplateIndex = null;
+        const lead = leads[index];
+        document.getElementById('leadName').value = lead.name;
+        document.getElementById('leadPhone').value = lead.phone || '';
+        document.getElementById('leadEmail').value = lead.email || '';
+        document.getElementById('leadDob').value = lead.dob || '';
+        document.getElementById('leadNotes').value = lead.notes || '';
+        document.getElementById('leadTime').value = lead.time ? lead.time.slice(0, 16) : '';
+        document.getElementById('popupTitle').textContent = 'Edit Lead';
+        document.getElementById('saveBtnText').textContent = 'Save Lead';
+        document.getElementById('deleteBtn').style.display = 'inline-flex';
+        document.getElementById('leadNameGroup').style.display = 'block';
+        document.getElementById('leadPhoneGroup').style.display = 'block';
+        document.getElementById('leadEmailGroup').style.display = 'block';
+        document.getElementById('leadDobGroup').style.display = 'block';
+        document.getElementById('leadNotesGroup').style.display = 'block';
+        document.getElementById('leadTimeGroup').style.display = 'block';
+        document.getElementById('templateNameGroup').style.display = 'none';
+        document.getElementById('templateMessageGroup').style.display = 'none';
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('popup').style.display = 'block';
+        if (recognition) recognition.stop(); // Stop any ongoing recognition
+      } catch (error) {
+        console.error('Error editing lead:', error);
+        showNotification('warning', 'Error', 'Failed to edit lead.');
+      }
+    }
+
+    function editTemplate(index) {
+      try {
+        currentPopupMode = 'template';
+        currentEditTemplateIndex = index;
+        currentEditIndex = null;
+        const template = templates[index];
+        document.getElementById('templateName').value = template.name;
+        document.getElementById('templateMessage').value = template.message;
+        document.getElementById('popupTitle').textContent = 'Edit Template';
+        document.getElementById('saveBtnText').textContent = 'Save Template';
+        document.getElementById('deleteBtn').style.display = 'inline-flex';
+        document.getElementById('leadNameGroup').style.display = 'none';
+        document.getElementById('leadPhoneGroup').style.display = 'none';
+        document.getElementById('leadEmailGroup').style.display = 'none';
+        document.getElementById('leadDobGroup').style.display = 'none';
+        document.getElementById('leadNotesGroup').style.display = 'none';
+        document.getElementById('leadTimeGroup').style.display = 'none';
+        document.getElementById('templateNameGroup').style.display = 'block';
+        document.getElementById('templateMessageGroup').style.display = 'block';
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('popup').style.display = 'block';
+      } catch (error) {
+        console.error('Error editing template:', error);
+        showNotification('warning', 'Error', 'Failed to edit template.');
+      }
+    }
+
+    function renderLeads() {
+      try {
+        console.log('Rendering leads...');
+        const grid = document.getElementById('leadGrid');
+        const emptyState = document.getElementById('emptyState');
+        grid.innerHTML = '';
+
+        if (!leads || leads.length === 0) {
+          emptyState.style.display = 'block';
+          console.log('No leads, showing empty state');
+          return;
         }
-    </script>
-</body>
-</html>
+
+        emptyState.style.display = 'none';
+
+        const sortedLeads = [...leads].sort((a, b) => {
+          if (!a.time && !b.time) return 0;
+          if (!a.time) return 1;
+          if (!b.time) return -1;
+          return new Date(a.time) - new Date(b.time);
+        });
+
+        sortedLeads.forEach((lead, index) => {
+          const originalIndex = leads.indexOf(lead);
+          const card = document.createElement('div');
+          card.className = 'lead-card';
+          card.onclick = () => editLead(originalIndex);
+          card.innerHTML = `
+            <div class="lead-header">
+              <div>
+                <div class="lead-name">${lead.name}</div>
+                ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i>${lead.phone}</div>` : ''}
+                ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i>${lead.email}</div>` : ''}
+                ${lead.dob ? `<div class="lead-dob"><i class="fas fa-birthday-cake"></i>${new Date(lead.dob).toLocaleDateString()}</div>` : ''}
+              </div>
+              <div class="lead-status status-${lead.status.toLowerCase()}">${lead.status}</div>
+            </div>
+            ${lead.notes ? `<div class="lead-notes">${lead.notes}</div>` : ''}
+            <div class="lead-footer">
+              <div class="lead-time">
+                <i class="fas fa-clock"></i>
+                ${lead.time ? new Date(lead.time).toLocaleString() : 'No appointment'}
+              </div>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+        console.log(`Rendered ${sortedLeads.length} leads, sorted by time`);
+      } catch (error) {
+        console.error('Error rendering leads:', error);
+        showNotification('warning', 'Error', 'Failed to render leads.');
+        document.getElementById('emptyState').style.display = 'block';
+      }
+    }
+
+    function renderTrash() {
+      try {
+        console.log('Rendering trash...');
+        const grid = document.getElementById('trashGrid');
+        const emptyState = document.getElementById('trashEmptyState');
+        grid.innerHTML = '';
+
+        if (!deletedLeads || deletedLeads.length === 0) {
+          emptyState.style.display = 'block';
+          console.log('No deleted leads, showing empty state');
+          return;
+        }
+
+        emptyState.style.display = 'none';
+
+        deletedLeads.forEach((lead, index) => {
+          const card = document.createElement('div');
+          card.className = 'lead-card';
+          card.innerHTML = `
+            <div class="lead-header">
+              <div>
+                <div class="lead-name">${lead.name}</div>
+                ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i>${lead.phone}</div>` : ''}
+                ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i>${lead.email}</div>` : ''}
+                ${lead.dob ? `<div class="lead-dob"><i class="fas fa-birthday-cake"></i>${new Date(lead.dob).toLocaleDateString()}</div>` : ''}
+              </div>
+              <div class="lead-status status-new">Deleted</div>
+            </div>
+            ${lead.notes ? `<div class="lead-notes">${lead.notes}</div>` : ''}
+            <div class="lead-footer">
+              <div class="lead-time">
+                <i class="fas fa-clock"></i>
+                Deleted: ${new Date(lead.deletedAt).toLocaleString()}
+              </div>
+              <button class="btn btn-secondary btn-small" onclick="restoreLead(${index}); event.stopPropagation();">Restore</button>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+        console.log(`Rendered ${deletedLeads.length} deleted leads`);
+      } catch (error) {
+        console.error('Error rendering trash:', error);
+        showNotification('warning', 'Error', 'Failed to render trash.');
+        document.getElementById('trashEmptyState').style.display = 'block';
+      }
+    }
+
+    function renderTemplates() {
+      try {
+        console.log('Rendering templates...');
+        const grid = document.getElementById('templateGrid');
+        const emptyState = document.getElementById('templateEmptyState');
+        grid.innerHTML = '';
+
+        if (!templates || templates.length === 0) {
+          emptyState.style.display = 'block';
+          console.log('No templates, showing empty state');
+          return;
+        }
+
+        emptyState.style.display = 'none';
+
+        templates.forEach((template, index) => {
+          const card = document.createElement('div');
+          card.className = 'template-card';
+          card.onclick = () => editTemplate(index);
+          card.innerHTML = `
+            <div class="template-header">
+              <div>
+                <div class="template-name">${template.name}</div>
+              </div>
+            </div>
+            <div class="template-message">${template.message}</div>
+          `;
+          grid.appendChild(card);
+        });
+        console.log(`Rendered ${templates.length} templates`);
+      } catch (error) {
+        console.error('Error rendering templates:', error);
+        showNotification('warning', 'Error', 'Failed to render templates.');
+        document.getElementById('templateEmptyState').style.display = 'block';
+      }
+    }
+
+    function filterLeads() {
+      try {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const filtered = leads.filter(lead => 
+          lead.name.toLowerCase().includes(search) || 
+          (lead.phone && lead.phone.includes(search)) ||
+          (lead.email && lead.email.toLowerCase().includes(search))
+        );
+        const grid = document.getElementById('leadGrid');
+        const emptyState = document.getElementById('emptyState');
+        grid.innerHTML = '';
+
+        if (filtered.length === 0) {
+          emptyState.style.display = 'block';
+          return;
+        }
+
+        emptyState.style.display = 'none';
+
+        const sortedFiltered = filtered.sort((a, b) => {
+          if (!a.time && !b.time) return 0;
+          if (!a.time) return 1;
+          if (!b.time) return -1;
+          return new Date(a.time) - new Date(b.time);
+        });
+
+        sortedFiltered.forEach(lead => {
+          const originalIndex = leads.indexOf(lead);
+          const card = document.createElement('div');
+          card.className = 'lead-card';
+          card.onclick = () => editLead(originalIndex);
+          card.innerHTML = `
+            <div class="lead-header">
+              <div>
+                <div class="lead-name">${lead.name}</div>
+              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i>${lead.phone}</div>` : ''}
+              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i>${lead.email}</div>` : ''}
+              ${lead.dob ? `<div class="lead-dob"><i class="fas fa-birthday-cake"></i>${new Date(lead.dob).toLocaleDateString()}</div>` : ''}
+              </div>
+              <div class="lead-status status-${lead.status.toLowerCase()}">${lead.status}</div>
+            </div>
+            ${lead.notes ? `<div class="lead-notes">${lead.notes}</div>` : ''}
+            <div class="lead-footer">
+              <div class="lead-time">
+                <i class="fas fa-clock"></i>
+                ${lead.time ? new Date(lead.time).toLocaleString() : 'No appointment'}
+              </div>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      } catch (error) {
+        console.error('Error filtering leads:', error);
+        showNotification('warning', 'Error', 'Failed to filter leads.');
+      }
+    }
+
+    function filterTemplates() {
+      try {
+        const search = document.getElementById('templateSearchInput').value.toLowerCase();
+        const filtered = templates.filter(template => 
+          template.name.toLowerCase().includes(search) || 
+          template.message.toLowerCase().includes(search)
+        );
+        const grid = document.getElementById('templateGrid');
+        const emptyState = document.getElementById('templateEmptyState');
+        grid.innerHTML = '';
+
+        if (filtered.length === 0) {
+          emptyState.style.display = 'block';
+          return;
+        }
+
+        emptyState.style.display = 'none';
+
+        filtered.forEach((template, index) => {
+          const card = document.createElement('div');
+          card.className = 'template-card';
+          card.onclick = () => editTemplate(templates.indexOf(template));
+          card.innerHTML = `
+            <div class="template-header">
+              <div>
+                <div class="template-name">${template.name}</div>
+              </div>
+            </div>
+            <div class="template-message">${template.message}</div>
+          `;
+          grid.appendChild(card);
+        });
+      } catch (error) {
+        console.error('Error filtering templates:', error);
+        showNotification('warning', 'Error', 'Failed to filter templates.');
+      }
+    }
+
+    function updateStats() {
+      try {
+        const total = leads.length;
+        const upcoming = leads.filter(lead => lead.time && new Date(lead.time) > new Date()).length;
+        document.getElementById('totalLeads').textContent = `${total} Leads`;
+        document.getElementById('upcomingAppts').textContent = `${upcoming} Appointments`;
+      } catch (error) {
+        console.error('Error updating stats:', error);
+      }
+    }
+
+    function initCalendar() {
+      try {
+        const calendarEl = document.getElementById('calendarView');
+        calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+          editable: true,
+          events: function(fetchInfo, successCallback, failureCallback) {
+            try {
+              const events = leads
+                .filter(lead => lead.time)
+                .map((lead, index) => ({
+                  title: lead.name,
+                  start: lead.time,
+                  extendedProps: { index }
+                }));
+              console.log('Fetched events for calendar:', events.length);
+              successCallback(events);
+            } catch (error) {
+              console.error('Error fetching calendar events:', error);
+              failureCallback(error);
+            }
+          },
+          eventClick: function(info) {
+            editLead(info.event.extendedProps.index);
+          },
+          eventDrop: function(info) {
+            try {
+              const index = info.event.extendedProps.index;
+              leads[index].time = info.event.start.toISOString();
+              console.log(`Dropped lead ${leads[index].name} to ${info.event.start}`);
+              saveLeads();
+              renderLeads();
+              updateStats();
+            } catch (error) {
+              console.error('Error handling event drop:', error);
+              showNotification('warning', 'Error', 'Failed to update schedule.');
+            }
+          }
+        });
+        calendar.render();
+      } catch (error) {
+        console.error('Error initializing calendar:', error);
+        showNotification('warning', 'Error', 'Failed to load calendar.');
+      }
+    }
+
+    function startReminderSystem() {
+      try {
+        setInterval(() => {
+          const now = new Date();
+          leads.forEach(lead => {
+            if (lead.time && !lead.reminderSent) {
+              const apptTime = new Date(lead.time);
+              const diff = (apptTime - now) / 1000 / 60; // Minutes
+              if (diff <= 60 && diff > 0) {
+                showNotification('warning', 'Reminder', `Appointment with ${lead.name} in ${Math.round(diff)} minutes.`);
+                lead.reminderSent = true;
+                saveLeads();
+              }
+            }
+          });
+        }, 60000); // Check every minute
+      } catch (error) {
+        console.error('Error in reminder system:', error);
+      }
+    }
+
+    function showNotification(type, title, message) {
+      try {
+        const notification = document.getElementById('notification');
+        notification.className = `notification ${type}`;
+        notification.querySelector('.notification-icon i').className = `fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}`;
+        notification.querySelector('.notification-title').textContent = title;
+        notification.querySelector('.notification-message').textContent = message;
+        notification.style.display = 'block';
+        setTimeout(() => { notification.style.display = 'none'; }, 5000);
+      } catch (error) {
+        console.error('Error showing notification:', error);
+      }
+    }
+
+    document.querySelectorAll('.nav-link').forEach(button => {
+      button.addEventListener('click', () => showTab(button.getAttribute('data-tab')));
+    });
+
+    document.getElementById('searchInput').addEventListener('input', filterLeads);
+    document.getElementById('templateSearchInput').addEventListener('input', filterTemplates);
+
+    document.querySelectorAll('.export-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.classList.add('loading');
+        setTimeout(() => {
+          exportLeads();
+          btn.classList.remove('loading');
+        }, 500);
+      });
+    });
+
+    document.querySelectorAll('.print-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.classList.add('loading');
+        setTimeout(() => {
+          printSection();
+          btn.classList.remove('loading');
+        }, 500);
+      });
+    });
+
+    document.querySelectorAll('.form-input, .form-textarea').forEach(input => {
+        input.addEventListener('input', function() {
+            const label = this.nextElementSibling || this.previousElementSibling;
+            if (label && label.classList.contains('form-label')) {
+                if (this.value.trim() !== '') {
+                    label.style.top = '-0.5rem';
+                    label.style.fontSize = '0.75rem';
+                    label.style.background = 'var(--card-bg)';
+                    label.style.padding = '0 0.25rem';
+                    label.style.color = 'var(--primary-blue)';
+                } else {
+                    label.style.top = '0.75rem';
+                    label.style.fontSize = '0.875rem';
+                    label.style.background = 'transparent';
+                    label.style.padding = '0';
+                    label.style.color = 'var(--text-secondary)';
+                }
+            }
+        });
+
+        input.addEventListener('focus', function() {
+            const label = this.nextElementSibling || this.previousElementSibling;
+            if (label && label.classList.contains('form-label') && this.value.trim() === '') {
+                label.style.top = '-0.5rem';
+                label.style.fontSize = '0.75rem';
+                label.style.background = 'var(--card-bg)';
+                label.style.padding = '0 0.25rem';
+                label.style.color = 'var(--primary-blue)';
+            }
+        });
+
+        input.addEventListener('blur', function() {
+            const label = this.nextElementSibling || this.previousElementSibling;
+            if (label && label.classList.contains('form-label') && this.value.trim() === '') {
+                label.style.top = '0.75rem';
+                label.style.fontSize = '0.875rem';
+                label.style.background = 'transparent';
+                label.style.padding = '0';
+                label.style.color = 'var(--text-secondary)';
+            }
+        });
+    });
+
+    function toggleDarkMode() {
+      const body = document.body;
+      const isDarkMode = body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', isDarkMode);
+      showNotification('success', 'Theme Updated', `Switched to ${isDarkMode ? 'Dark' : 'Light'} Mode`);
+    }
+
+    function printSection() {
+      const printContent = document.querySelector('#leads').innerHTML;
+      const originalContent = document.body.innerHTML;
+      document.body.innerHTML = `
+        <html>
+          <head>
+            <title>Print Leads</title>
+            <style>
+              body { font-family: 'Roboto', sans-serif; padding: 20px; }
+              .lead-card { margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; }
+              .lead-name { font-weight: bold; }
+            </style>
+          </head>
+          <body>${printContent}</body>
+        </html>`;
+      window.print();
+      document.body.innerHTML = originalContent;
+      location.reload();
+    }
+
+    function exportLeads() {
+      const csv = [
+        ['Name', 'Phone', 'Email', 'Date of Birth', 'Notes', 'Appointment Time', 'Status'],
+        ...leads.map(lead => [
+          lead.name,
+          lead.phone || '',
+          lead.email || '',
+          lead.dob || '',
+          lead.notes || '',
+          lead.time || '',
+          lead.status || 'New'
+        ])
+      ].map(row => row.join(',')).join('\n');
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'leads.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      showNotification('success', 'Success', 'Leads exported as leads.csv');
+    }
+
+    function initSpeechRecognition() {
+      if ('webkitSpeechRecognition' in window) {
+        recognition = new webkitSpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US'; // Google’s default language setting
+
+        recognition.onresult = function(event) {
+          let finalTranscript = '';
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            if (event.results[i].isFinal) {
+              finalTranscript += event.results[i][0].transcript;
+            }
+          }
+          const notesField = document.getElementById('leadNotes');
+          notesField.value = notesField.value + finalTranscript;
+          const label = notesField.nextElementSibling;
+          if (label && label.classList.contains('form-label') && notesField.value.trim() !== '') {
+            label.style.top = '-0.5rem';
+            label.style.fontSize = '0.75rem';
+            label.style.background = 'var(--card-bg)';
+            label.style.padding = '0 0.25rem';
+            label.style.color = 'var(--primary-blue)';
+          }
+        };
+
+        recognition.onerror = function(event) {
+          console.error('Speech recognition error:', event.error);
+          showNotification('warning', 'Error', 'Speech recognition failed. Please try again.');
+        };
+
+        recognition.onend = function() {
+          document.getElementById('speechBtn').classList.remove('active');
+          showNotification('success', 'Speech Stopped', 'Speech recognition has stopped.');
+        };
+
+        document.getElementById('speechBtn').addEventListener('click', function() {
+          if (recognition) {
+            if (recognition.isStarted || !recognition.isStarted) {
+              if (!recognition.isStarted) {
+                recognition.start();
+                this.classList.add('active');
+                showNotification('success', 'Speech Started', 'Speak now to add notes.');
+              } else {
+                recognition.stop();
+                this.classList.remove('active');
+                showNotification('success', 'Speech Stopped', 'Speech recognition has stopped.');
+              }
+            }
+          }
+        });
+      } else {
+        console.log('Speech recognition not supported in this browser.');
+        showNotification('warning', 'Error', 'Speech recognition is not supported in your browser.');
+      }
+    }
+
+    init();
+  </script>
+
+GLOBAL LENDING
+
+ 
+dragon fruit-10
+wintergreen 10
+watermelon chill-10
+spearmint 10
+wild berry 10
+mint- 10
