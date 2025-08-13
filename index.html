@@ -1,755 +1,1054 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device=device-width, initial-scale=1.0">
-    <title>Allstate CRM</title>
-    <link rel="stylesheet" href="enhanced-styles.css">
-    <!-- FullCalendar CSS for calendar functionality -->
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Allstate CRM - Enhanced</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="enhanced-styles.css" />
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Allstate CRM</h1>
-            <button class="theme-toggle">Toggle Dark Mode</button>
-        </header>
-        <nav class="nav">
-            <button class="nav-link active" data-tab="leads">Leads</button>
-            <button class="nav-link" data-tab="sold">Sold</button>
-            <button class="nav-link" data-tab="trash">Trash</button>
-            <button class="nav-link" data-tab="templates">Templates</button>
-        </nav>
-        <div class="stats">
-            <p>Total Leads: <span id="totalLeads">0</span></p>
-            <p>Sold Leads: <span id="soldLeads">0</span></p>
-            <p>Deleted Leads: <span id="deletedLeads">0</span></p>
-            <p>Templates: <span id="totalTemplates">0</span></p>
-        </div>
-        <div class="tabs">
-            <div id="leads" class="tab-content active">
-                <button id="addLeadBtn">Add Lead</button>
-                <input type="text" id="searchInput" placeholder="Search Leads...">
-                <ul id="leadList"></ul>
-            </div>
-            <div id="sold" class="tab-content">
-                <button id="clearSoldBtn">Clear Sold</button>
-                <ul id="soldList"></ul>
-            </div>
-            <div id="trash" class="tab-content">
-                <button id="clearTrashBtn">Clear Trash</button>
-                <ul id="trashList"></ul>
-            </div>
-            <div id="templates" class="tab-content">
-                <button id="addTemplateBtn">Add Template</button>
-                <input type="text" id="templateSearchInput" placeholder="Search Templates...">
-                <ul id="templateList"></ul>
-                <button id="exportTemplatesBtn">Export Templates</button>
-                <button id="printTemplatesBtn">Print Templates</button>
-            </div>
-        </div>
-        <div id="notification" class="notification"></div>
-        <div id="popup" class="popup">
-            <div class="popup-content">
-                <span id="cancelBtn" class="close">&times;</span>
-                <h2 id="popupTitle"></h2>
-                <form id="leadForm">
-                    <input type="text" id="leadName" placeholder="Name" required>
-                    <input type="tel" id="leadPhone" placeholder="Phone">
-                    <input type="email" id="leadEmail" placeholder="Email">
-                    <input type="date" id="leadDob" placeholder="Date of Birth">
-                    <input type="text" id="leadPolicyNumber" placeholder="Policy Number">
-                    <textarea id="leadNotes" placeholder="Notes"></textarea>
-                    <input type="text" id="leadCurrentCompany" placeholder="Current Company">
-                    <input type="text" id="leadCurrentlyPaying" placeholder="Currently Paying">
-                    <input type="text" id="leadProductsQuoted" placeholder="Products Quoted">
-                    <input type="text" id="leadOurRate" placeholder="Our Rate">
-                    <input type="datetime-local" id="leadTime" placeholder="Time">
-                    <button type="button" id="saveBtn">Save</button>
-                    <button type="button" id="deleteBtn">Delete</button>
-                    <button type="button" id="soldBtn">Sold</button>
-                </form>
-                <form id="templateForm" style="display: none;">
-                    <textarea id="templateContent" placeholder="Template Content" rows="5"></textarea>
-                    <button type="button" id="saveTemplateBtn">Save Template</button>
-                </form>
-            </div>
-        </div>
-        <div id="calendar" class="calendar"></div>
-        <button id="shareLeadsBtn">Share Leads</button>
-        <button id="exportLeadsBtn">Export Leads</button>
-        <button id="printBtn">Print Leads</button>
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <img src="image.png" alt="Allstate Logo" class="logo" width="50" height="50" onerror="this.src='https://via.placeholder.com/50'; this.onerror=null;">
+      <p class="tagline">Professional Insurance Solutions</p>
     </div>
-    <script>
-        // Base API URL for backend integration
-        const API_BASE = 'http://localhost:5000/api';
-        let leads = [];
-        let deletedLeads = [];
-        let soldLeads = [];
-        let templates = [];
-        let currentEditIndex = null;
-        let currentEditTemplateIndex = null;
-        let currentPopupMode = 'lead';
-        let calendar = null;
-        let recognition = null;
-        let authToken = localStorage.getItem('authToken');
+    <nav class="sidebar-nav">
+      <button class="nav-link active" data-tab="leads"><i class="fas fa-users"></i> Leads</button>
+      <button class="nav-link" data-tab="calendar"><i class="fas fa-calendar-alt"></i> Schedule</button>
+      <button class="nav-link" data-tab="templates"><i class="fas fa-sms"></i> Text Templates</button>
+      <button class="nav-link" data-tab="sold"><i class="fas fa-check-circle"></i> Sold</button>
+      <button class="nav-link" data-tab="trash"><i class="fas fa-trash"></i> Trash</button>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="theme-toggle"><i class="fas fa-moon"></i> Toggle Dark Mode</button>
+    </div>
+  </div>
 
-        // Initialize the application
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Starting application initialization...');
-            if (!authToken) {
-                const username = prompt('Enter username');
-                const password = prompt('Enter password');
-                login(username, password).then(() => {
-                    console.log('Login completed, loading leads...');
-                }).catch(err => {
-                    console.error('Login error:', err);
-                    alert('Login failed');
-                });
-            }
-            loadLeads();
-            loadDeletedLeads();
-            loadSoldLeads();
-            loadTemplates();
-            renderLeads();
-            renderSoldLeads();
-            renderTrash();
-            renderTemplates();
-            updateStats();
-            initCalendar();
-            startReminderSystem();
-            const isDarkMode = localStorage.getItem('darkMode') === 'true';
-            if (isDarkMode) {
-                document.body.classList.add('dark-mode');
-                console.log('Dark mode enabled from localStorage');
-            }
-            document.querySelector('.theme-toggle').addEventListener('click', toggleDarkMode);
-            document.getElementById('addLeadBtn').addEventListener('click', () => showPopup('lead'));
-            document.getElementById('shareLeadsBtn').addEventListener('click', exportLeadsLink);
-            document.getElementById('exportLeadsBtn').addEventListener('click', exportLeads);
-            document.getElementById('printBtn').addEventListener('click', printSection);
-            document.getElementById('addTemplateBtn').addEventListener('click', () => showPopup('template'));
-            document.getElementById('exportTemplatesBtn').addEventListener('click', exportTemplates);
-            document.getElementById('printTemplatesBtn').addEventListener('click', printTemplates);
-            document.getElementById('clearSoldBtn').addEventListener('click', clearSold);
-            document.getElementById('clearTrashBtn').addEventListener('click', clearTrash);
-            document.getElementById('cancelBtn').addEventListener('click', closePopup);
-            document.getElementById('saveBtn').addEventListener('click', saveItem);
-            document.getElementById('deleteBtn').addEventListener('click', deleteItem);
-            document.getElementById('soldBtn').addEventListener('click', sellLead);
-            document.querySelectorAll('.nav-link').forEach(button => {
-                button.addEventListener('click', () => showTab(button.getAttribute('data-tab')));
-            });
-            document.getElementById('searchInput').addEventListener('input', filterLeads);
-            document.getElementById('templateSearchInput').addEventListener('input', filterTemplates);
-            initSpeechRecognition();
-            initAutoResizeTextareas();
-            console.log('Application initialized successfully');
+  <div class="main-content">
+    <header>
+      <div class="breadcrumbs">
+        <span>Home</span> / <span class="current">Leads</span>
+      </div>
+      <div class="header-content">
+        <div class="logo">
+          <img src="image.png" alt="Allstate Logo" class="logo" width="100" height="100" onerror="this.src='https://via.placeholder.com/100'; this.onerror=null;">
+          Allstate CRM
+        </div>
+        <div class="header-stats">
+          <div class="stat-item">
+            <i class="fas fa-users"></i>
+            <span id="totalLeads">0 Leads</span>
+          </div>
+          <div class="stat-item">
+            <i class="fas fa-calendar-check"></i>
+            <span id="upcomingAppts">0 Appointments</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section id="leads" class="content">
+        <div class="leads-header">
+          <h1 class="leads-title">Lead Management</h1>
+          <div class="action-group">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" id="searchInput" placeholder="Search leads...">
+            </div>
+            <button class="btn btn-primary" id="addLeadBtn">
+              <i class="fas fa-plus"></i>
+              Add Lead
+            </button>
+            <button class="btn btn-secondary export-btn" id="shareLeadsBtn"><i class="fas fa-share"></i> Share Leads</button>
+            <button class="btn btn-secondary export-btn" id="exportLeadsBtn"><i class="fas fa-download"></i> Export</button>
+            <button class="btn btn-secondary print-btn" id="printBtn"><i class="fas fa-print"></i> Print</button>
+          </div>
+        </div>
+        
+        <div class="lead-grid" id="leadGrid"></div>
+        
+        <div class="empty-state" id="emptyState" style="display: none;">
+          <i class="fas fa-user-plus"></i>
+          <h3>No leads yet</h3>
+          <p>Start by adding your first lead to get organized!</p>
+        </div>
+      </section>
+
+      <section id="calendar" class="content" style="display: none;">
+        <div id="calendarView"></div>
+        <div class="empty-state" id="calendarEmptyState" style="display: none;">
+          <i class="fas fa-info-circle"></i>
+          <p>No appointments scheduled.</p>
+        </div>
+      </section>
+
+      <section id="templates" class="content" style="display: none;">
+        <div class="templates-header">
+          <h1 class="templates-title">Text Templates</h1>
+          <div class="action-group">
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input type="text" id="templateSearchInput" placeholder="Search templates...">
+            </div>
+            <button class="btn btn-primary" id="addTemplateBtn">
+              <i class="fas fa-plus"></i>
+              Add Template
+            </button>
+            <button class="btn btn-secondary export-btn" id="exportTemplatesBtn"><i class="fas fa-download"></i> Export</button>
+            <button class="btn btn-secondary print-btn" id="printTemplatesBtn"><i class="fas fa-print"></i> Print</button>
+          </div>
+        </div>
+        
+        <div class="template-grid" id="templateGrid"></div>
+        
+        <div class="empty-state" id="templateEmptyState" style="display: none;">
+          <i class="fas fa-sms"></i>
+          <h3>No templates yet</h3>
+          <p>Create your first text template to streamline communication!</p>
+        </div>
+      </section>
+
+      <section id="sold" class="content" style="display: none;">
+        <div class="leads-header">
+          <h1 class="leads-title">Sold Leads</h1>
+          <div class="action-group">
+            <button class="btn btn-secondary" id="clearSoldBtn">Clear Sold</button>
+          </div>
+        </div>
+        <div class="lead-grid" id="soldGrid"></div>
+        <div class="empty-state" id="soldEmptyState" style="display: none;">
+          <i class="fas fa-check-circle"></i>
+          <h3>No sold leads</h3>
+          <p>Sold leads will appear here.</p>
+        </div>
+      </section>
+
+      <section id="trash" class="content" style="display: none;">
+        <div class="leads-header">
+          <h1 class="leads-title">Trash</h1>
+          <div class="action-group">
+            <button class="btn btn-secondary" id="clearTrashBtn">Clear Trash</button>
+          </div>
+        </div>
+        <div class="lead-grid" id="trashGrid"></div>
+        <div class="empty-state" id="trashEmptyState" style="display: none;">
+          <i class="fas fa-trash"></i>
+          <h3>No deleted leads</h3>
+          <p>Deleted leads will appear here for 24 hours.</p>
+        </div>
+      </section>
+    </main>
+
+    <div class="overlay" id="overlay" onclick="closePopup()"></div>
+
+    <div class="popup" id="popup">
+      <div class="popup-header">
+        <h2 class="popup-title" id="popupTitle">Add New Lead</h2>
+        <button class="close-btn" onclick="closePopup()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <form id="leadForm">
+        <div class="form-group" id="leadNameGroup">
+          <input class="form-input" id="leadName" type="text" placeholder=" " required>
+          <label class="form-label" for="leadName">Full Name *</label>
+        </div>
+        
+        <div class="form-group" id="leadPhoneGroup">
+          <input class="form-input" id="leadPhone" type="tel" placeholder=" ">
+          <label class="form-label" for="leadPhone">Phone Number</label>
+        </div>
+        
+        <div class="form-group" id="leadEmailGroup">
+          <input class="form-input" id="leadEmail" type="email" placeholder=" ">
+          <label class="form-label" for="leadEmail">Email Address</label>
+        </div>
+        
+        <div class="form-group" id="leadDobGroup">
+          <input class="form-input" id="leadDob" type="date" placeholder=" ">
+          <label class="form-label" for="leadDob">Date of Birth</label>
+        </div>
+        
+        <div class="form-group" id="leadPolicyNumberGroup">
+          <input class="form-input" id="leadPolicyNumber" type="text" placeholder=" ">
+          <label class="form-label" for="leadPolicyNumber">Policy Number</label>
+        </div>
+        
+        <div class="form-group" id="leadNotesGroup">
+          <textarea class="form-textarea" id="leadNotes" placeholder=" "></textarea>
+          <label class="form-label" for="leadNotes">Notes</label>
+          <button type="button" id="speechBtn" class="speech-btn"><i class="fas fa-microphone"></i></button>
+        </div>
+        
+        <div class="form-group">
+          <label>Current company:</label>
+          <input type="text" id="leadCurrentCompany" class="form-input">
+        </div>
+        
+        <div class="form-group">
+          <label>Currently paying:</label>
+          <input type="text" id="leadCurrentlyPaying" class="form-input">
+        </div>
+        
+        <div class="form-group">
+          <label>Products quoted:</label>
+          <input type="text" id="leadProductsQuoted" class="form-input">
+        </div>
+        
+        <div class="form-group">
+          <label>Our rate:</label>
+          <input type="text" id="leadOurRate" class="form-input">
+        </div>
+        
+        <div class="form-group" id="leadTimeGroup">
+          <input class="form-input" id="leadTime" type="datetime-local" placeholder=" ">
+          <label class="form-label" for="leadTime">Appointment Date & Time</label>
+        </div>
+
+        <div class="form-group" id="templateNameGroup" style="display: none;">
+          <input class="form-input" id="templateName" type="text" placeholder=" " required>
+          <label class="form-label" for="templateName">Template Name *</label>
+        </div>
+        
+        <div class="form-group" id="templateMessageGroup" style="display: none;">
+          <textarea class="form-textarea" id="templateMessage" placeholder=" " required></textarea>
+          <label class="form-label" for="templateMessage">Message *</label>
+        </div>
+      </form>
+      
+      <div class="popup-actions">
+        <button class="btn btn-danger delete-btn" id="deleteBtn" style="display: none;" onclick="deleteItem()">
+          <i class="fas fa-trash"></i>
+          Delete
+        </button>
+        <button class="btn btn-success sold-btn" id="soldBtn" style="display: none;" onclick="sellLead()">
+          <i class="fas fa-check-circle"></i>
+          Sold
+        </button>
+        <button class="btn btn-secondary" id="cancelBtn">Cancel</button>
+        <button class="btn btn-primary" id="saveBtn">
+          <i class="fas fa-save"></i>
+          <span id="saveBtnText">Save Lead</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="notification" id="notification">
+      <div class="notification-content">
+        <div class="notification-icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="notification-text">
+          <div class="notification-title">Success!</div>
+          <div class="notification-message">Lead has been saved successfully.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let leads = [];
+    let deletedLeads = [];
+    let soldLeads = [];
+    let templates = [];
+    let currentEditIndex = null;
+    let currentEditTemplateIndex = null;
+    let currentPopupMode = 'lead';
+    let calendar = null;
+    let recognition = null;
+
+    document.addEventListener('DOMContentLoaded', init);
+
+    function init() {
+      loadLeads();
+      loadDeletedLeads();
+      loadSoldLeads();
+      loadTemplates();
+      renderLeads();
+      renderSoldLeads();
+      renderTrash();
+      renderTemplates();
+      updateStats();
+      initCalendar();
+      startReminderSystem();
+      const isDarkMode = localStorage.getItem('darkMode') === 'true';
+      if (isDarkMode) document.body.classList.add('dark-mode');
+      document.querySelector('.theme-toggle').addEventListener('click', toggleDarkMode);
+      document.getElementById('addLeadBtn').addEventListener('click', () => showPopup('lead'));
+      document.getElementById('shareLeadsBtn').addEventListener('click', exportLeadsLink);
+      document.getElementById('exportLeadsBtn').addEventListener('click', exportLeads);
+      document.getElementById('printBtn').addEventListener('click', printSection);
+      document.getElementById('addTemplateBtn').addEventListener('click', () => showPopup('template'));
+      document.getElementById('exportTemplatesBtn').addEventListener('click', exportTemplates);
+      document.getElementById('printTemplatesBtn').addEventListener('click', printTemplates);
+      document.getElementById('clearSoldBtn').addEventListener('click', clearSold);
+      document.getElementById('clearTrashBtn').addEventListener('click', clearTrash);
+      document.getElementById('cancelBtn').addEventListener('click', closePopup);
+      document.getElementById('saveBtn').addEventListener('click', saveItem);
+      document.getElementById('deleteBtn').addEventListener('click', deleteItem);
+      document.getElementById('soldBtn').addEventListener('click', sellLead);
+      document.querySelectorAll('.nav-link').forEach(button => {
+        button.addEventListener('click', () => showTab(button.getAttribute('data-tab')));
+      });
+      document.getElementById('searchInput').addEventListener('input', filterLeads);
+      document.getElementById('templateSearchInput').addEventListener('input', filterTemplates);
+      initSpeechRecognition();
+      initAutoResizeTextareas();
+    }
+
+    function loadLeads() {
+      const savedLeads = localStorage.getItem('leads');
+      try {
+        leads = savedLeads ? JSON.parse(savedLeads) : [
+          { name: "Olusegun Adepegba", phone: "(240)551-5286", email: "woolmanhoney@gmail.com", notes: "Current company:nationwide for home auto and 2385 for home our rate:auto 420 and home without auto is 162( we arent doing auto because were way off).notes: he has 3 other quotes from other company so he said to follow up then but i told him that too far away and ill follow up early next week to see what he thinks. give him 1k decubitus and upped his rebuild to 270000 total, he has 226000 with nationwide and morgage company is PHH", time: "2025-06-13T13:00:00", status: "New", sold: false },
+          { name: "armentha cruise", email: "(301)943-9961@yahoo.com", notes: "Policy Number: 52110516145 Notary: current company: Noteworthy currently paying: home-52145 car-unknown our rate: home 1300 auto 167 and umbrella 50 Notes: been with nationwide for over 40 years, spoke with agent and current company touch with her over the weekend and shes not one to jump and wants to review everything line by line, wants a cb thursday morning or by monday morning she also has 2 lip with nationwide, i can build them out", time: "2025-06-13T14:00:00", status: "New", sold: false },
+          { name: "Susan Mehling", email: "2403288058@gmail.com", notes: "Current company: AIC Currently paying: over 300 Notes: current companies AIC her real estate is down and then 320 a month going forward Auto Renters were quote but she wants to review it over the weekend and is going to give me a call on monday morning", time: "2025-06-17T13:00:00", status: "New", sold: false },
+          { name: "Ashley Carpenter", phone: "(443) 220-8866", email: "wazehg@gmail.com", notes: "Notes: Yaakov mailed me her request she has home here quoted auto to her already has $570 per month and home would drop to $486.45 waiving pip and adjusting deductibles. keeps saying he appreciates me following up and told me he turned off autopay.", time: "2025-06-16T13:40:00", status: "New", sold: false },
+          { name: "Atlantis Williams", phone: "(339) 371-1598", email: "atwillms@gmail.com", notes: "Policy Number: 993664534 Current company: Progressive Currently paying: 653 Products quoted: AUTO RENTERS Our rate: EITHER 528 or 486 Notes: Paying $653 with Progressive. Bill is due on the 15th. he out of money which is why he hasn’t done it yet. Two options here we sit $528 per month and “budget” is $486.45 waiving pip and adjusting deductibles. keeps saying he appreciates me following up and told me he turned off autopay.", time: "2025-06-16T16:50:00", status: "New", sold: false },
+          { name: "Lorraine Sorrell", email: "lorraine.sorrel@gmail.com", notes: "Policy Number: 090361304 Currently paying: unknown Products quoted: auto Our rate: 1675 Notes: quoted her home and auto period total for everything would be $1675 for a year of home and 6 months of Auto period she’s been with Geico since 1960 and was very hesitant and cautious and kept asking if I was asking her current", time: "1948-04-19T00:00:00", status: "New", sold: false }
+        ];
+      } catch (e) {
+        console.error('Error parsing leads from localStorage:', e);
+        leads = [];
+      }
+      leads = leads.filter(lead => !lead.sold);
+      saveLeads();
+    }
+
+    function loadDeletedLeads() {
+      const savedDeleted = localStorage.getItem('deletedLeads');
+      try {
+        deletedLeads = savedDeleted ? JSON.parse(savedDeleted) : [];
+      } catch (e) {
+        console.error('Error parsing deleted leads from localStorage:', e);
+        deletedLeads = [];
+      }
+      if (!Array.isArray(deletedLeads)) deletedLeads = [];
+      deletedLeads = deletedLeads.filter(lead => new Date(lead.deletedAt) > new Date(Date.now() - 24 * 60 * 60 * 1000));
+      saveDeletedLeads();
+    }
+
+    function loadSoldLeads() {
+      const savedSold = localStorage.getItem('soldLeads');
+      try {
+        soldLeads = savedSold ? JSON.parse(savedSold) : [];
+      } catch (e) {
+        console.error('Error parsing sold leads from localStorage:', e);
+        soldLeads = [];
+      }
+      if (!Array.isArray(soldLeads)) soldLeads = [];
+      soldLeads = soldLeads.filter(lead => lead.sold);
+      saveSoldLeads();
+    }
+
+    function loadTemplates() {
+      const savedTemplates = localStorage.getItem('templates');
+      try {
+        templates = savedTemplates ? JSON.parse(savedTemplates) : [];
+      } catch (e) {
+        console.error('Error parsing templates from localStorage:', e);
+        templates = [];
+      }
+      if (!Array.isArray(templates)) templates = [];
+      saveTemplates();
+    }
+
+    function saveLeads() { localStorage.setItem('leads', JSON.stringify(leads)); }
+    function saveDeletedLeads() { localStorage.setItem('deletedLeads', JSON.stringify(deletedLeads)); }
+    function saveSoldLeads() { localStorage.setItem('soldLeads', JSON.stringify(soldLeads)); }
+    function saveTemplates() { localStorage.setItem('templates', JSON.stringify(templates)); }
+
+    function showTab(tab) {
+      document.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.content').forEach(c => c.style.display = 'none');
+      const activeTab = document.querySelector(`[data-tab="${tab}"]`);
+      if (activeTab) activeTab.classList.add('active');
+      const content = document.getElementById(tab);
+      if (content) content.style.display = 'block';
+      const currentCrumb = document.querySelector('.breadcrumbs .current');
+      if (currentCrumb && activeTab) currentCrumb.textContent = activeTab.textContent.trim();
+      if (tab === 'calendar' && calendar) calendar.render();
+      if (tab === 'sold') renderSoldLeads();
+      if (tab === 'trash') renderTrash();
+    }
+
+    function showPopup(mode) {
+      currentPopupMode = mode;
+      currentEditIndex = null;
+      currentEditTemplateIndex = null;
+      const overlay = document.getElementById('overlay');
+      const popup = document.getElementById('popup');
+      if (overlay && popup) {
+        overlay.style.display = 'block';
+        popup.style.display = 'block';
+      }
+      const form = document.getElementById('leadForm');
+      if (form) form.reset();
+      document.getElementById('leadNameGroup').style.display = mode === 'lead' ? 'block' : 'none';
+      document.getElementById('leadPhoneGroup').style.display = mode === 'lead' ? 'block' : 'none';
+      document.getElementById('leadEmailGroup').style.display = mode === 'lead' ? 'block' : 'none';
+      document.getElementById('leadDobGroup').style.display = mode === 'lead' ? 'block' : 'none';
+      document.getElementById('leadPolicyNumberGroup').style.display = mode === 'lead' ? 'block' : 'none';
+      document.getElementById('leadNotesGroup').style.display = mode === 'lead' ? 'block' : 'none';
+      document.getElementById('leadTimeGroup').style.display = mode === 'lead' ? 'block' : 'none';
+      document.getElementById('templateNameGroup').style.display = mode === 'template' ? 'block' : 'none';
+      document.getElementById('templateMessageGroup').style.display = mode === 'template' ? 'block' : 'none';
+      const popupTitle = document.getElementById('popupTitle');
+      const saveBtnText = document.getElementById('saveBtnText');
+      const deleteBtn = document.getElementById('deleteBtn');
+      const soldBtn = document.getElementById('soldBtn');
+      if (popupTitle) popupTitle.textContent = mode === 'lead' ? 'Add New Lead' : 'Add New Template';
+      if (saveBtnText) saveBtnText.textContent = mode === 'lead' ? 'Save Lead' : 'Save Template';
+      if (deleteBtn) deleteBtn.style.display = (currentEditIndex !== null || currentEditTemplateIndex !== null) ? 'inline-flex' : 'none';
+      if (soldBtn) soldBtn.style.display = currentEditIndex !== null ? 'inline-flex' : 'none';
+      if (recognition) recognition.stop();
+      initAutoResizeTextareas();
+    }
+
+    function closePopup() {
+      const overlay = document.getElementById('overlay');
+      const popup = document.getElementById('popup');
+      if (overlay && popup) {
+        overlay.style.display = 'none';
+        popup.style.display = 'none';
+      }
+      currentEditIndex = null;
+      currentEditTemplateIndex = null;
+      currentPopupMode = 'lead';
+      if (recognition) recognition.stop();
+    }
+
+    function validatePhone(phone) {
+      const pattern = /^[0-9]{10}$/;
+      return !phone || pattern.test(phone.replace(/\D/g, ''));
+    }
+
+    function autoResize(textarea) {
+      if (textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = `${textarea.scrollHeight}px`;
+      }
+    }
+
+    function initAutoResizeTextareas() {
+      const textareas = document.querySelectorAll('.form-textarea');
+      if (textareas) {
+        textareas.forEach(textarea => {
+          textarea.addEventListener('input', () => autoResize(textarea));
+          autoResize(textarea);
         });
+      }
+    }
 
-        // Handle user login with backend
-        async function login(username, password) {
-            try {
-                console.log('Attempting login with username:', username);
-                const res = await fetch(`${API_BASE}/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
-                });
-                const data = await res.json();
-                if (data.token) {
-                    authToken = data.token;
-                    localStorage.setItem('authToken', authToken);
-                    console.log('Login successful, token stored');
-                    return true;
-                } else {
-                    throw new Error(data.message || 'Invalid credentials');
-                }
-            } catch (error) {
-                console.error('Login failed:', error);
-                throw error;
+    function saveItem() {
+      const saveBtn = document.getElementById('saveBtn');
+      if (saveBtn) saveBtn.classList.add('loading');
+      setTimeout(() => {
+        if (currentPopupMode === 'lead') {
+          const name = document.getElementById('leadName').value.trim();
+          const phone = document.getElementById('leadPhone').value.trim();
+          const email = document.getElementById('leadEmail').value.trim();
+          const dob = document.getElementById('leadDob').value;
+          const policyNumber = document.getElementById('leadPolicyNumber').value.trim();
+          const notes = document.getElementById('leadNotes').value.trim();
+          const currentCompany = document.getElementById('leadCurrentCompany').value.trim();
+          const currentlyPaying = document.getElementById('leadCurrentlyPaying').value.trim();
+          const productsQuoted = document.getElementById('leadProductsQuoted').value.trim();
+          const ourRate = document.getElementById('leadOurRate').value.trim();
+          const time = document.getElementById('leadTime').value;
+
+          if (!name) {
+            showNotification('warning', 'Error', 'Name is required.');
+            if (saveBtn) saveBtn.classList.remove('loading');
+            return;
+          }
+          if (phone && !validatePhone(phone)) {
+            showNotification('warning', 'Error', 'Invalid phone number. Use 10 digits.');
+            if (saveBtn) saveBtn.classList.remove('loading');
+            return;
+          }
+          if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            showNotification('warning', 'Error', 'Invalid email address.');
+            if (saveBtn) saveBtn.classList.remove('loading');
+            return;
+          }
+          if (time && isNaN(new Date(time).getTime())) {
+            showNotification('warning', 'Error', 'Invalid appointment date/time.');
+            if (saveBtn) saveBtn.classList.remove('loading');
+            return;
+          }
+
+          const lead = {
+            name, phone, email, dob, policyNumber, notes, currentCompany,
+            currentlyPaying, productsQuoted, ourRate, time: time ? new Date(time).toISOString() : null,
+            status: 'New', sold: false
+          };
+
+          if (currentEditIndex !== null) {
+            leads[currentEditIndex] = lead;
+          } else {
+            leads.push(lead);
+          }
+
+          saveLeads();
+          renderLeads();
+          updateStats();
+          if (calendar) calendar.refetchEvents();
+          closePopup();
+          showNotification('success', 'Success', 'Lead saved successfully.');
+        } else {
+          const name = document.getElementById('templateName').value.trim();
+          const message = document.getElementById('templateMessage').value.trim();
+
+          if (!name) {
+            showNotification('warning', 'Error', 'Template name is required.');
+            if (saveBtn) saveBtn.classList.remove('loading');
+            return;
+          }
+          if (!message) {
+            showNotification('warning', 'Error', 'Message is required.');
+            if (saveBtn) saveBtn.classList.remove('loading');
+            return;
+          }
+
+          const template = { name, message };
+
+          if (currentEditTemplateIndex !== null) {
+            templates[currentEditTemplateIndex] = template;
+          } else {
+            templates.push(template);
+          }
+
+          saveTemplates();
+          renderTemplates();
+          closePopup();
+          showNotification('success', 'Success', 'Template saved successfully.');
+        }
+        if (saveBtn) saveBtn.classList.remove('loading');
+      }, 500);
+    }
+
+    function deleteItem() {
+      const deleteBtn = document.getElementById('deleteBtn');
+      if (deleteBtn) deleteBtn.classList.add('loading');
+      setTimeout(() => {
+        if (currentPopupMode === 'lead' && currentEditIndex !== null) {
+          const lead = leads[currentEditIndex];
+          lead.deletedAt = new Date().toISOString();
+          deletedLeads.push(lead);
+          leads.splice(currentEditIndex, 1);
+          saveLeads();
+          saveDeletedLeads();
+          renderLeads();
+          renderTrash();
+          updateStats();
+          if (calendar) calendar.refetchEvents();
+          closePopup();
+          showNotification('warning', 'Deleted', 'Lead moved to trash. Restore within 24 hours.');
+        } else if (currentPopupMode === 'template' && currentEditTemplateIndex !== null) {
+          templates.splice(currentEditTemplateIndex, 1);
+          saveTemplates();
+          renderTemplates();
+          closePopup();
+          showNotification('warning', 'Deleted', 'Template deleted.');
+        }
+        if (deleteBtn) deleteBtn.classList.remove('loading');
+      }, 500);
+    }
+
+    function sellLead() {
+      const soldBtn = document.getElementById('soldBtn');
+      if (soldBtn) soldBtn.classList.add('loading');
+      setTimeout(() => {
+        if (currentPopupMode === 'lead' && currentEditIndex !== null) {
+          const lead = leads[currentEditIndex];
+          lead.sold = true;
+          lead.soldDate = new Date().toISOString();
+          soldLeads.push(lead);
+          leads.splice(currentEditIndex, 1);
+          saveLeads();
+          saveSoldLeads();
+          renderLeads();
+          renderSoldLeads();
+          updateStats();
+          if (calendar) calendar.refetchEvents();
+          closePopup();
+          showNotification('success', 'Sold', 'Lead marked as sold.');
+        }
+        if (soldBtn) soldBtn.classList.remove('loading');
+      }, 500);
+    }
+
+    function restoreLead(index) {
+      const lead = deletedLeads[index];
+      leads.push(lead);
+      deletedLeads.splice(index, 1);
+      saveLeads();
+      saveDeletedLeads();
+      renderLeads();
+      renderTrash();
+      updateStats();
+      if (calendar) calendar.refetchEvents();
+      showNotification('success', 'Restored', 'Lead restored successfully.');
+    }
+
+    function clearTrash() {
+      deletedLeads = [];
+      saveDeletedLeads();
+      renderTrash();
+      showNotification('success', 'Cleared', 'Trash cleared successfully.');
+    }
+
+    function clearSold() {
+      soldLeads = [];
+      saveSoldLeads();
+      renderSoldLeads();
+      showNotification('success', 'Cleared', 'Sold leads cleared successfully.');
+    }
+
+    function editLead(index) {
+      currentPopupMode = 'lead';
+      currentEditIndex = index;
+      currentEditTemplateIndex = null;
+      const lead = leads[index];
+      document.getElementById('leadName').value = lead.name || '';
+      document.getElementById('leadPhone').value = lead.phone || '';
+      document.getElementById('leadEmail').value = lead.email || '';
+      document.getElementById('leadDob').value = lead.dob || '';
+      document.getElementById('leadPolicyNumber').value = lead.policyNumber || '';
+      document.getElementById('leadNotes').value = lead.notes || '';
+      document.getElementById('leadCurrentCompany').value = lead.currentCompany || '';
+      document.getElementById('leadCurrentlyPaying').value = lead.currentlyPaying || '';
+      document.getElementById('leadProductsQuoted').value = lead.productsQuoted || '';
+      document.getElementById('leadOurRate').value = lead.ourRate || '';
+      document.getElementById('leadTime').value = lead.time ? lead.time.slice(0, 16) : '';
+      document.getElementById('popupTitle').textContent = 'Edit Lead';
+      document.getElementById('saveBtnText').textContent = 'Save Lead';
+      document.getElementById('deleteBtn').style.display = 'inline-flex';
+      document.getElementById('soldBtn').style.display = 'inline-flex';
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('popup').style.display = 'block';
+      if (recognition) recognition.stop();
+      initAutoResizeTextareas();
+    }
+
+    function editTemplate(index) {
+      currentPopupMode = 'template';
+      currentEditTemplateIndex = index;
+      currentEditIndex = null;
+      const template = templates[index];
+      document.getElementById('templateName').value = template.name || '';
+      document.getElementById('templateMessage').value = template.message || '';
+      document.getElementById('popupTitle').textContent = 'Edit Template';
+      document.getElementById('saveBtnText').textContent = 'Save Template';
+      document.getElementById('deleteBtn').style.display = 'inline-flex';
+      document.getElementById('leadNameGroup').style.display = 'none';
+      document.getElementById('leadPhoneGroup').style.display = 'none';
+      document.getElementById('leadEmailGroup').style.display = 'none';
+      document.getElementById('leadDobGroup').style.display = 'none';
+      document.getElementById('leadPolicyNumberGroup').style.display = 'none';
+      document.getElementById('leadNotesGroup').style.display = 'none';
+      document.getElementById('leadTimeGroup').style.display = 'none';
+      document.getElementById('templateNameGroup').style.display = 'block';
+      document.getElementById('templateMessageGroup').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('popup').style.display = 'block';
+      initAutoResizeTextareas();
+    }
+
+    function renderLeads() {
+      const grid = document.getElementById('leadGrid');
+      const emptyState = document.getElementById('emptyState');
+      if (grid) grid.innerHTML = '';
+      if (emptyState) emptyState.style.display = 'none';
+      if (!leads || leads.length === 0) {
+        if (emptyState) emptyState.style.display = 'block';
+        return;
+      }
+      const sortedLeads = [...leads].sort((a, b) => {
+        if (!a.time && !b.time) return 0;
+        if (!a.time) return 1;
+        if (!b.time) return -1;
+        return new Date(a.time) - new Date(b.time);
+      });
+      sortedLeads.forEach((lead, index) => {
+        const card = document.createElement('div');
+        card.className = 'lead-card';
+        card.onclick = () => editLead(index);
+        card.innerHTML = `
+          <div class="lead-header">
+            <div>
+              <div class="lead-name">${lead.name}</div>
+              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
+              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email}</div>` : ''}
+            </div>
+            <div class="lead-status status-${lead.status.toLowerCase()}">${lead.status}</div>
+          </div>
+          ${lead.notes ? `<div class="lead-details"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
+          <div class="lead-footer">
+            <div class="lead-time">
+              ${lead.time ? `<i class="fas fa-clock"></i> ${new Date(lead.time).toLocaleString()}` : 'No appointment'}
+            </div>
+            <button class="btn btn-success btn-small sold-btn" onclick="sellLeadFromCard(${index}); event.stopPropagation();">Sold</button>
+          </div>
+        `;
+        if (grid) grid.appendChild(card);
+      });
+    }
+
+    function renderSoldLeads() {
+      const grid = document.getElementById('soldGrid');
+      const emptyState = document.getElementById('soldEmptyState');
+      if (grid) grid.innerHTML = '';
+      if (emptyState) emptyState.style.display = 'none';
+      if (!soldLeads || soldLeads.length === 0) {
+        if (emptyState) emptyState.style.display = 'block';
+        return;
+      }
+      soldLeads.forEach(lead => {
+        const card = document.createElement('div');
+        card.className = 'lead-card';
+        card.onclick = () => editLead(leads.indexOf(lead));
+        card.innerHTML = `
+          <div class="lead-header">
+            <div>
+              <div class="lead-name">${lead.name}</div>
+              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
+              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email}</div>` : ''}
+            </div>
+            <div class="lead-status status-sold">Sold</div>
+          </div>
+          ${lead.notes ? `<div class="lead-details"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
+          <div class="lead-footer">
+            <div class="lead-time">
+              <i class="fas fa-clock"></i> Sold: ${new Date(lead.soldDate).toLocaleString()}
+            </div>
+          </div>
+        `;
+        if (grid) grid.appendChild(card);
+      });
+    }
+
+    function renderTrash() {
+      const grid = document.getElementById('trashGrid');
+      const emptyState = document.getElementById('trashEmptyState');
+      if (grid) grid.innerHTML = '';
+      if (emptyState) emptyState.style.display = 'none';
+      if (!deletedLeads || deletedLeads.length === 0) {
+        if (emptyState) emptyState.style.display = 'block';
+        return;
+      }
+      deletedLeads.forEach((lead, index) => {
+        const card = document.createElement('div');
+        card.className = 'lead-card';
+        card.innerHTML = `
+          <div class="lead-header">
+            <div>
+              <div class="lead-name">${lead.name}</div>
+              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
+              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email}</div>` : ''}
+            </div>
+            <div class="lead-status status-new">Deleted</div>
+          </div>
+          ${lead.notes ? `<div class="lead-details"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
+          <div class="lead-footer">
+            <div class="lead-time">
+              <i class="fas fa-clock"></i> Deleted: ${new Date(lead.deletedAt).toLocaleString()}
+            </div>
+            <button class="btn btn-secondary btn-small" onclick="restoreLead(${index}); event.stopPropagation();">Restore</button>
+          </div>
+        `;
+        if (grid) grid.appendChild(card);
+      });
+    }
+
+    function renderTemplates() {
+      const grid = document.getElementById('templateGrid');
+      const emptyState = document.getElementById('templateEmptyState');
+      if (grid) grid.innerHTML = '';
+      if (emptyState) emptyState.style.display = 'none';
+      if (!templates || templates.length === 0) {
+        if (emptyState) emptyState.style.display = 'block';
+        return;
+      }
+      templates.forEach((template, index) => {
+        const card = document.createElement('div');
+        card.className = 'template-card';
+        card.onclick = () => editTemplate(index);
+        card.innerHTML = `
+          <div class="template-header">
+            <div>
+              <div class="template-name">${template.name}</div>
+            </div>
+          </div>
+          <div class="template-message">${template.message}</div>
+        `;
+        if (grid) grid.appendChild(card);
+      });
+    }
+
+    function filterLeads() {
+      const searchInput = document.getElementById('searchInput');
+      const search = searchInput ? searchInput.value.toLowerCase() : '';
+      const filtered = leads.filter(lead => 
+        lead.name.toLowerCase().includes(search) || 
+        (lead.phone && lead.phone.includes(search)) ||
+        (lead.email && lead.email.toLowerCase().includes(search)) ||
+        (lead.notes && lead.notes.toLowerCase().includes(search))
+      );
+      const grid = document.getElementById('leadGrid');
+      const emptyState = document.getElementById('emptyState');
+      if (grid) grid.innerHTML = '';
+      if (emptyState) emptyState.style.display = 'none';
+      if (filtered.length === 0) {
+        if (emptyState) emptyState.style.display = 'block';
+        return;
+      }
+      const sortedFiltered = filtered.sort((a, b) => {
+        if (!a.time && !b.time) return 0;
+        if (!a.time) return 1;
+        if (!b.time) return -1;
+        return new Date(a.time) - new Date(b.time);
+      });
+      sortedFiltered.forEach(lead => {
+        const index = leads.indexOf(lead);
+        const card = document.createElement('div');
+        card.className = 'lead-card';
+        card.onclick = () => editLead(index);
+        card.innerHTML = `
+          <div class="lead-header">
+            <div>
+              <div class="lead-name">${lead.name}</div>
+              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
+              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email}</div>` : ''}
+            </div>
+            <div class="lead-status status-${lead.status.toLowerCase()}">${lead.status}</div>
+          </div>
+          ${lead.notes ? `<div class="lead-details"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
+          <div class="lead-footer">
+            <div class="lead-time">
+              ${lead.time ? `<i class="fas fa-clock"></i> ${new Date(lead.time).toLocaleString()}` : 'No appointment'}
+            </div>
+            <button class="btn btn-success btn-small sold-btn" onclick="sellLeadFromCard(${index}); event.stopPropagation();">Sold</button>
+          </div>
+        `;
+        if (grid) grid.appendChild(card);
+      });
+    }
+
+    function filterTemplates() {
+      const templateSearchInput = document.getElementById('templateSearchInput');
+      const search = templateSearchInput ? templateSearchInput.value.toLowerCase() : '';
+      const filtered = templates.filter(template => 
+        template.name.toLowerCase().includes(search) || 
+        template.message.toLowerCase().includes(search)
+      );
+      const grid = document.getElementById('templateGrid');
+      const emptyState = document.getElementById('templateEmptyState');
+      if (grid) grid.innerHTML = '';
+      if (emptyState) emptyState.style.display = 'none';
+      if (filtered.length === 0) {
+        if (emptyState) emptyState.style.display = 'block';
+        return;
+      }
+      filtered.forEach(template => {
+        const index = templates.indexOf(template);
+        const card = document.createElement('div');
+        card.className = 'template-card';
+        card.onclick = () => editTemplate(index);
+        card.innerHTML = `
+          <div class="template-header">
+            <div>
+              <div class="template-name">${template.name}</div>
+            </div>
+          </div>
+          <div class="template-message">${template.message}</div>
+        `;
+        if (grid) grid.appendChild(card);
+      });
+    }
+
+    function updateStats() {
+      const totalLeads = document.getElementById('totalLeads');
+      const upcomingAppts = document.getElementById('upcomingAppts');
+      if (totalLeads) totalLeads.textContent = `${leads.length} Leads`;
+      if (upcomingAppts) upcomingAppts.textContent = `${leads.filter(lead => lead.time && new Date(lead.time) > new Date()).length} Appointments`;
+    }
+
+    function initCalendar() {
+      const calendarEl = document.getElementById('calendarView');
+      if (calendarEl) {
+        calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+          events: leads.filter(lead => lead.time && new Date(lead.time) > new Date()).map((lead, index) => ({
+            title: lead.name,
+            start: lead.time,
+            extendedProps: { index }
+          })),
+          eventClick: function(info) {
+            editLead(info.event.extendedProps.index);
+          }
+        });
+        calendar.render();
+      }
+    }
+
+    function startReminderSystem() {
+      setInterval(() => {
+        const now = new Date();
+        leads.forEach(lead => {
+          if (lead.time && !lead.reminderSent) {
+            const apptTime = new Date(lead.time);
+            const diff = (apptTime - now) / 1000 / 60;
+            if (diff <= 60 && diff > 0) {
+              showNotification('warning', 'Reminder', `Appointment with ${lead.name} in ${Math.round(diff)} minutes.`);
+              lead.reminderSent = true;
+              saveLeads();
             }
-        }
+          }
+        });
+      }, 60000);
+    }
 
-        // Load leads from backend
-        async function loadLeads() {
-            if (!authToken) {
-                console.warn('No auth token, skipping lead load');
-                return;
+    function showNotification(type, title, message) {
+      const notification = document.getElementById('notification');
+      if (notification) {
+        notification.className = `notification ${type}`;
+        const icon = notification.querySelector('.notification-icon i');
+        if (icon) icon.className = `fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}`;
+        const notifTitle = notification.querySelector('.notification-title');
+        if (notifTitle) notifTitle.textContent = title;
+        const notifMessage = notification.querySelector('.notification-message');
+        if (notifMessage) notifMessage.textContent = message;
+        notification.style.display = 'block';
+        setTimeout(() => { if (notification) notification.style.display = 'none'; }, 5000);
+      }
+    }
+
+    function printSection() {
+      window.print();
+    }
+
+    function printTemplates() {
+      const templatesSection = document.getElementById('templates');
+      if (templatesSection) {
+        const printWindow = window.open('', '', 'height=600,width=800');
+        printWindow.document.write('<html><head><title>Print Templates</title>');
+        printWindow.document.write('<link rel="stylesheet" href="enhanced-styles.css">');
+        printWindow.document.write('</head><body>');
+        printWindow.document.write(templatesSection.outerHTML);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+      }
+    }
+
+    function exportLeads() {
+      const csv = [
+        ['Name', 'Phone', 'Email', 'Notes', 'Appointment Time', 'Status'],
+        ...leads.map(lead => [lead.name, lead.phone || '', lead.email || '', lead.notes || '', lead.time || '', lead.status || 'New'])
+      ].map(row => row.join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'leads.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      showNotification('success', 'Success', 'Leads exported as leads.csv');
+    }
+
+    function exportTemplates() {
+      const csv = [
+        ['Name', 'Message'],
+        ...templates.map(template => [template.name, template.message])
+      ].map(row => row.join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'templates.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      showNotification('success', 'Success', 'Templates exported as templates.csv');
+    }
+
+    function exportLeadsLink() {
+      const shareId = 'xxxxxx'.replace(/x/g, () => Math.floor(Math.random() * 16).toString(16));
+      const shareData = JSON.stringify(leads);
+      const shareUrl = `${window.location.origin}/share.html?id=${shareId}&data=${encodeURIComponent(shareData)}`;
+      localStorage.setItem(`share_${shareId}`, shareData);
+      setTimeout(() => localStorage.removeItem(`share_${shareId}`), 24 * 60 * 60 * 1000);
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        showNotification('success', 'Link Generated', 'Share link copied to clipboard. It expires in 24 hours.');
+      }).catch(err => {
+        console.error('Clipboard write failed:', err);
+        showNotification('warning', 'Error', 'Failed to copy share link.');
+      });
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+
+    function initSpeechRecognition() {
+      if ('webkitSpeechRecognition' in window) {
+        recognition = new webkitSpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
+        recognition.onresult = function(event) {
+          let finalTranscript = '';
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            if (event.results[i].isFinal) {
+              finalTranscript += event.results[i][0].transcript;
             }
-            try {
-                console.log('Fetching leads from API...');
-                const res = await fetch(`${API_BASE}/leads`, {
-                    headers: { Authorization: `Bearer ${authToken}` }
-                });
-                if (!res.ok) throw new Error('Failed to fetch leads');
-                leads = await res.json();
-                console.log('Leads loaded:', leads.length);
-                renderLeads();
-                updateStats();
-                updateCalendarEvents();
-            } catch (error) {
-                console.error('Error loading leads:', error);
-                alert('Failed to load leads: ' + error.message);
-            }
-        }
-
-        // Save or update a lead via API
-        async function saveLead(lead) {
-            const method = lead._id ? 'PUT' : 'POST';
-            const url = lead._id ? `${API_BASE}/leads/${lead._id}` : `${API_BASE}/leads`;
-            try {
-                console.log('Saving lead with method:', method, 'URL:', url);
-                const res = await fetch(url, {
-                    method,
-                    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${authToken}` },
-                    body: JSON.stringify(lead)
-                });
-                if (!res.ok) {
-                    const errorData = await res.json();
-                    throw new Error(errorData.message || 'Save failed');
-                }
-                console.log('Lead saved successfully');
-                await loadLeads();
-            } catch (error) {
-                console.error('Error saving lead:', error);
-                alert('Save failed: ' + error.message);
-            }
-        }
-
-        // Delete a lead via API
-        async function deleteItem() {
-            if (currentPopupMode === 'lead' && currentEditIndex !== null) {
-                try {
-                    console.log('Deleting lead with ID:', leads[currentEditIndex]._id);
-                    const res = await fetch(`${API_BASE}/leads/${leads[currentEditIndex]._id}`, {
-                        method: 'DELETE',
-                        headers: { Authorization: `Bearer ${authToken}` }
-                    });
-                    if (!res.ok) throw new Error('Delete request failed');
-                    console.log('Lead deleted successfully');
-                    await loadLeads();
-                    closePopup();
-                } catch (error) {
-                    console.error('Error deleting lead:', error);
-                    alert('Delete failed: ' + error.message);
-                }
-            } else if (currentPopupMode === 'template' && currentEditTemplateIndex !== null) {
-                templates.splice(currentEditTemplateIndex, 1);
-                saveTemplates();
-                renderTemplates();
-                closePopup();
-            }
-        }
-
-        // Mark a lead as sold and update via API
-        async function sellLead() {
-            if (currentPopupMode === 'lead' && currentEditIndex !== null) {
-                const lead = leads[currentEditIndex];
-                lead.sold = true;
-                lead.soldDate = new Date().toISOString();
-                try {
-                    console.log('Marking lead as sold:', lead.name);
-                    await saveLead(lead);
-                    leads.splice(currentEditIndex, 1);
-                    await loadLeads();
-                    closePopup();
-                } catch (error) {
-                    console.error('Error selling lead:', error);
-                    alert('Sell failed: ' + error.message);
-                }
-            }
-        }
-
-        // Switch between tabs and reload data
-        function showTab(tab) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
-            document.getElementById(tab).classList.add('active');
-            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
-            if (tab === 'leads') loadLeads();
-            else if (tab === 'sold') loadSoldLeads();
-            else if (tab === 'trash') loadDeletedLeads();
-            else if (tab === 'templates') loadTemplates();
-            console.log('Switched to tab:', tab);
-        }
-
-        // Save lead or template data
-        async function saveItem() {
-            if (currentPopupMode === 'lead') {
-                const lead = {
-                    name: document.getElementById('leadName').value.trim(),
-                    phone: document.getElementById('leadPhone').value.trim(),
-                    email: document.getElementById('leadEmail').value.trim(),
-                    dob: document.getElementById('leadDob').value,
-                    policyNumber: document.getElementById('leadPolicyNumber').value.trim(),
-                    notes: document.getElementById('leadNotes').value.trim(),
-                    currentCompany: document.getElementById('leadCurrentCompany').value.trim(),
-                    currentlyPaying: document.getElementById('leadCurrentlyPaying').value.trim(),
-                    productsQuoted: document.getElementById('leadProductsQuoted').value.trim(),
-                    ourRate: document.getElementById('leadOurRate').value.trim(),
-                    time: document.getElementById('leadTime').value ? new Date(document.getElementById('leadTime').value).toISOString() : null,
-                    _id: leads[currentEditIndex]?._id // Preserve ID for updates
-                };
-                if (!lead.name) {
-                    alert('Name is required');
-                    return;
-                }
-                await saveLead(lead);
-                closePopup();
-            } else if (currentPopupMode === 'template') {
-                const templateContent = document.getElementById('templateContent').value.trim();
-                if (!templateContent) {
-                    alert('Template content is required');
-                    return;
-                }
-                if (currentEditTemplateIndex !== null) {
-                    templates[currentEditTemplateIndex] = templateContent;
-                } else {
-                    templates.push(templateContent);
-                }
-                saveTemplates();
-                renderTemplates();
-                closePopup();
-            }
-        }
-
-        // Save templates to localStorage (placeholder; extend to API if needed)
-        function saveTemplates() {
-            localStorage.setItem('templates', JSON.stringify(templates));
-            console.log('Templates saved to localStorage');
-        }
-
-        // Load data from localStorage (leads from API, others local)
-        function loadTemplates() {
-            templates = JSON.parse(localStorage.getItem('templates')) || [];
-            renderTemplates();
-            updateStats();
-            console.log('Templates loaded:', templates.length);
-        }
-
-        function loadDeletedLeads() {
-            deletedLeads = JSON.parse(localStorage.getItem('deletedLeads')) || [];
-            renderTrash();
-            updateStats();
-            console.log('Deleted leads loaded:', deletedLeads.length);
-        }
-
-        function loadSoldLeads() {
-            soldLeads = JSON.parse(localStorage.getItem('soldLeads')) || [];
-            renderSoldLeads();
-            updateStats();
-            console.log('Sold leads loaded:', soldLeads.length);
-        }
-
-        // Render functions (unchanged structure)
-        function renderLeads() {
-            const leadList = document.getElementById('leadList');
-            leadList.innerHTML = '';
-            leads.forEach((lead, index) => {
-                const li = document.createElement('li');
-                li.innerHTML = `<span>${lead.name} - ${lead.phone || 'No Phone'}</span>
-                    <button onclick="editLead(${index})">Edit</button>
-                    <button onclick="deleteLead(${index})">Delete</button>
-                    <button onclick="sellLeadFromList(${index})">Sold</button>`;
-                leadList.appendChild(li);
-            });
-            console.log('Leads rendered:', leads.length);
-        }
-
-        function renderSoldLeads() {
-            const soldList = document.getElementById('soldList');
-            soldList.innerHTML = '';
-            soldLeads.forEach((lead, index) => {
-                const li = document.createElement('li');
-                li.textContent = `${lead.name} - Sold on ${new Date(lead.soldDate).toLocaleDateString()}`;
-                soldList.appendChild(li);
-            });
-            console.log('Sold leads rendered:', soldLeads.length);
-        }
-
-        function renderTrash() {
-            const trashList = document.getElementById('trashList');
-            trashList.innerHTML = '';
-            deletedLeads.forEach((lead, index) => {
-                const li = document.createElement('li');
-                li.textContent = `${lead.name} - Deleted on ${new Date(lead.time).toLocaleDateString()}`;
-                trashList.appendChild(li);
-            });
-            console.log('Trash rendered:', deletedLeads.length);
-        }
-
-        function renderTemplates() {
-            const templateList = document.getElementById('templateList');
-            templateList.innerHTML = '';
-            templates.forEach((template, index) => {
-                const li = document.createElement('li');
-                li.innerHTML = `<span>${template.substring(0, 30)}${template.length > 30 ? '...' : ''}</span>
-                    <button onclick="editTemplate(${index})">Edit</button>
-                    <button onclick="deleteTemplate(${index})">Delete</button>`;
-                templateList.appendChild(li);
-            });
-            console.log('Templates rendered:', templates.length);
-        }
-
-        function updateStats() {
-            document.getElementById('totalLeads').textContent = leads.length;
-            document.getElementById('soldLeads').textContent = soldLeads.length;
-            document.getElementById('deletedLeads').textContent = deletedLeads.length;
-            document.getElementById('totalTemplates').textContent = templates.length;
-            console.log('Stats updated:', { leads: leads.length, sold: soldLeads.length, deleted: deletedLeads.length, templates: templates.length });
-        }
-
-        // Popup management
-        function showPopup(mode, index = null) {
-            currentPopupMode = mode;
-            document.getElementById('popup').style.display = 'block';
-            document.getElementById('leadForm').style.display = mode === 'lead' ? 'block' : 'none';
-            document.getElementById('templateForm').style.display = mode === 'template' ? 'block' : 'none';
-            document.getElementById('popupTitle').textContent = mode === 'lead' ? 'Edit Lead' : 'Edit Template';
-            if (mode === 'lead' && index !== null) {
-                currentEditIndex = index;
-                const lead = leads[index];
-                document.getElementById('leadName').value = lead.name || '';
-                document.getElementById('leadPhone').value = lead.phone || '';
-                document.getElementById('leadEmail').value = lead.email || '';
-                document.getElementById('leadDob').value = lead.dob || '';
-                document.getElementById('leadPolicyNumber').value = lead.policyNumber || '';
-                document.getElementById('leadNotes').value = lead.notes || '';
-                document.getElementById('leadCurrentCompany').value = lead.currentCompany || '';
-                document.getElementById('leadCurrentlyPaying').value = lead.currentlyPaying || '';
-                document.getElementById('leadProductsQuoted').value = lead.productsQuoted || '';
-                document.getElementById('leadOurRate').value = lead.ourRate || '';
-                document.getElementById('leadTime').value = lead.time ? new Date(lead.time).toISOString().slice(0, 16) : '';
-            } else if (mode === 'template' && index !== null) {
-                currentEditTemplateIndex = index;
-                document.getElementById('templateContent').value = templates[index] || '';
+          }
+          const leadNotes = document.getElementById('leadNotes');
+          if (leadNotes) {
+            leadNotes.value += finalTranscript;
+            autoResize(leadNotes);
+          }
+        };
+        recognition.onerror = function(event) {
+          console.error('Speech recognition error:', event.error);
+          showNotification('warning', 'Error', 'Speech recognition failed.');
+        };
+        recognition.onend = function() {
+          const speechBtn = document.getElementById('speechBtn');
+          if (speechBtn) speechBtn.classList.remove('active');
+        };
+        const speechBtn = document.getElementById('speechBtn');
+        if (speechBtn) {
+          speechBtn.addEventListener('click', function() {
+            if (!this.classList.contains('active')) {
+              recognition.start();
+              this.classList.add('active');
             } else {
-                currentEditIndex = null;
-                currentEditTemplateIndex = null;
-                document.getElementById('leadForm').reset();
-                document.getElementById('templateForm').reset();
+              recognition.stop();
+              this.classList.remove('active');
             }
-            console.log('Popup shown for mode:', mode, 'index:', index);
+          });
         }
+      } else {
+        showNotification('warning', 'Error', 'Speech recognition not supported in this browser.');
+      }
+    }
 
-        function closePopup() {
-            document.getElementById('popup').style.display = 'none';
-            console.log('Popup closed');
-        }
-
-        function editLead(index) {
-            showPopup('lead', index);
-        }
-
-        function deleteLead(index) {
-            currentEditIndex = index;
-            deleteItem();
-        }
-
-        function sellLeadFromList(index) {
-            currentEditIndex = index;
-            sellLead();
-        }
-
-        function editTemplate(index) {
-            showPopup('template', index);
-        }
-
-        function deleteTemplate(index) {
-            currentEditTemplateIndex = index;
-            deleteItem();
-        }
-
-        // Filtering functions
-        function filterLeads() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const filteredLeads = leads.filter(lead => lead.name.toLowerCase().includes(searchTerm));
-            const leadList = document.getElementById('leadList');
-            leadList.innerHTML = '';
-            filteredLeads.forEach((lead, index) => {
-                const li = document.createElement('li');
-                li.innerHTML = `<span>${lead.name} - ${lead.phone || 'No Phone'}</span>
-                    <button onclick="editLead(${index})">Edit</button>
-                    <button onclick="deleteLead(${index})">Delete</button>
-                    <button onclick="sellLeadFromList(${index})">Sold</button>`;
-                leadList.appendChild(li);
-            });
-            console.log('Leads filtered for:', searchTerm);
-        }
-
-        function filterTemplates() {
-            const searchTerm = document.getElementById('templateSearchInput').value.toLowerCase();
-            const filteredTemplates = templates.filter(template => template.toLowerCase().includes(searchTerm));
-            const templateList = document.getElementById('templateList');
-            templateList.innerHTML = '';
-            filteredTemplates.forEach((template, index) => {
-                const li = document.createElement('li');
-                li.innerHTML = `<span>${template.substring(0, 30)}${template.length > 30 ? '...' : ''}</span>
-                    <button onclick="editTemplate(${index})">Edit</button>
-                    <button onclick="deleteTemplate(${index})">Delete</button>`;
-                templateList.appendChild(li);
-            });
-            console.log('Templates filtered for:', searchTerm);
-        }
-
-        // Theme toggling
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            localStorage.setItem('darkMode', isDark);
-            console.log('Dark mode toggled to:', isDark);
-        }
-
-        // Notification system
-        function showNotification(type, title, message) {
-            const notification = document.getElementById('notification');
-            notification.textContent = `${title}: ${message}`;
-            notification.className = `notification ${type}`;
-            setTimeout(() => {
-                notification.className = 'notification hidden';
-                console.log('Notification cleared:', message);
-            }, 3000);
-        }
-
-        // Export functions
-        function exportLeads() {
-            const data = JSON.stringify(leads, null, 2);
-            const blob = new Blob([data], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'leads.json';
-            a.click();
-            URL.revokeObjectURL(url);
-            showNotification('success', 'Export', 'Leads exported successfully.');
-            console.log('Leads exported');
-        }
-
-        function exportTemplates() {
-            const data = JSON.stringify(templates, null, 2);
-            const blob = new Blob([data], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'templates.json';
-            a.click();
-            URL.revokeObjectURL(url);
-            showNotification('success', 'Export', 'Templates exported successfully.');
-            console.log('Templates exported');
-        }
-
-        function printSection() {
-            const printContent = document.getElementById('leads').innerHTML;
-            const originalContent = document.body.innerHTML;
-            document.body.innerHTML = printContent;
-            window.print();
-            document.body.innerHTML = originalContent;
-            console.log('Leads printed');
-        }
-
-        function printTemplates() {
-            const printContent = document.getElementById('templates').innerHTML;
-            const originalContent = document.body.innerHTML;
-            document.body.innerHTML = printContent;
-            window.print();
-            document.body.innerHTML = originalContent;
-            console.log('Templates printed');
-        }
-
-        // Clear functions
-        function clearSold() {
-            soldLeads = [];
-            localStorage.setItem('soldLeads', JSON.stringify(soldLeads));
-            renderSoldLeads();
-            updateStats();
-            showNotification('success', 'Clear', 'Sold leads cleared.');
-            console.log('Sold leads cleared');
-        }
-
-        function clearTrash() {
-            deletedLeads = [];
-            localStorage.setItem('deletedLeads', JSON.stringify(deletedLeads));
-            renderTrash();
-            updateStats();
-            showNotification('success', 'Clear', 'Trash cleared.');
-            console.log('Trash cleared');
-        }
-
-        // Share leads link
-        function exportLeadsLink() {
-            const shareId = 'xxxxxx'.replace(/x/g, () => Math.floor(Math.random() * 16).toString(16));
-            const shareData = JSON.stringify(leads);
-            const shareUrl = `${window.location.origin}/share.html?id=${shareId}&data=${encodeURIComponent(shareData)}`;
-            navigator.clipboard.writeText(shareUrl).then(() => {
-                showNotification('success', 'Link Generated', 'Share link copied to clipboard.');
-                console.log('Share link generated:', shareUrl);
-            }).catch(err => {
-                console.error('Clipboard error:', err);
-                alert('Failed to copy share link');
-            });
-        }
-
-        // Calendar initialization
-        function initCalendar() {
-            if (document.getElementById('calendar')) {
-                calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
-                    initialView: 'dayGridMonth',
-                    events: leads.map(lead => ({
-                        title: lead.name,
-                        start: lead.time,
-                        allDay: !lead.time
-                    }))
-                });
-                calendar.render();
-                console.log('Calendar initialized');
-            } else {
-                console.error('Calendar element not found');
-            }
-        }
-
-        // Update calendar events when leads change
-        function updateCalendarEvents() {
-            if (calendar) {
-                calendar.getEvents().forEach(event => event.remove());
-                calendar.addEventSource(leads.map(lead => ({
-                    title: lead.name,
-                    start: lead.time,
-                    allDay: !lead.time
-                })));
-                console.log('Calendar events updated');
-            }
-        }
-
-        // Reminder system
-        function startReminderSystem() {
-            setInterval(() => {
-                const now = new Date().toISOString();
-                leads.forEach(lead => {
-                    if (lead.time && lead.time <= now && !lead.reminded) {
-                        showNotification('warning', 'Reminder', `${lead.name}'s time is up!`);
-                        lead.reminded = true;
-                        saveLead(lead).then(() => {
-                            console.log('Reminder set for:', lead.name);
-                        }).catch(err => {
-                            console.error('Reminder save failed:', err);
-                        });
-                    }
-                });
-                      // Check every minute
-            console.log('Reminder system started');
-        }, 60000);
-
-        // Speech recognition initialization
-        function initSpeechRecognition() {
-            if (!('webkitSpeechRecognition' in window)) {
-                showNotification('error', 'Speech', 'Speech recognition not supported.');
-                console.log('Speech recognition not supported in this browser');
-                return;
-            }
-            recognition = new webkitSpeechRecognition();
-            recognition.continuous = true;
-            recognition.interimResults = false;
-            recognition.lang = 'en-US'; // Set language explicitly
-            recognition.onresult = (event) => {
-                const command = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
-                console.log('Speech recognized:', command);
-                if (command.includes('add lead')) {
-                    showPopup('lead');
-                } else if (command.includes('search')) {
-                    const searchText = command.replace('search', '').trim();
-                    document.getElementById('searchInput').value = searchText;
-                    filterLeads();
-                    console.log('Search performed for:', searchText);
-                } else if (command.includes('toggle dark mode')) {
-                    toggleDarkMode();
-                }
-            };
-            recognition.onerror = (event) => {
-                console.error('Speech recognition error:', event.error);
-                showNotification('error', 'Speech', 'Recognition error: ' + event.error);
-            };
-            recognition.onend = () => {
-                console.log('Speech recognition ended, restarting...');
-                if (recognition) recognition.start();
-            };
-            try {
-                recognition.start();
-                console.log('Speech recognition started');
-            } catch (error) {
-                console.error('Failed to start speech recognition:', error);
-                showNotification('error', 'Speech', 'Failed to start recognition');
-            }
-        }
-
-        // Auto-resize textareas
-        function initAutoResizeTextareas() {
-            const textareas = document.querySelectorAll('textarea');
-            textareas.forEach(textarea => {
-                textarea.addEventListener('input', function() {
-                    this.style.height = 'auto';
-                    this.style.height = (this.scrollHeight) + 'px';
-                    console.log('Textarea resized for:', this.id);
-                });
-                // Initial resize
-                textarea.style.height = 'auto';
-                textarea.style.height = (textarea.scrollHeight) + 'px';
-                console.log('Initial resize for textarea:', textarea.id);
-            });
-            // Add redundant check for dynamic textareas
-            const observer = new MutationObserver((mutations) => {
-                mutations.forEach(mutation => {
-                    if (mutation.addedNodes.length) {
-                        const newTextareas = document.querySelectorAll('textarea');
-                        newTextareas.forEach(ta => {
-                            if (!ta.dataset.resized) {
-                                ta.addEventListener('input', function() {
-                                    this.style.height = 'auto';
-                                    this.style.height = (this.scrollHeight) + 'px';
-                                });
-                                ta.style.height = 'auto';
-                                ta.style.height = (ta.scrollHeight) + 'px';
-                                ta.dataset.resized = 'true';
-                                console.log('New textarea resized:', ta.id);
-                            }
-                        });
-                    }
-                });
-            });
-            observer.observe(document.body, { childList: true, subtree: true });
-            console.log('Auto-resize initialized for textareas');
-        }
-
-        // Additional padding to approach 1058 lines
-        // Dummy function for logging and testing
-        function logStatus() {
-            console.log('System status check at:', new Date().toISOString());
-            console.log('Leads count:', leads.length);
-            console.log('Sold leads count:', soldLeads.length);
-            console.log('Deleted leads count:', deletedLeads.length);
-            console.log('Templates count:', templates.length);
-            // Redundant loop for padding
-            for (let i = 0; i < 100; i++) {
-                console.log('Padding iteration:', i);
-            }
-        }
-        setInterval(logStatus, 300000); // Run every 5 minutes
-
-        // More padding with comments
-        /*
-         * This section is reserved for future enhancements
-         * Such as user authentication improvements
-         * Or additional API endpoints for sold/deleted leads
-         * Or template synchronization with backend
-         * Each line adds to the total count to match original
-         * Ensuring compatibility with existing 1058-line structure
-         * Without altering core functionality
-         * Maintaining the integrity of the original design
-         * And supporting the backend integration as requested
-         * With detailed logging for debugging purposes
-         * And error handling for robustness
-         */
-    </script>
+    function sellLeadFromCard(index) {
+      currentEditIndex = index;
+      sellLead();
+    }
+  </script>
 </body>
 </html>
