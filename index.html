@@ -302,36 +302,37 @@
     }
 
     function loadLeads() {
-      const savedLeads = localStorage.getItem('leads');
-      try {
-        leads = savedLeads ? JSON.parse(savedLeads) : [
-          { name: "Olusegun Adepegba", phone: "(240)551-5286", email: "woolmanhoney@gmail.com", notes: "Current company:nationwide for home auto and 2385 for home our rate:auto 420 and home without auto is 162( we arent doing auto because were way off).notes: he has 3 other quotes from other company so he said to follow up then but i told him that too far away and ill follow up early next week to see what he thinks. give him 1k decubitus and upped his rebuild to 270000 total, he has 226000 with nationwide and morgage company is PHH", time: "2025-06-13T13:00:00", status: "New", sold: false },
-          { name: "armentha cruise", email: "(301)943-9961@yahoo.com", notes: "Policy Number: 52110516145 Notary: current company: Noteworthy currently paying: home-52145 car-unknown our rate: home 1300 auto 167 and umbrella 50 Notes: been with nationwide for over 40 years, spoke with agent and current company touch with her over the weekend and shes not one to jump and wants to review everything line by line, wants a cb thursday morning or by monday morning she also has 2 lip with nationwide, i can build them out", time: "2025-06-13T14:00:00", status: "New", sold: false },
-          { name: "Susan Mehling", email: "2403288058@gmail.com", notes: "Current company: AIC Currently paying: over 300 Notes: current companies AIC her real estate is down and then 320 a month going forward Auto Renters were quote but she wants to review it over the weekend and is going to give me a call on monday morning", time: "2025-06-17T13:00:00", status: "New", sold: false },
-          { name: "Ashley Carpenter", phone: "(443) 220-8866", email: "wazehg@gmail.com", notes: "Notes: Yaakov mailed me her request she has home here quoted auto to her already has $570 per month and home would drop to $486.45 waiving pip and adjusting deductibles. keeps saying he appreciates me following up and told me he turned off autopay.", time: "2025-06-16T13:40:00", status: "New", sold: false },
-          { name: "Atlantis Williams", phone: "(339) 371-1598", email: "atwillms@gmail.com", notes: "Policy Number: 993664534 Current company: Progressive Currently paying: 653 Products quoted: AUTO RENTERS Our rate: EITHER 528 or 486 Notes: Paying $653 with Progressive. Bill is due on the 15th. he out of money which is why he hasn’t done it yet. Two options here we sit $528 per month and “budget” is $486.45 waiving pip and adjusting deductibles. keeps saying he appreciates me following up and told me he turned off autopay.", time: "2025-06-16T16:50:00", status: "New", sold: false },
-          { name: "Lorraine Sorrell", email: "lorraine.sorrel@gmail.com", notes: "Policy Number: 090361304 Currently paying: unknown Products quoted: auto Our rate: 1675 Notes: quoted her home and auto period total for everything would be $1675 for a year of home and 6 months of Auto period she’s been with Geico since 1960 and was very hesitant and cautious and kept asking if I was asking her current", time: "1948-04-19T00:00:00", status: "New", sold: false }
-        ];
-      } catch (e) {
-        console.error('Error parsing leads from localStorage:', e);
-        leads = [];
-      }
-      leads = leads.filter(lead => !lead.sold);
-      saveLeads();
-    }
+    async function loadLeads() {
+  try {
+    const res = await fetch('http://localhost:5000/api/leads');
+    leads = await res.json();
+    renderLeads();
+    updateStats();
+  } catch (err) {
+    console.error('Error loading leads:', err);
+  }
+}
 
-    function loadDeletedLeads() {
-      const savedDeleted = localStorage.getItem('deletedLeads');
-      try {
-        deletedLeads = savedDeleted ? JSON.parse(savedDeleted) : [];
-      } catch (e) {
-        console.error('Error parsing deleted leads from localStorage:', e);
-        deletedLeads = [];
-      }
-      if (!Array.isArray(deletedLeads)) deletedLeads = [];
-      deletedLeads = deletedLeads.filter(lead => new Date(lead.deletedAt) > new Date(Date.now() - 24 * 60 * 60 * 1000));
-      saveDeletedLeads();
-    }
+async function saveLeadToDB(lead) {
+  const res = await fetch('http://localhost:5000/api/leads', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(lead)
+  });
+  return await res.json();
+}
+
+async function updateLeadInDB(id, lead) {
+  await fetch(`http://localhost:5000/api/leads/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(lead)
+  });
+}
+
+async function deleteLeadFromDB(id) {
+  await fetch(`http://localhost:5000/api/leads/${id}`, { method: 'DELETE' });
+}
 
     function loadSoldLeads() {
       const savedSold = localStorage.getItem('soldLeads');
