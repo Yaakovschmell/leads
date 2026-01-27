@@ -1,1055 +1,429 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Allstate CRM - Enhanced</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.css" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.js"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="enhanced-styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Quote Review & Hotlist</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+        }
+        .page {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 24px 32px 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+        .title-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+        }
+        .meta-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 16px 0 24px;
+            font-size: 14px;
+        }
+        .meta-item {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .meta-item label {
+            font-weight: 600;
+        }
+        .meta-item input,
+        .meta-item select {
+            border: none;
+            border-bottom: 1px solid #ccc;
+            padding: 2px 4px;
+            font-size: 14px;
+            min-width: 140px;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin: 20px 0 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+            font-size: 13px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 6px 8px;
+            vertical-align: top;
+        }
+        th {
+            background: #e5e7eb;
+            font-weight: 600;
+            text-align: left;
+        }
+        textarea {
+            width: 100%;
+            border: none;
+            resize: vertical;
+            min-height: 40px;
+            font-family: inherit;
+            font-size: 13px;
+        }
+        textarea:focus {
+            outline: none;
+            box-shadow: inset 0 0 0 1px #4f46e5;
+        }
+        .btn-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 12px;
+        }
+        button {
+            border: none;
+            border-radius: 6px;
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
+        }
+        .btn-primary {
+            background: #4f46e5;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #4338ca;
+            box-shadow: 0 2px 8px rgba(79,70,229,0.35);
+            transform: translateY(-1px);
+        }
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #111827;
+        }
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+        .btn-outline {
+            background: white;
+            color: #4f46e5;
+            border: 1px solid #4f46e5;
+        }
+        .btn-outline:hover {
+            background: #eef2ff;
+        }
+        .small {
+            font-size: 11px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .page {
+                box-shadow: none;
+                border-radius: 0;
+            }
+            .btn-row {
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="sidebar">
-    <div class="sidebar-header">
-      <img src="image.png" alt="Allstate Logo" class="logo" width="50" height="50" onerror="this.src='https://via.placeholder.com/50'; this.onerror=null;">
-      <p class="tagline">Professional Insurance Solutions</p>
-    </div>
-    <nav class="sidebar-nav">
-      <button class="nav-link active" data-tab="leads"><i class="fas fa-users"></i> Leads</button>
-      <button class="nav-link" data-tab="calendar"><i class="fas fa-calendar-alt"></i> Schedule</button>
-      <button class="nav-link" data-tab="templates"><i class="fas fa-sms"></i> Text Templates</button>
-      <button class="nav-link" data-tab="sold"><i class="fas fa-check-circle"></i> Sold</button>
-      <button class="nav-link" data-tab="trash"><i class="fas fa-trash"></i> Trash</button>
-    </nav>
-    <div class="sidebar-footer">
-      <button class="theme-toggle"><i class="fas fa-moon"></i> Toggle Dark Mode</button>
-    </div>
-  </div>
-
-  <div class="main-content">
-    <header>
-      <div class="breadcrumbs">
-        <span>Home</span> / <span class="current">Leads</span>
-      </div>
-      <div class="header-content">
-        <div class="logo">
-          <img src="image.png" alt="Allstate Logo" class="logo" width="100" height="100" onerror="this.src='https://via.placeholder.com/100'; this.onerror=null;">
-          Allstate CRM
-        </div>
-        <div class="header-stats">
-          <div class="stat-item">
-            <i class="fas fa-users"></i>
-            <span id="totalLeads">0 Leads</span>
-          </div>
-          <div class="stat-item">
-            <i class="fas fa-calendar-check"></i>
-            <span id="upcomingAppts">0 Appointments</span>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <main>
-      <section id="leads" class="content">
-        <div class="leads-header">
-          <h1 class="leads-title">Lead Management</h1>
-          <div class="action-group">
-            <div class="search-box">
-              <i class="fas fa-search"></i>
-              <input type="text" id="searchInput" placeholder="Search leads...">
-            </div>
-            <button class="btn btn-primary" id="addLeadBtn">
-              <i class="fas fa-plus"></i>
-              Add Lead
-            </button>
-            <button class="btn btn-secondary export-btn" id="shareLeadsBtn"><i class="fas fa-share"></i> Share Leads</button>
-            <button class="btn btn-secondary export-btn" id="exportLeadsBtn"><i class="fas fa-download"></i> Export</button>
-            <button class="btn btn-secondary print-btn" id="printBtn"><i class="fas fa-print"></i> Print</button>
-          </div>
-        </div>
-        
-        <div class="lead-grid" id="leadGrid"></div>
-        
-        <div class="empty-state" id="emptyState" style="display: none;">
-          <i class="fas fa-user-plus"></i>
-          <h3>No leads yet</h3>
-          <p>Start by adding your first lead to get organized!</p>
-        </div>
-      </section>
-
-      <section id="calendar" class="content" style="display: none;">
-        <div id="calendarView"></div>
-        <div class="empty-state" id="calendarEmptyState" style="display: none;">
-          <i class="fas fa-info-circle"></i>
-          <p>No appointments scheduled.</p>
-        </div>
-      </section>
-
-      <section id="templates" class="content" style="display: none;">
-        <div class="templates-header">
-          <h1 class="templates-title">Text Templates</h1>
-          <div class="action-group">
-            <div class="search-box">
-              <i class="fas fa-search"></i>
-              <input type="text" id="templateSearchInput" placeholder="Search templates...">
-            </div>
-            <button class="btn btn-primary" id="addTemplateBtn">
-              <i class="fas fa-plus"></i>
-              Add Template
-            </button>
-            <button class="btn btn-secondary export-btn" id="exportTemplatesBtn"><i class="fas fa-download"></i> Export</button>
-            <button class="btn btn-secondary print-btn" id="printTemplatesBtn"><i class="fas fa-print"></i> Print</button>
-          </div>
-        </div>
-        
-        <div class="template-grid" id="templateGrid"></div>
-        
-        <div class="empty-state" id="templateEmptyState" style="display: none;">
-          <i class="fas fa-sms"></i>
-          <h3>No templates yet</h3>
-          <p>Create your first text template to streamline communication!</p>
-        </div>
-      </section>
-
-      <section id="sold" class="content" style="display: none;">
-        <div class="leads-header">
-          <h1 class="leads-title">Sold Leads</h1>
-          <div class="action-group">
-            <button class="btn btn-secondary" id="clearSoldBtn">Clear Sold</button>
-          </div>
-        </div>
-        <div class="lead-grid" id="soldGrid"></div>
-        <div class="empty-state" id="soldEmptyState" style="display: none;">
-          <i class="fas fa-check-circle"></i>
-          <h3>No sold leads</h3>
-          <p>Sold leads will appear here.</p>
-        </div>
-      </section>
-
-      <section id="trash" class="content" style="display: none;">
-        <div class="leads-header">
-          <h1 class="leads-title">Trash</h1>
-          <div class="action-group">
-            <button class="btn btn-secondary" id="clearTrashBtn">Clear Trash</button>
-          </div>
-        </div>
-        <div class="lead-grid" id="trashGrid"></div>
-        <div class="empty-state" id="trashEmptyState" style="display: none;">
-          <i class="fas fa-trash"></i>
-          <h3>No deleted leads</h3>
-          <p>Deleted leads will appear here for 24 hours.</p>
-        </div>
-      </section>
-    </main>
-
-    <div class="overlay" id="overlay" onclick="closePopup()"></div>
-
-    <div class="popup" id="popup">
-      <div class="popup-header">
-        <h2 class="popup-title" id="popupTitle">Add New Lead</h2>
-        <button class="close-btn" onclick="closePopup()">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-      
-      <form id="leadForm">
-        <div class="form-group" id="leadNameGroup">
-          <input class="form-input" id="leadName" type="text" placeholder=" " required>
-          <label class="form-label" for="leadName">Full Name *</label>
-        </div>
-        
-        <div class="form-group" id="leadPhoneGroup">
-          <input class="form-input" id="leadPhone" type="tel" placeholder=" ">
-          <label class="form-label" for="leadPhone">Phone Number</label>
-        </div>
-        
-        <div class="form-group" id="leadEmailGroup">
-          <input class="form-input" id="leadEmail" type="email" placeholder=" ">
-          <label class="form-label" for="leadEmail">Email Address</label>
-        </div>
-        
-        <div class="form-group" id="leadDobGroup">
-          <input class="form-input" id="leadDob" type="date" placeholder=" ">
-          <label class="form-label" for="leadDob">Date of Birth</label>
-        </div>
-        
-        <div class="form-group" id="leadPolicyNumberGroup">
-          <input class="form-input" id="leadPolicyNumber" type="text" placeholder=" ">
-          <label class="form-label" for="leadPolicyNumber">Policy Number</label>
-        </div>
-        
-        <div class="form-group" id="leadNotesGroup">
-          <textarea class="form-textarea" id="leadNotes" placeholder=" "></textarea>
-          <label class="form-label" for="leadNotes">Notes</label>
-          <button type="button" id="speechBtn" class="speech-btn"><i class="fas fa-microphone"></i></button>
-        </div>
-        
-        <div class="form-group">
-          <label>Current company:</label>
-          <input type="text" id="leadCurrentCompany" class="form-input">
-        </div>
-        
-        <div class="form-group">
-          <label>Currently paying:</label>
-          <input type="text" id="leadCurrentlyPaying" class="form-input">
-        </div>
-        
-        <div class="form-group">
-          <label>Products quoted:</label>
-          <input type="text" id="leadProductsQuoted" class="form-input">
-        </div>
-        
-        <div class="form-group">
-          <label>Our rate:</label>
-          <input type="text" id="leadOurRate" class="form-input">
-        </div>
-        
-        <div class="form-group" id="leadTimeGroup">
-          <input class="form-input" id="leadTime" type="datetime-local" placeholder=" ">
-          <label class="form-label" for="leadTime">Appointment Date & Time</label>
-        </div>
-
-        <div class="form-group" id="templateNameGroup" style="display: none;">
-          <input class="form-input" id="templateName" type="text" placeholder=" " required>
-          <label class="form-label" for="templateName">Template Name *</label>
-        </div>
-        
-        <div class="form-group" id="templateMessageGroup" style="display: none;">
-          <textarea class="form-textarea" id="templateMessage" placeholder=" " required></textarea>
-          <label class="form-label" for="templateMessage">Message *</label>
-        </div>
-      </form>
-      
-      <div class="popup-actions">
-        <button class="btn btn-danger delete-btn" id="deleteBtn" style="display: none;" onclick="deleteItem()">
-          <i class="fas fa-trash"></i>
-          Delete
-        </button>
-        <button class="btn btn-success sold-btn" id="soldBtn" style="display: none;" onclick="sellLead()">
-          <i class="fas fa-check-circle"></i>
-          Sold
-        </button>
-        <button class="btn btn-secondary" id="cancelBtn">Cancel</button>
-        <button class="btn btn-primary" id="saveBtn">
-          <i class="fas fa-save"></i>
-          <span id="saveBtnText">Save Lead</span>
-        </button>
-      </div>
+<div class="page">
+    <div class="title-row">
+        <h1>Daily Quote Review & Hotlist</h1>
     </div>
 
-    <div class="notification" id="notification">
-      <div class="notification-content">
-        <div class="notification-icon">
-          <i class="fas fa-check-circle"></i>
+    <div class="meta-row">
+        <div class="meta-item">
+            <label for="reviewDate">Date:</label>
+            <input type="date" id="reviewDate">
         </div>
-        <div class="notification-text">
-          <div class="notification-title">Success!</div>
-          <div class="notification-message">Lead has been saved successfully.</div>
+        <div class="meta-item">
+            <label for="traineeName">Trainee:</label>
+            <input type="text" id="traineeName" placeholder="Type trainee name...">
         </div>
-      </div>
+        <div class="meta-item">
+            <label for="reviewerName">Reviewer:</label>
+            <input type="text" id="reviewerName" placeholder="Your name...">
+        </div>
     </div>
-  </div>
 
-  <script>
-    let leads = [];
-    let deletedLeads = [];
-    let soldLeads = [];
-    let templates = [];
-    let currentEditIndex = null;
-    let currentEditTemplateIndex = null;
-    let currentPopupMode = 'lead';
-    let calendar = null;
-    let recognition = null;
+    <div>
+        <div class="section-title">Quoted Leads (Quick Review)</div>
+        <table id="quotedTable">
+            <thead>
+            <tr>
+                <th style="width: 25%;">Lead Name</th>
+                <th style="width: 20%;">Trainee</th>
+                <th style="width: 35%;">What Happened (1–2 lines)</th>
+                <th style="width: 20%;">Next Step</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- 5 starter rows -->
+            <tr>
+                <td><textarea data-field="quoted_leadName"></textarea></td>
+                <td><textarea data-field="quoted_trainee"></textarea></td>
+                <td><textarea data-field="quoted_happened"></textarea></td>
+                <td><textarea data-field="quoted_nextStep"></textarea></td>
+            </tr>
+            <tr>
+                <td><textarea data-field="quoted_leadName"></textarea></td>
+                <td><textarea data-field="quoted_trainee"></textarea></td>
+                <td><textarea data-field="quoted_happened"></textarea></td>
+                <td><textarea data-field="quoted_nextStep"></textarea></td>
+            </tr>
+            <tr>
+                <td><textarea data-field="quoted_leadName"></textarea></td>
+                <td><textarea data-field="quoted_trainee"></textarea></td>
+                <td><textarea data-field="quoted_happened"></textarea></td>
+                <td><textarea data-field="quoted_nextStep"></textarea></td>
+            </tr>
+            <tr>
+                <td><textarea data-field="quoted_leadName"></textarea></td>
+                <td><textarea data-field="quoted_trainee"></textarea></td>
+                <td><textarea data-field="quoted_happened"></textarea></td>
+                <td><textarea data-field="quoted_nextStep"></textarea></td>
+            </tr>
+            <tr>
+                <td><textarea data-field="quoted_leadName"></textarea></td>
+                <td><textarea data-field="quoted_trainee"></textarea></td>
+                <td><textarea data-field="quoted_happened"></textarea></td>
+                <td><textarea data-field="quoted_nextStep"></textarea></td>
+            </tr>
+            </tbody>
+        </table>
+        <button class="btn-outline" onclick="addQuotedRow()">+ Add Row</button>
+    </div>
 
-    document.addEventListener('DOMContentLoaded', init);
+    <div style="margin-top: 24px;">
+        <div class="section-title">Hotlist (Priority Follow-Ups)</div>
+        <table id="hotlistTable">
+            <thead>
+            <tr>
+                <th style="width: 30%;">Lead Name</th>
+                <th style="width: 40%;">Why Hot?</th>
+                <th style="width: 30%;">Next Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><textarea data-field="hot_leadName"></textarea></td>
+                <td><textarea data-field="hot_why"></textarea></td>
+                <td><textarea data-field="hot_next"></textarea></td>
+            </tr>
+            <tr>
+                <td><textarea data-field="hot_leadName"></textarea></td>
+                <td><textarea data-field="hot_why"></textarea></td>
+                <td><textarea data-field="hot_next"></textarea></td>
+            </tr>
+            </tbody>
+        </table>
+        <button class="btn-outline" onclick="addHotRow()">+ Add Row</button>
+    </div>
 
-    function init() {
-      loadLeads();
-      loadDeletedLeads();
-      loadSoldLeads();
-      loadTemplates();
-      renderLeads();
-      renderSoldLeads();
-      renderTrash();
-      renderTemplates();
-      updateStats();
-      initCalendar();
-      startReminderSystem();
-      const isDarkMode = localStorage.getItem('darkMode') === 'true';
-      if (isDarkMode) document.body.classList.add('dark-mode');
-      document.querySelector('.theme-toggle').addEventListener('click', toggleDarkMode);
-      document.getElementById('addLeadBtn').addEventListener('click', () => showPopup('lead'));
-      document.getElementById('shareLeadsBtn').addEventListener('click', exportLeadsLink);
-      document.getElementById('exportLeadsBtn').addEventListener('click', exportLeads);
-      document.getElementById('printBtn').addEventListener('click', printSection);
-      document.getElementById('addTemplateBtn').addEventListener('click', () => showPopup('template'));
-      document.getElementById('exportTemplatesBtn').addEventListener('click', exportTemplates);
-      document.getElementById('printTemplatesBtn').addEventListener('click', printTemplates);
-      document.getElementById('clearSoldBtn').addEventListener('click', clearSold);
-      document.getElementById('clearTrashBtn').addEventListener('click', clearTrash);
-      document.getElementById('cancelBtn').addEventListener('click', closePopup);
-      document.getElementById('saveBtn').addEventListener('click', saveItem);
-      document.getElementById('deleteBtn').addEventListener('click', deleteItem);
-      document.getElementById('soldBtn').addEventListener('click', sellLead);
-      document.querySelectorAll('.nav-link').forEach(button => {
-        button.addEventListener('click', () => showTab(button.getAttribute('data-tab')));
-      });
-      document.getElementById('searchInput').addEventListener('input', filterLeads);
-      document.getElementById('templateSearchInput').addEventListener('input', filterTemplates);
-      initSpeechRecognition();
-      initAutoResizeTextareas();
+    <div class="btn-row">
+        <button class="btn-secondary" onclick="clearPage()">Clear Page</button>
+        <button class="btn-secondary" onclick="loadFromStorage()">Load Saved</button>
+        <button class="btn-primary" onclick="saveToStorage()">Save (Browser)</button>
+        <button class="btn-outline" onclick="exportCSV()">Export CSV</button>
+        <button class="btn-primary" onclick="window.print()">Print / Save as PDF</button>
+    </div>
+    <div class="small">
+        Saved copies stay in this browser only. Export or print to keep a permanent record or upload to GitHub.
+    </div>
+</div>
+
+<script>
+    function todayISO() {
+        return new Date().toISOString().split("T")[0];
     }
 
-    function loadLeads() {
-    async function loadLeads() {
-  try {
-    const res = await fetch('http://localhost:5000/api/leads');
-    leads = await res.json();
-    renderLeads();
-    updateStats();
-  } catch (err) {
-    console.error('Error loading leads:', err);
-  }
-}
-
-async function saveLeadToDB(lead) {
-  const res = await fetch('http://localhost:5000/api/leads', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(lead)
-  });
-  return await res.json();
-}
-
-async function updateLeadInDB(id, lead) {
-  await fetch(`http://localhost:5000/api/leads/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(lead)
-  });
-}
-
-async function deleteLeadFromDB(id) {
-  await fetch(`http://localhost:5000/api/leads/${id}`, { method: 'DELETE' });
-}
-
-    function loadSoldLeads() {
-      const savedSold = localStorage.getItem('soldLeads');
-      try {
-        soldLeads = savedSold ? JSON.parse(savedSold) : [];
-      } catch (e) {
-        console.error('Error parsing sold leads from localStorage:', e);
-        soldLeads = [];
-      }
-      if (!Array.isArray(soldLeads)) soldLeads = [];
-      soldLeads = soldLeads.filter(lead => lead.sold);
-      saveSoldLeads();
-    }
-
-    function loadTemplates() {
-      const savedTemplates = localStorage.getItem('templates');
-      try {
-        templates = savedTemplates ? JSON.parse(savedTemplates) : [];
-      } catch (e) {
-        console.error('Error parsing templates from localStorage:', e);
-        templates = [];
-      }
-      if (!Array.isArray(templates)) templates = [];
-      saveTemplates();
-    }
-
-    function saveLeads() { localStorage.setItem('leads', JSON.stringify(leads)); }
-    function saveDeletedLeads() { localStorage.setItem('deletedLeads', JSON.stringify(deletedLeads)); }
-    function saveSoldLeads() { localStorage.setItem('soldLeads', JSON.stringify(soldLeads)); }
-    function saveTemplates() { localStorage.setItem('templates', JSON.stringify(templates)); }
-
-    function showTab(tab) {
-      document.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.content').forEach(c => c.style.display = 'none');
-      const activeTab = document.querySelector(`[data-tab="${tab}"]`);
-      if (activeTab) activeTab.classList.add('active');
-      const content = document.getElementById(tab);
-      if (content) content.style.display = 'block';
-      const currentCrumb = document.querySelector('.breadcrumbs .current');
-      if (currentCrumb && activeTab) currentCrumb.textContent = activeTab.textContent.trim();
-      if (tab === 'calendar' && calendar) calendar.render();
-      if (tab === 'sold') renderSoldLeads();
-      if (tab === 'trash') renderTrash();
-    }
-
-    function showPopup(mode) {
-      currentPopupMode = mode;
-      currentEditIndex = null;
-      currentEditTemplateIndex = null;
-      const overlay = document.getElementById('overlay');
-      const popup = document.getElementById('popup');
-      if (overlay && popup) {
-        overlay.style.display = 'block';
-        popup.style.display = 'block';
-      }
-      const form = document.getElementById('leadForm');
-      if (form) form.reset();
-      document.getElementById('leadNameGroup').style.display = mode === 'lead' ? 'block' : 'none';
-      document.getElementById('leadPhoneGroup').style.display = mode === 'lead' ? 'block' : 'none';
-      document.getElementById('leadEmailGroup').style.display = mode === 'lead' ? 'block' : 'none';
-      document.getElementById('leadDobGroup').style.display = mode === 'lead' ? 'block' : 'none';
-      document.getElementById('leadPolicyNumberGroup').style.display = mode === 'lead' ? 'block' : 'none';
-      document.getElementById('leadNotesGroup').style.display = mode === 'lead' ? 'block' : 'none';
-      document.getElementById('leadTimeGroup').style.display = mode === 'lead' ? 'block' : 'none';
-      document.getElementById('templateNameGroup').style.display = mode === 'template' ? 'block' : 'none';
-      document.getElementById('templateMessageGroup').style.display = mode === 'template' ? 'block' : 'none';
-      const popupTitle = document.getElementById('popupTitle');
-      const saveBtnText = document.getElementById('saveBtnText');
-      const deleteBtn = document.getElementById('deleteBtn');
-      const soldBtn = document.getElementById('soldBtn');
-      if (popupTitle) popupTitle.textContent = mode === 'lead' ? 'Add New Lead' : 'Add New Template';
-      if (saveBtnText) saveBtnText.textContent = mode === 'lead' ? 'Save Lead' : 'Save Template';
-      if (deleteBtn) deleteBtn.style.display = (currentEditIndex !== null || currentEditTemplateIndex !== null) ? 'inline-flex' : 'none';
-      if (soldBtn) soldBtn.style.display = currentEditIndex !== null ? 'inline-flex' : 'none';
-      if (recognition) recognition.stop();
-      initAutoResizeTextareas();
-    }
-
-    function closePopup() {
-      const overlay = document.getElementById('overlay');
-      const popup = document.getElementById('popup');
-      if (overlay && popup) {
-        overlay.style.display = 'none';
-        popup.style.display = 'none';
-      }
-      currentEditIndex = null;
-      currentEditTemplateIndex = null;
-      currentPopupMode = 'lead';
-      if (recognition) recognition.stop();
-    }
-
-    function validatePhone(phone) {
-      const pattern = /^[0-9]{10}$/;
-      return !phone || pattern.test(phone.replace(/\D/g, ''));
-    }
-
-    function autoResize(textarea) {
-      if (textarea) {
-        textarea.style.height = 'auto';
-        textarea.style.height = `${textarea.scrollHeight}px`;
-      }
-    }
-
-    function initAutoResizeTextareas() {
-      const textareas = document.querySelectorAll('.form-textarea');
-      if (textareas) {
-        textareas.forEach(textarea => {
-          textarea.addEventListener('input', () => autoResize(textarea));
-          autoResize(textarea);
-        });
-      }
-    }
-
-    function saveItem() {
-      const saveBtn = document.getElementById('saveBtn');
-      if (saveBtn) saveBtn.classList.add('loading');
-      setTimeout(() => {
-        if (currentPopupMode === 'lead') {
-          const name = document.getElementById('leadName').value.trim();
-          const phone = document.getElementById('leadPhone').value.trim();
-          const email = document.getElementById('leadEmail').value.trim();
-          const dob = document.getElementById('leadDob').value;
-          const policyNumber = document.getElementById('leadPolicyNumber').value.trim();
-          const notes = document.getElementById('leadNotes').value.trim();
-          const currentCompany = document.getElementById('leadCurrentCompany').value.trim();
-          const currentlyPaying = document.getElementById('leadCurrentlyPaying').value.trim();
-          const productsQuoted = document.getElementById('leadProductsQuoted').value.trim();
-          const ourRate = document.getElementById('leadOurRate').value.trim();
-          const time = document.getElementById('leadTime').value;
-
-          if (!name) {
-            showNotification('warning', 'Error', 'Name is required.');
-            if (saveBtn) saveBtn.classList.remove('loading');
-            return;
-          }
-          if (phone && !validatePhone(phone)) {
-            showNotification('warning', 'Error', 'Invalid phone number. Use 10 digits.');
-            if (saveBtn) saveBtn.classList.remove('loading');
-            return;
-          }
-          if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            showNotification('warning', 'Error', 'Invalid email address.');
-            if (saveBtn) saveBtn.classList.remove('loading');
-            return;
-          }
-          if (time && isNaN(new Date(time).getTime())) {
-            showNotification('warning', 'Error', 'Invalid appointment date/time.');
-            if (saveBtn) saveBtn.classList.remove('loading');
-            return;
-          }
-
-          const lead = {
-            name, phone, email, dob, policyNumber, notes, currentCompany,
-            currentlyPaying, productsQuoted, ourRate, time: time ? new Date(time).toISOString() : null,
-            status: 'New', sold: false
-          };
-
-          if (currentEditIndex !== null) {
-            leads[currentEditIndex] = lead;
-          } else {
-            leads.push(lead);
-          }
-
-          saveLeads();
-          renderLeads();
-          updateStats();
-          if (calendar) calendar.refetchEvents();
-          closePopup();
-          showNotification('success', 'Success', 'Lead saved successfully.');
-        } else {
-          const name = document.getElementById('templateName').value.trim();
-          const message = document.getElementById('templateMessage').value.trim();
-
-          if (!name) {
-            showNotification('warning', 'Error', 'Template name is required.');
-            if (saveBtn) saveBtn.classList.remove('loading');
-            return;
-          }
-          if (!message) {
-            showNotification('warning', 'Error', 'Message is required.');
-            if (saveBtn) saveBtn.classList.remove('loading');
-            return;
-          }
-
-          const template = { name, message };
-
-          if (currentEditTemplateIndex !== null) {
-            templates[currentEditTemplateIndex] = template;
-          } else {
-            templates.push(template);
-          }
-
-          saveTemplates();
-          renderTemplates();
-          closePopup();
-          showNotification('success', 'Success', 'Template saved successfully.');
-        }
-        if (saveBtn) saveBtn.classList.remove('loading');
-      }, 500);
-    }
-
-    function deleteItem() {
-      const deleteBtn = document.getElementById('deleteBtn');
-      if (deleteBtn) deleteBtn.classList.add('loading');
-      setTimeout(() => {
-        if (currentPopupMode === 'lead' && currentEditIndex !== null) {
-          const lead = leads[currentEditIndex];
-          lead.deletedAt = new Date().toISOString();
-          deletedLeads.push(lead);
-          leads.splice(currentEditIndex, 1);
-          saveLeads();
-          saveDeletedLeads();
-          renderLeads();
-          renderTrash();
-          updateStats();
-          if (calendar) calendar.refetchEvents();
-          closePopup();
-          showNotification('warning', 'Deleted', 'Lead moved to trash. Restore within 24 hours.');
-        } else if (currentPopupMode === 'template' && currentEditTemplateIndex !== null) {
-          templates.splice(currentEditTemplateIndex, 1);
-          saveTemplates();
-          renderTemplates();
-          closePopup();
-          showNotification('warning', 'Deleted', 'Template deleted.');
-        }
-        if (deleteBtn) deleteBtn.classList.remove('loading');
-      }, 500);
-    }
-
-    function sellLead() {
-      const soldBtn = document.getElementById('soldBtn');
-      if (soldBtn) soldBtn.classList.add('loading');
-      setTimeout(() => {
-        if (currentPopupMode === 'lead' && currentEditIndex !== null) {
-          const lead = leads[currentEditIndex];
-          lead.sold = true;
-          lead.soldDate = new Date().toISOString();
-          soldLeads.push(lead);
-          leads.splice(currentEditIndex, 1);
-          saveLeads();
-          saveSoldLeads();
-          renderLeads();
-          renderSoldLeads();
-          updateStats();
-          if (calendar) calendar.refetchEvents();
-          closePopup();
-          showNotification('success', 'Sold', 'Lead marked as sold.');
-        }
-        if (soldBtn) soldBtn.classList.remove('loading');
-      }, 500);
-    }
-
-    function restoreLead(index) {
-      const lead = deletedLeads[index];
-      leads.push(lead);
-      deletedLeads.splice(index, 1);
-      saveLeads();
-      saveDeletedLeads();
-      renderLeads();
-      renderTrash();
-      updateStats();
-      if (calendar) calendar.refetchEvents();
-      showNotification('success', 'Restored', 'Lead restored successfully.');
-    }
-
-    function clearTrash() {
-      deletedLeads = [];
-      saveDeletedLeads();
-      renderTrash();
-      showNotification('success', 'Cleared', 'Trash cleared successfully.');
-    }
-
-    function clearSold() {
-      soldLeads = [];
-      saveSoldLeads();
-      renderSoldLeads();
-      showNotification('success', 'Cleared', 'Sold leads cleared successfully.');
-    }
-
-    function editLead(index) {
-      currentPopupMode = 'lead';
-      currentEditIndex = index;
-      currentEditTemplateIndex = null;
-      const lead = leads[index];
-      document.getElementById('leadName').value = lead.name || '';
-      document.getElementById('leadPhone').value = lead.phone || '';
-      document.getElementById('leadEmail').value = lead.email || '';
-      document.getElementById('leadDob').value = lead.dob || '';
-      document.getElementById('leadPolicyNumber').value = lead.policyNumber || '';
-      document.getElementById('leadNotes').value = lead.notes || '';
-      document.getElementById('leadCurrentCompany').value = lead.currentCompany || '';
-      document.getElementById('leadCurrentlyPaying').value = lead.currentlyPaying || '';
-      document.getElementById('leadProductsQuoted').value = lead.productsQuoted || '';
-      document.getElementById('leadOurRate').value = lead.ourRate || '';
-      document.getElementById('leadTime').value = lead.time ? lead.time.slice(0, 16) : '';
-      document.getElementById('popupTitle').textContent = 'Edit Lead';
-      document.getElementById('saveBtnText').textContent = 'Save Lead';
-      document.getElementById('deleteBtn').style.display = 'inline-flex';
-      document.getElementById('soldBtn').style.display = 'inline-flex';
-      document.getElementById('overlay').style.display = 'block';
-      document.getElementById('popup').style.display = 'block';
-      if (recognition) recognition.stop();
-      initAutoResizeTextareas();
-    }
-
-    function editTemplate(index) {
-      currentPopupMode = 'template';
-      currentEditTemplateIndex = index;
-      currentEditIndex = null;
-      const template = templates[index];
-      document.getElementById('templateName').value = template.name || '';
-      document.getElementById('templateMessage').value = template.message || '';
-      document.getElementById('popupTitle').textContent = 'Edit Template';
-      document.getElementById('saveBtnText').textContent = 'Save Template';
-      document.getElementById('deleteBtn').style.display = 'inline-flex';
-      document.getElementById('leadNameGroup').style.display = 'none';
-      document.getElementById('leadPhoneGroup').style.display = 'none';
-      document.getElementById('leadEmailGroup').style.display = 'none';
-      document.getElementById('leadDobGroup').style.display = 'none';
-      document.getElementById('leadPolicyNumberGroup').style.display = 'none';
-      document.getElementById('leadNotesGroup').style.display = 'none';
-      document.getElementById('leadTimeGroup').style.display = 'none';
-      document.getElementById('templateNameGroup').style.display = 'block';
-      document.getElementById('templateMessageGroup').style.display = 'block';
-      document.getElementById('overlay').style.display = 'block';
-      document.getElementById('popup').style.display = 'block';
-      initAutoResizeTextareas();
-    }
-
-    function renderLeads() {
-      const grid = document.getElementById('leadGrid');
-      const emptyState = document.getElementById('emptyState');
-      if (grid) grid.innerHTML = '';
-      if (emptyState) emptyState.style.display = 'none';
-      if (!leads || leads.length === 0) {
-        if (emptyState) emptyState.style.display = 'block';
-        return;
-      }
-      const sortedLeads = [...leads].sort((a, b) => {
-        if (!a.time && !b.time) return 0;
-        if (!a.time) return 1;
-        if (!b.time) return -1;
-        return new Date(a.time) - new Date(b.time);
-      });
-      sortedLeads.forEach((lead, index) => {
-        const card = document.createElement('div');
-        card.className = 'lead-card';
-        card.onclick = () => editLead(index);
-        card.innerHTML = `
-          <div class="lead-header">
-            <div>
-              <div class="lead-name">${lead.name}</div>
-              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
-              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email}</div>` : ''}
-            </div>
-            <div class="lead-status status-${lead.status.toLowerCase()}">${lead.status}</div>
-          </div>
-          ${lead.notes ? `<div class="lead-details"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
-          <div class="lead-footer">
-            <div class="lead-time">
-              ${lead.time ? `<i class="fas fa-clock"></i> ${new Date(lead.time).toLocaleString()}` : 'No appointment'}
-            </div>
-            <button class="btn btn-success btn-small sold-btn" onclick="sellLeadFromCard(${index}); event.stopPropagation();">Sold</button>
-          </div>
+    function addQuotedRow() {
+        const tbody = document.querySelector("#quotedTable tbody");
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td><textarea data-field="quoted_leadName"></textarea></td>
+            <td><textarea data-field="quoted_trainee"></textarea></td>
+            <td><textarea data-field="quoted_happened"></textarea></td>
+            <td><textarea data-field="quoted_nextStep"></textarea></td>
         `;
-        if (grid) grid.appendChild(card);
-      });
+        tbody.appendChild(tr);
     }
 
-    function renderSoldLeads() {
-      const grid = document.getElementById('soldGrid');
-      const emptyState = document.getElementById('soldEmptyState');
-      if (grid) grid.innerHTML = '';
-      if (emptyState) emptyState.style.display = 'none';
-      if (!soldLeads || soldLeads.length === 0) {
-        if (emptyState) emptyState.style.display = 'block';
-        return;
-      }
-      soldLeads.forEach(lead => {
-        const card = document.createElement('div');
-        card.className = 'lead-card';
-        card.onclick = () => editLead(leads.indexOf(lead));
-        card.innerHTML = `
-          <div class="lead-header">
-            <div>
-              <div class="lead-name">${lead.name}</div>
-              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
-              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email}</div>` : ''}
-            </div>
-            <div class="lead-status status-sold">Sold</div>
-          </div>
-          ${lead.notes ? `<div class="lead-details"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
-          <div class="lead-footer">
-            <div class="lead-time">
-              <i class="fas fa-clock"></i> Sold: ${new Date(lead.soldDate).toLocaleString()}
-            </div>
-          </div>
+    function addHotRow() {
+        const tbody = document.querySelector("#hotlistTable tbody");
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td><textarea data-field="hot_leadName"></textarea></td>
+            <td><textarea data-field="hot_why"></textarea></td>
+            <td><textarea data-field="hot_next"></textarea></td>
         `;
-        if (grid) grid.appendChild(card);
-      });
+        tbody.appendChild(tr);
     }
 
-    function renderTrash() {
-      const grid = document.getElementById('trashGrid');
-      const emptyState = document.getElementById('trashEmptyState');
-      if (grid) grid.innerHTML = '';
-      if (emptyState) emptyState.style.display = 'none';
-      if (!deletedLeads || deletedLeads.length === 0) {
-        if (emptyState) emptyState.style.display = 'block';
-        return;
-      }
-      deletedLeads.forEach((lead, index) => {
-        const card = document.createElement('div');
-        card.className = 'lead-card';
-        card.innerHTML = `
-          <div class="lead-header">
-            <div>
-              <div class="lead-name">${lead.name}</div>
-              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
-              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email}</div>` : ''}
-            </div>
-            <div class="lead-status status-new">Deleted</div>
-          </div>
-          ${lead.notes ? `<div class="lead-details"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
-          <div class="lead-footer">
-            <div class="lead-time">
-              <i class="fas fa-clock"></i> Deleted: ${new Date(lead.deletedAt).toLocaleString()}
-            </div>
-            <button class="btn btn-secondary btn-small" onclick="restoreLead(${index}); event.stopPropagation();">Restore</button>
-          </div>
-        `;
-        if (grid) grid.appendChild(card);
-      });
+    function getKey() {
+        const date = document.getElementById("reviewDate").value || todayISO();
+        const trainee = (document.getElementById("traineeName").value || "Unknown").trim();
+        return "dqrh_" + date + "_" + trainee.toLowerCase().replace(/\s+/g, "-");
     }
 
-    function renderTemplates() {
-      const grid = document.getElementById('templateGrid');
-      const emptyState = document.getElementById('templateEmptyState');
-      if (grid) grid.innerHTML = '';
-      if (emptyState) emptyState.style.display = 'none';
-      if (!templates || templates.length === 0) {
-        if (emptyState) emptyState.style.display = 'block';
-        return;
-      }
-      templates.forEach((template, index) => {
-        const card = document.createElement('div');
-        card.className = 'template-card';
-        card.onclick = () => editTemplate(index);
-        card.innerHTML = `
-          <div class="template-header">
-            <div>
-              <div class="template-name">${template.name}</div>
-            </div>
-          </div>
-          <div class="template-message">${template.message}</div>
-        `;
-        if (grid) grid.appendChild(card);
-      });
-    }
-
-    function filterLeads() {
-      const searchInput = document.getElementById('searchInput');
-      const search = searchInput ? searchInput.value.toLowerCase() : '';
-      const filtered = leads.filter(lead => 
-        lead.name.toLowerCase().includes(search) || 
-        (lead.phone && lead.phone.includes(search)) ||
-        (lead.email && lead.email.toLowerCase().includes(search)) ||
-        (lead.notes && lead.notes.toLowerCase().includes(search))
-      );
-      const grid = document.getElementById('leadGrid');
-      const emptyState = document.getElementById('emptyState');
-      if (grid) grid.innerHTML = '';
-      if (emptyState) emptyState.style.display = 'none';
-      if (filtered.length === 0) {
-        if (emptyState) emptyState.style.display = 'block';
-        return;
-      }
-      const sortedFiltered = filtered.sort((a, b) => {
-        if (!a.time && !b.time) return 0;
-        if (!a.time) return 1;
-        if (!b.time) return -1;
-        return new Date(a.time) - new Date(b.time);
-      });
-      sortedFiltered.forEach(lead => {
-        const index = leads.indexOf(lead);
-        const card = document.createElement('div');
-        card.className = 'lead-card';
-        card.onclick = () => editLead(index);
-        card.innerHTML = `
-          <div class="lead-header">
-            <div>
-              <div class="lead-name">${lead.name}</div>
-              ${lead.phone ? `<div class="lead-phone"><i class="fas fa-phone"></i> ${lead.phone}</div>` : ''}
-              ${lead.email ? `<div class="lead-email"><i class="fas fa-envelope"></i> ${lead.email}</div>` : ''}
-            </div>
-            <div class="lead-status status-${lead.status.toLowerCase()}">${lead.status}</div>
-          </div>
-          ${lead.notes ? `<div class="lead-details"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
-          <div class="lead-footer">
-            <div class="lead-time">
-              ${lead.time ? `<i class="fas fa-clock"></i> ${new Date(lead.time).toLocaleString()}` : 'No appointment'}
-            </div>
-            <button class="btn btn-success btn-small sold-btn" onclick="sellLeadFromCard(${index}); event.stopPropagation();">Sold</button>
-          </div>
-        `;
-        if (grid) grid.appendChild(card);
-      });
-    }
-
-    function filterTemplates() {
-      const templateSearchInput = document.getElementById('templateSearchInput');
-      const search = templateSearchInput ? templateSearchInput.value.toLowerCase() : '';
-      const filtered = templates.filter(template => 
-        template.name.toLowerCase().includes(search) || 
-        template.message.toLowerCase().includes(search)
-      );
-      const grid = document.getElementById('templateGrid');
-      const emptyState = document.getElementById('templateEmptyState');
-      if (grid) grid.innerHTML = '';
-      if (emptyState) emptyState.style.display = 'none';
-      if (filtered.length === 0) {
-        if (emptyState) emptyState.style.display = 'block';
-        return;
-      }
-      filtered.forEach(template => {
-        const index = templates.indexOf(template);
-        const card = document.createElement('div');
-        card.className = 'template-card';
-        card.onclick = () => editTemplate(index);
-        card.innerHTML = `
-          <div class="template-header">
-            <div>
-              <div class="template-name">${template.name}</div>
-            </div>
-          </div>
-          <div class="template-message">${template.message}</div>
-        `;
-        if (grid) grid.appendChild(card);
-      });
-    }
-
-    function updateStats() {
-      const totalLeads = document.getElementById('totalLeads');
-      const upcomingAppts = document.getElementById('upcomingAppts');
-      if (totalLeads) totalLeads.textContent = `${leads.length} Leads`;
-      if (upcomingAppts) upcomingAppts.textContent = `${leads.filter(lead => lead.time && new Date(lead.time) > new Date()).length} Appointments`;
-    }
-
-    function initCalendar() {
-      const calendarEl = document.getElementById('calendarView');
-      if (calendarEl) {
-        calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: 'dayGridMonth',
-          events: leads.filter(lead => lead.time && new Date(lead.time) > new Date()).map((lead, index) => ({
-            title: lead.name,
-            start: lead.time,
-            extendedProps: { index }
-          })),
-          eventClick: function(info) {
-            editLead(info.event.extendedProps.index);
-          }
-        });
-        calendar.render();
-      }
-    }
-
-    function startReminderSystem() {
-      setInterval(() => {
-        const now = new Date();
-        leads.forEach(lead => {
-          if (lead.time && !lead.reminderSent) {
-            const apptTime = new Date(lead.time);
-            const diff = (apptTime - now) / 1000 / 60;
-            if (diff <= 60 && diff > 0) {
-              showNotification('warning', 'Reminder', `Appointment with ${lead.name} in ${Math.round(diff)} minutes.`);
-              lead.reminderSent = true;
-              saveLeads();
-            }
-          }
-        });
-      }, 60000);
-    }
-
-    function showNotification(type, title, message) {
-      const notification = document.getElementById('notification');
-      if (notification) {
-        notification.className = `notification ${type}`;
-        const icon = notification.querySelector('.notification-icon i');
-        if (icon) icon.className = `fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}`;
-        const notifTitle = notification.querySelector('.notification-title');
-        if (notifTitle) notifTitle.textContent = title;
-        const notifMessage = notification.querySelector('.notification-message');
-        if (notifMessage) notifMessage.textContent = message;
-        notification.style.display = 'block';
-        setTimeout(() => { if (notification) notification.style.display = 'none'; }, 5000);
-      }
-    }
-
-    function printSection() {
-      window.print();
-    }
-
-    function printTemplates() {
-      const templatesSection = document.getElementById('templates');
-      if (templatesSection) {
-        const printWindow = window.open('', '', 'height=600,width=800');
-        printWindow.document.write('<html><head><title>Print Templates</title>');
-        printWindow.document.write('<link rel="stylesheet" href="enhanced-styles.css">');
-        printWindow.document.write('</head><body>');
-        printWindow.document.write(templatesSection.outerHTML);
-        printWindow.document.write('</body></html>');
-        printWindow.document.close();
-        printWindow.print();
-      }
-    }
-
-    function exportLeads() {
-      const csv = [
-        ['Name', 'Phone', 'Email', 'Notes', 'Appointment Time', 'Status'],
-        ...leads.map(lead => [lead.name, lead.phone || '', lead.email || '', lead.notes || '', lead.time || '', lead.status || 'New'])
-      ].map(row => row.join(',')).join('\n');
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'leads.csv';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-      showNotification('success', 'Success', 'Leads exported as leads.csv');
-    }
-
-    function exportTemplates() {
-      const csv = [
-        ['Name', 'Message'],
-        ...templates.map(template => [template.name, template.message])
-      ].map(row => row.join(',')).join('\n');
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'templates.csv';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-      showNotification('success', 'Success', 'Templates exported as templates.csv');
-    }
-
-    function exportLeadsLink() {
-      const shareId = 'xxxxxx'.replace(/x/g, () => Math.floor(Math.random() * 16).toString(16));
-      const shareData = JSON.stringify(leads);
-      const shareUrl = `${window.location.origin}/share.html?id=${shareId}&data=${encodeURIComponent(shareData)}`;
-      localStorage.setItem(`share_${shareId}`, shareData);
-      setTimeout(() => localStorage.removeItem(`share_${shareId}`), 24 * 60 * 60 * 1000);
-      navigator.clipboard.writeText(shareUrl).then(() => {
-        showNotification('success', 'Link Generated', 'Share link copied to clipboard. It expires in 24 hours.');
-      }).catch(err => {
-        console.error('Clipboard write failed:', err);
-        showNotification('warning', 'Error', 'Failed to copy share link.');
-      });
-    }
-
-    function toggleDarkMode() {
-      document.body.classList.toggle('dark-mode');
-      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-    }
-
-    function initSpeechRecognition() {
-      if ('webkitSpeechRecognition' in window) {
-        recognition = new webkitSpeechRecognition();
-        recognition.continuous = true;
-        recognition.interimResults = true;
-        recognition.lang = 'en-US';
-        recognition.onresult = function(event) {
-          let finalTranscript = '';
-          for (let i = event.resultIndex; i < event.results.length; i++) {
-            if (event.results[i].isFinal) {
-              finalTranscript += event.results[i][0].transcript;
-            }
-          }
-          const leadNotes = document.getElementById('leadNotes');
-          if (leadNotes) {
-            leadNotes.value += finalTranscript;
-            autoResize(leadNotes);
-          }
+    function saveToStorage() {
+        const data = {
+            date: document.getElementById("reviewDate").value,
+            trainee: document.getElementById("traineeName").value,
+            reviewer: document.getElementById("reviewerName").value,
+            quoted: [],
+            hotlist: []
         };
-        recognition.onerror = function(event) {
-          console.error('Speech recognition error:', event.error);
-          showNotification('warning', 'Error', 'Speech recognition failed.');
-        };
-        recognition.onend = function() {
-          const speechBtn = document.getElementById('speechBtn');
-          if (speechBtn) speechBtn.classList.remove('active');
-        };
-        const speechBtn = document.getElementById('speechBtn');
-        if (speechBtn) {
-          speechBtn.addEventListener('click', function() {
-            if (!this.classList.contains('active')) {
-              recognition.start();
-              this.classList.add('active');
-            } else {
-              recognition.stop();
-              this.classList.remove('active');
+
+        document.querySelectorAll("#quotedTable tbody tr").forEach(tr => {
+            const row = {
+                leadName: tr.querySelector('[data-field="quoted_leadName"]').value,
+                trainee: tr.querySelector('[data-field="quoted_trainee"]').value,
+                happened: tr.querySelector('[data-field="quoted_happened"]').value,
+                nextStep: tr.querySelector('[data-field="quoted_nextStep"]').value
+            };
+            if (row.leadName || row.happened || row.nextStep || row.trainee) {
+                data.quoted.push(row);
             }
-          });
-        }
-      } else {
-        showNotification('warning', 'Error', 'Speech recognition not supported in this browser.');
-      }
+        });
+
+        document.querySelectorAll("#hotlistTable tbody tr").forEach(tr => {
+            const row = {
+                leadName: tr.querySelector('[data-field="hot_leadName"]').value,
+                why: tr.querySelector('[data-field="hot_why"]').value,
+                next: tr.querySelector('[data-field="hot_next"]').value
+            };
+            if (row.leadName || row.why || row.next) {
+                data.hotlist.push(row);
+            }
+        });
+
+        localStorage.setItem(getKey(), JSON.stringify(data));
+        alert("Saved in this browser for this trainee + date.");
     }
 
-    function sellLeadFromCard(index) {
-      currentEditIndex = index;
-      sellLead();
+    function loadFromStorage() {
+        const raw = localStorage.getItem(getKey());
+        if (!raw) {
+            alert("No saved data found for this trainee + date.");
+            return;
+        }
+        const data = JSON.parse(raw);
+        document.getElementById("reviewDate").value = data.date || todayISO();
+        document.getElementById("traineeName").value = data.trainee || "";
+        document.getElementById("reviewerName").value = data.reviewer || "";
+
+        const quotedBody = document.querySelector("#quotedTable tbody");
+        quotedBody.innerHTML = "";
+        (data.quoted || []).forEach(row => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td><textarea data-field="quoted_leadName">${row.leadName || ""}</textarea></td>
+                <td><textarea data-field="quoted_trainee">${row.trainee || ""}</textarea></td>
+                <td><textarea data-field="quoted_happened">${row.happened || ""}</textarea></td>
+                <td><textarea data-field="quoted_nextStep">${row.nextStep || ""}</textarea></td>
+            `;
+            quotedBody.appendChild(tr);
+        });
+        if (quotedBody.children.length === 0) {
+            addQuotedRow();
+        }
+
+        const hotBody = document.querySelector("#hotlistTable tbody");
+        hotBody.innerHTML = "";
+        (data.hotlist || []).forEach(row => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td><textarea data-field="hot_leadName">${row.leadName || ""}</textarea></td>
+                <td><textarea data-field="hot_why">${row.why || ""}</textarea></td>
+                <td><textarea data-field="hot_next">${row.next || ""}</textarea></td>
+            `;
+            hotBody.appendChild(tr);
+        });
+        if (hotBody.children.length === 0) {
+            addHotRow();
+        }
     }
-  </script>
+
+    function clearPage() {
+        if (!confirm("Clear everything on this page?")) return;
+        document.getElementById("reviewDate").value = todayISO();
+        document.getElementById("traineeName").value = "";
+        document.getElementById("reviewerName").value = "";
+        document.querySelectorAll("textarea").forEach(t => t.value = "");
+    }
+
+    function exportCSV() {
+        const date = document.getElementById("reviewDate").value || todayISO();
+        const trainee = (document.getElementById("traineeName").value || "Unknown").trim();
+        let csv = "Section,Lead Name,Trainee,What Happened / Why Hot,Next Step / Next Action\n";
+
+        document.querySelectorAll("#quotedTable tbody tr").forEach(tr => {
+            const leadName = tr.querySelector('[data-field="quoted_leadName"]').value;
+            const traineeName = tr.querySelector('[data-field="quoted_trainee"]').value;
+            const happened = tr.querySelector('[data-field="quoted_happened"]').value;
+            const nextStep = tr.querySelector('[data-field="quoted_nextStep"]').value;
+            if (leadName || traineeName || happened || nextStep) {
+                csv += [
+                    "Quoted",
+                    '"' + (leadName || "").replace(/"/g, '""') + '"',
+                    '"' + (traineeName || "").replace(/"/g, '""') + '"',
+                    '"' + (happened || "").replace(/"/g, '""') + '"',
+                    '"' + (nextStep || "").replace(/"/g, '""') + '"'
+                ].join(",") + "\n";
+            }
+        });
+
+        document.querySelectorAll("#hotlistTable tbody tr").forEach(tr => {
+            const leadName = tr.querySelector('[data-field="hot_leadName"]').value;
+            const why = tr.querySelector('[data-field="hot_why"]').value;
+            const next = tr.querySelector('[data-field="hot_next"]').value;
+            if (leadName || why || next) {
+                csv += [
+                    "Hotlist",
+                    '"' + (leadName || "").replace(/"/g, '""') + '"',
+                    '""',
+                    '"' + (why || "").replace(/"/g, '""') + '"',
+                    '"' + (next || "").replace(/"/g, '""') + '"'
+                ].join(",") + "\n";
+            }
+        });
+
+        const blob = new Blob([csv], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${date}_${trainee.replace(/\s+/g,"-")}_quotes.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("reviewDate").value = todayISO();
+    });
+</script>
 </body>
 </html>
