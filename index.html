@@ -2,20 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Training Dashboard</title>
+  <title>Training Control Panel</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #f5f7fb;
-      --card: #ffffff;
-      --primary: #2563eb;
-      --text: #0f172a;
-      --muted: #64748b;
-      --border: #e2e8f0;
+      --bg: #0b1020;
+      --card: rgba(255,255,255,0.08);
+      --border: rgba(255,255,255,0.15);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: linear-gradient(135deg, #6366f1, #22d3ee);
+      --glow: 0 0 40px rgba(99,102,241,0.25);
     }
 
     * {
@@ -25,125 +26,138 @@
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background: var(--bg);
+      background: radial-gradient(circle at top, #111827, #020617);
       color: var(--text);
     }
 
     header {
-      padding: 30px 20px;
       text-align: center;
+      padding: 50px 20px 30px;
     }
 
     header h1 {
-      font-size: 32px;
+      font-size: 40px;
+      font-weight: 800;
       margin: 0;
-      font-weight: 700;
+      background: var(--accent);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     header p {
+      margin-top: 10px;
       color: var(--muted);
-      margin-top: 8px;
       font-size: 16px;
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1300px;
       margin: auto;
-      padding: 20px;
+      padding: 30px;
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 28px;
     }
 
     .card {
       background: var(--card);
-      border-radius: 18px;
-      padding: 22px;
-      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      backdrop-filter: blur(14px);
+      border-radius: 22px;
+      padding: 26px;
+      border: 1px solid var(--border);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--accent);
+      opacity: 0.07;
     }
 
     .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+      transform: translateY(-6px);
+      box-shadow: var(--glow);
     }
 
     .card h2 {
-      margin-top: 0;
-      margin-bottom: 18px;
-      font-size: 20px;
       text-align: center;
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 22px;
+      font-weight: 700;
     }
 
     label {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
       color: var(--muted);
       display: block;
-      margin-bottom: 6px;
+      margin: 12px 0 6px;
     }
 
     input {
       width: 100%;
-      padding: 10px 12px;
-      border-radius: 10px;
+      padding: 12px 14px;
+      border-radius: 12px;
       border: 1px solid var(--border);
+      background: rgba(0,0,0,0.35);
+      color: var(--text);
       font-size: 14px;
-      margin-bottom: 14px;
-      transition: border 0.2s ease;
     }
 
     input:focus {
       outline: none;
-      border-color: var(--primary);
+      border-color: #38bdf8;
     }
 
     button {
       width: 100%;
-      padding: 12px;
-      border-radius: 12px;
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 14px;
       border: none;
-      background: var(--primary);
-      color: white;
+      background: var(--accent);
+      color: #020617;
       font-size: 15px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
-      transition: background 0.2s ease;
+      transition: transform 0.2s ease;
     }
 
     button:hover {
-      background: #1e40af;
+      transform: scale(1.02);
     }
 
     .status {
+      margin-top: 10px;
       text-align: center;
       font-size: 13px;
-      color: green;
-      margin-top: 10px;
+      color: #22c55e;
     }
 
     .recording {
       display: block;
       text-align: center;
-      margin-top: 12px;
+      margin-top: 14px;
       font-weight: 600;
-      color: var(--primary);
+      color: #38bdf8;
       text-decoration: none;
-    }
-
-    .recording:hover {
-      text-decoration: underline;
     }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>Weekly Training Dashboard</h1>
-  <p>Track who you trained and access session recordings</p>
+  <h1>Training Control Panel</h1>
+  <p>3 sessions per day • track trainees • open recordings instantly</p>
 </header>
 
 <div class="container">
@@ -163,28 +177,37 @@
     card.innerHTML = `
       <h2>${day}</h2>
 
-      <label>Trainee(s)</label>
-      <input id="${day}-trainee" placeholder="Who did you train?" value="${saved.trainee || ""}">
+      <label>Trainee 1</label>
+      <input value="${saved.t1 || ""}" id="${day}-t1">
+
+      <label>Trainee 2</label>
+      <input value="${saved.t2 || ""}" id="${day}-t2">
+
+      <label>Trainee 3</label>
+      <input value="${saved.t3 || ""}" id="${day}-t3">
 
       <label>Recording Link</label>
-      <input id="${day}-link" placeholder="Paste Zoom / Drive / Loom link" value="${saved.link || ""}">
+      <input value="${saved.link || ""}" id="${day}-link">
 
-      <button onclick="save('${day}')">Save</button>
+      <button onclick="save('${day}')">Save Day</button>
 
       <div class="status" id="${day}-status"></div>
 
-      ${saved.link ? `<a class="recording" href="${saved.link}" target="_blank">View Recording</a>` : ""}
+      ${saved.link ? `<a class="recording" href="${saved.link}" target="_blank">▶ View Recording</a>` : ""}
     `;
 
     grid.appendChild(card);
   });
 
   function save(day) {
-    const trainee = document.getElementById(`${day}-trainee`).value;
-    const link = document.getElementById(`${day}-link`).value;
+    const data = {
+      t1: document.getElementById(`${day}-t1`).value,
+      t2: document.getElementById(`${day}-t2`).value,
+      t3: document.getElementById(`${day}-t3`).value,
+      link: document.getElementById(`${day}-link`).value
+    };
 
-    localStorage.setItem(day, JSON.stringify({ trainee, link }));
-
+    localStorage.setItem(day, JSON.stringify(data));
     document.getElementById(`${day}-status`).textContent = "Saved ✓";
 
     setTimeout(() => location.reload(), 400);
