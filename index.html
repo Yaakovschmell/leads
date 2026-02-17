@@ -1,199 +1,326 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Training Control Panel</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+import { useState, useEffect, useRef, useCallback } from "react";
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+const SLOTS_PER_DAY = 3;
+const PALETTE = ['#6c63ff','#f7971e','#00d4aa','#ff6b9d','#4ecdc4','#ffe66d','#a855f7','#ff8c00','#38bdf8','#f43f5e'];
 
-  <style>
-    :root {
-      --bg: #020617;
-      --card: rgba(255,255,255,0.08);
-      --border: rgba(255,255,255,0.15);
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --accent: linear-gradient(135deg, #6366f1, #22d3ee);
-      --glow: 0 0 30px rgba(99,102,241,0.35);
+function initials(name) {
+  return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+}
+
+function getMonday(offset = 0) {
+  const d = new Date();
+  const day = d.getDay();
+  d.setDate(d.getDate() - (day === 0 ? 6 : day - 1) + offset * 7);
+  d.setHours(0,0,0,0);
+  return new Date(d);
+}
+
+function weekKey(offset) {
+  return 'week-' + getMonday(offset).toISOString().slice(0, 10);
+}
+
+function fmtWeek(offset) {
+  const m = getMonday(offset);
+  const f = new Date(m); f.setDate(f.getDate() + 4);
+  const o = { month: 'short', day: 'numeric' };
+  return `${m.toLocaleDateString('en-US', o)} – ${f.toLocaleDateString('en-US', o)}`;
+}
+
+function dayDate(di, offset) {
+  const m = getMonday(offset); m.setDate(m.getDate() + di);
+  return m.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+const DEFAULT_ROSTER = ['Tyler','Julie','Adam','Carnell','Kris','Cameron','Cynthia']
+  .map((name, i) => ({ name, color: PALETTE[i] }));
+
+export default function App() {
+  const [weekOffset, setWeekOffset] = useState(0);
+  const [roster, setRoster] = useState(DEFAULT_ROSTER);
+  const [schedule, setSchedule] = useState({});
+  const [newName, setNewName] = useState('');
+  const [saveStatus, setSaveStatus] = useState('saved'); // 'saving' | 'saved'
+  const [toast, setToast] = useState('');
+  const [drag, setDrag] = useState(null); // {name, fromDay, fromSlot}
+  const [dragOver, setDragOver] = useState(null); // 'day-slot' key
+  const saveTimer = useRef(null);
+  const toastTimer = useRef(null);
+
+  // Load from storage
+  useEffect(() => {
+    try {
+      const r = window.storage ? null : JSON.parse(localStorage.getItem('ts_roster'));
+      const s = window.storage ? null : JSON.parse(localStorage.getItem('ts_schedule'));
+      if (r) setRoster(r);
+      if (s) setSchedule(s);
+    } catch {}
+  }, []);
+
+  const showToast = useCallback((msg) => {
+    setToast(msg);
+    clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToast(''), 2800);
+  }, []);
+
+  const scheduleSave = useCallback((newRoster, newSchedule) => {
+    setSaveStatus('saving');
+    clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(() => {
+      try {
+        localStorage.setItem('ts_roster', JSON.stringify(newRoster));
+        localStorage.setItem('ts_schedule', JSON.stringify(newSchedule));
+      } catch {}
+      setSaveStatus('saved');
+    }, 600);
+  }, []);
+
+  const getSlot = (day, si) => {
+    const wk = weekKey(weekOffset);
+    const key = `${day}-${si}`;
+    return schedule?.[wk]?.[key] || { traineeNames: [], recording: '' };
+  };
+
+  const setSlot = (day, si, updater) => {
+    const wk = weekKey(weekOffset);
+    const key = `${day}-${si}`;
+    setSchedule(prev => {
+      const newS = JSON.parse(JSON.stringify(prev));
+      if (!newS[wk]) newS[wk] = {};
+      if (!newS[wk][key]) newS[wk][key] = { traineeNames: [], recording: '' };
+      newS[wk][key] = updater(newS[wk][key]);
+      scheduleSave(roster, newS);
+      return newS;
+    });
+  };
+
+  const handleDrop = (day, si) => {
+    if (!drag) return;
+    setDragOver(null);
+    const target = getSlot(day, si);
+    if (target.traineeNames.includes(drag.name)) return;
+    if (target.traineeNames.length >= 1) { showToast('⚠️ Session already has a trainee'); return; }
+
+    const wk = weekKey(weekOffset);
+    setSchedule(prev => {
+      const newS = JSON.parse(JSON.stringify(prev));
+      if (!newS[wk]) newS[wk] = {};
+      // remove from source
+      if (drag.fromDay !== null) {
+        const srcKey = `${drag.fromDay}-${drag.fromSlot}`;
+        if (newS[wk][srcKey]) {
+          newS[wk][srcKey].traineeNames = newS[wk][srcKey].traineeNames.filter(n => n !== drag.name);
+        }
+      }
+      // add to target
+      const tKey = `${day}-${si}`;
+      if (!newS[wk][tKey]) newS[wk][tKey] = { traineeNames: [], recording: '' };
+      newS[wk][tKey].traineeNames.push(drag.name);
+      scheduleSave(roster, newS);
+      return newS;
+    });
+    setDrag(null);
+  };
+
+  const removeFromSlot = (day, si, name) => {
+    setSlot(day, si, d => ({ ...d, traineeNames: d.traineeNames.filter(n => n !== name) }));
+  };
+
+  const updateRecording = (day, si, val) => {
+    setSlot(day, si, d => ({ ...d, recording: val }));
+  };
+
+  const addPerson = () => {
+    const name = newName.trim();
+    if (!name) return;
+    if (roster.find(r => r.name.toLowerCase() === name.toLowerCase())) { showToast('⚠️ Already in roster'); return; }
+    const newRoster = [...roster, { name, color: PALETTE[roster.length % PALETTE.length] }];
+    setRoster(newRoster);
+    setNewName('');
+    scheduleSave(newRoster, schedule);
+    showToast(`✅ ${name} added!`);
+  };
+
+  // Stats
+  const wkData = schedule[weekKey(weekOffset)] || {};
+  let totalSessions = 0, withRec = 0;
+  const personCount = {};
+  DAYS.forEach(day => {
+    for (let si = 0; si < SLOTS_PER_DAY; si++) {
+      const d = wkData[`${day}-${si}`];
+      if (d?.traineeNames?.length) {
+        d.traineeNames.forEach(n => { personCount[n] = (personCount[n] || 0) + 1; totalSessions++; });
+        if (d.recording) withRec++;
+      }
     }
+  });
+  const topPerson = Object.entries(personCount).sort((a,b)=>b[1]-a[1])[0];
+  const filledSlots = Object.values(wkData).filter(d => d?.traineeNames?.length > 0).length;
+  const allSlots = DAYS.length * SLOTS_PER_DAY;
 
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: radial-gradient(circle at top, #0f172a, #020617);
-      color: var(--text);
-    }
-
-    header {
-      text-align: center;
-      padding: 50px 20px 30px;
-    }
-
-    header h1 {
-      font-size: 40px;
-      font-weight: 800;
-      margin: 0;
-      background: var(--accent);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    header p {
-      margin-top: 10px;
-      color: var(--muted);
-    }
-
-    .container {
-      max-width: 1300px;
-      margin: auto;
-      padding: 30px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 28px;
-    }
-
-    .card {
-      background: var(--card);
-      backdrop-filter: blur(14px);
-      border-radius: 22px;
-      padding: 26px;
-      border: 1px solid var(--border);
-      box-shadow: 0 25px 60px rgba(0,0,0,0.4);
-    }
-
-    .card h2 {
-      text-align: center;
-      margin-top: 0;
-      margin-bottom: 18px;
-      font-size: 22px;
-    }
-
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .chip {
-      padding: 8px 14px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--muted);
-      transition: all 0.2s ease;
-    }
-
-    .chip.active {
-      background: var(--accent);
-      color: #020617;
-      box-shadow: var(--glow);
-    }
-
-    input {
-      width: 100%;
-      padding: 12px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: rgba(0,0,0,0.35);
-      color: var(--text);
-      font-size: 14px;
-    }
-
-    .recording {
-      display: block;
-      text-align: center;
-      margin-top: 14px;
-      font-weight: 600;
-      color: #38bdf8;
-      text-decoration: none;
-    }
-
-    .hint {
-      text-align: center;
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 10px;
-    }
-  </style>
-</head>
-<body>
-
-<header>
-  <h1>Training Control Panel</h1>
-  <p>Select 3 trainees per day • autosave • instant playback</p>
-</header>
-
-<div class="container">
-  <div class="grid" id="grid"></div>
-</div>
-
-<script>
-  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-  const trainees = ["Tyler", "Julie", "Adam", "Cameron", "Cynthia", "Kris", "Carnell"];
-
-  const grid = document.getElementById("grid");
-
-  days.forEach(day => {
-    const saved = JSON.parse(localStorage.getItem(day)) || { trainees: [], link: "" };
-
-    const card = document.createElement("div");
-    card.className = "card";
-
-    card.innerHTML = `
-      <h2>${day}</h2>
-      <div class="chips">
-        ${trainees.map(t =>
-          `<div class="chip ${saved.trainees.includes(t) ? "active" : ""}"
-            onclick="toggleChip('${day}','${t}',this)">
-            ${t}
-          </div>`
-        ).join("")}
+  return (
+    <div style={{ background: '#0f1117', minHeight: '100vh', color: '#e8eaf0', fontFamily: "'Segoe UI', system-ui, sans-serif", display: 'flex', flexDirection: 'column' }}>
+      {/* HEADER */}
+      <div style={{ background: 'linear-gradient(135deg,#1a1d27,#0f1117)', borderBottom: '1px solid #2e3250', padding: '14px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 100 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ width: 36, height: 36, background: 'linear-gradient(135deg,#6c63ff,#00d4aa)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>🎯</div>
+          <div>
+            <div style={{ fontWeight: 700, fontSize: '1.1rem' }}>Training Scheduler</div>
+            <div style={{ fontSize: '0.7rem', color: '#7a7f9a', marginTop: 1 }}>Drag names · Log recordings · Auto-saved</div>
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#21253a', border: '1px solid #2e3250', borderRadius: 10, padding: '5px 10px' }}>
+            <button onClick={() => setWeekOffset(w => w-1)} style={{ background: 'none', border: 'none', color: '#7a7f9a', cursor: 'pointer', fontSize: 18, padding: '0 4px', borderRadius: 5 }}>‹</button>
+            <span style={{ fontSize: '0.82rem', fontWeight: 600, minWidth: 150, textAlign: 'center' }}>{fmtWeek(weekOffset)}</span>
+            <button onClick={() => setWeekOffset(w => w+1)} style={{ background: 'none', border: 'none', color: '#7a7f9a', cursor: 'pointer', fontSize: 18, padding: '0 4px', borderRadius: 5 }}>›</button>
+          </div>
+          <div style={{ fontSize: '0.72rem', padding: '5px 12px', borderRadius: 20, background: '#21253a', border: `1px solid ${saveStatus === 'saved' ? '#00d4aa' : '#2e3250'}`, color: saveStatus === 'saved' ? '#00d4aa' : '#7a7f9a', display: 'flex', alignItems: 'center', gap: 5, transition: 'all 0.3s' }}>
+            <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'currentColor' }}></div>
+            {saveStatus === 'saved' ? 'Auto-saved' : 'Saving…'}
+          </div>
+        </div>
       </div>
 
-      <input
-        placeholder="Paste recording link"
-        value="${saved.link}"
-        oninput="saveLink('${day}', this.value)"
-      />
+      {/* LAYOUT */}
+      <div style={{ display: 'flex', flex: 1 }}>
+        {/* SIDEBAR */}
+        <div style={{ width: 210, background: '#1a1d27', borderRight: '1px solid #2e3250', padding: '16px 12px', overflowY: 'auto', flexShrink: 0 }}>
+          <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '1.2px', color: '#7a7f9a', marginBottom: 10, padding: '0 4px' }}>Roster</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+            {roster.map(({ name, color }) => (
+              <div
+                key={name}
+                draggable
+                onDragStart={e => { setDrag({ name, fromDay: null, fromSlot: null }); e.dataTransfer.effectAllowed = 'move'; }}
+                onDragEnd={() => setDrag(null)}
+                style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 10px', borderRadius: 9, cursor: 'grab', background: color + '1a', border: '1px solid transparent', fontSize: '0.84rem', fontWeight: 500, userSelect: 'none' }}
+              >
+                <div style={{ width: 24, height: 24, borderRadius: '50%', background: color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.62rem', fontWeight: 700, color: '#fff', flexShrink: 0 }}>
+                  {initials(name)}
+                </div>
+                {name}
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 14, paddingTop: 12, borderTop: '1px solid #2e3250' }}>
+            <div style={{ fontSize: '0.65rem', color: '#7a7f9a', marginBottom: 5, textTransform: 'uppercase', letterSpacing: '0.8px' }}>Add Person</div>
+            <input
+              value={newName}
+              onChange={e => setNewName(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && addPerson()}
+              placeholder="Full name…"
+              maxLength={30}
+              style={{ width: '100%', background: '#21253a', border: '1px solid #2e3250', color: '#e8eaf0', padding: '7px 9px', borderRadius: 7, fontSize: '0.84rem', outline: 'none', boxSizing: 'border-box' }}
+            />
+            <button
+              onClick={addPerson}
+              style={{ marginTop: 6, width: '100%', padding: '7px', background: '#6c63ff', color: '#fff', border: 'none', borderRadius: 7, fontSize: '0.84rem', fontWeight: 600, cursor: 'pointer' }}
+            >
+              + Add to Roster
+            </button>
+          </div>
+        </div>
 
-      ${saved.link ? `<a class="recording" href="${saved.link}" target="_blank">▶ View Recording</a>` : ""}
+        {/* MAIN */}
+        <div style={{ flex: 1, padding: 20, overflow: 'auto' }}>
+          {/* STATS */}
+          <div style={{ display: 'flex', gap: 10, marginBottom: 18, flexWrap: 'wrap' }}>
+            {[
+              { label: 'Sessions', val: totalSessions, color: '#6c63ff' },
+              { label: 'Slots Filled', val: `${filledSlots}/${allSlots}`, color: '#00d4aa' },
+              { label: 'With Recordings', val: withRec, color: '#f7971e' },
+              topPerson && { label: 'Most Sessions', val: topPerson[0], color: '#ff6b9d' },
+            ].filter(Boolean).map(({ label, val, color }) => (
+              <div key={label} style={{ background: '#1a1d27', border: '1px solid #2e3250', borderRadius: 9, padding: '9px 14px', minWidth: 100 }}>
+                <div style={{ fontSize: '0.62rem', color: '#7a7f9a', textTransform: 'uppercase', letterSpacing: '0.8px' }}>{label}</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 700, color, marginTop: 2 }}>{val}</div>
+              </div>
+            ))}
+          </div>
 
-      <div class="hint">Select up to 3 trainees</div>
-    `;
+          {/* GRID */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 12, minWidth: 680 }}>
+            {DAYS.map((day, di) => (
+              <div key={day} style={{ background: '#1a1d27', border: '1px solid #2e3250', borderRadius: 13, overflow: 'hidden' }}>
+                <div style={{ padding: '11px 14px', background: '#21253a', borderBottom: '1px solid #2e3250' }}>
+                  <div style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, color: '#6c63ff' }}>{day}</div>
+                  <div style={{ fontSize: '0.66rem', color: '#7a7f9a', marginTop: 2 }}>{dayDate(di, weekOffset)}</div>
+                </div>
+                <div style={{ padding: 8, display: 'flex', flexDirection: 'column', gap: 7 }}>
+                  {Array.from({ length: SLOTS_PER_DAY }, (_, si) => {
+                    const data = getSlot(day, si);
+                    const isOver = dragOver === `${day}-${si}`;
+                    const hasPerson = data.traineeNames.length > 0;
+                    return (
+                      <div
+                        key={si}
+                        onDragOver={e => { e.preventDefault(); setDragOver(`${day}-${si}`); }}
+                        onDragLeave={() => setDragOver(null)}
+                        onDrop={() => handleDrop(day, si)}
+                        style={{
+                          background: isOver ? '#6c63ff22' : hasPerson ? '#21253a' : '#1e2235',
+                          border: `1.5px ${hasPerson ? 'solid' : 'dashed'} ${isOver ? '#6c63ff' : hasPerson ? 'transparent' : '#2e3250'}`,
+                          borderRadius: 9, minHeight: 76, padding: 7,
+                          transform: isOver ? 'scale(1.02)' : 'scale(1)',
+                          transition: 'all 0.18s', position: 'relative'
+                        }}
+                      >
+                        <div style={{ fontSize: '0.6rem', color: '#7a7f9a', textTransform: 'uppercase', letterSpacing: '0.7px', marginBottom: 4 }}>Session {si+1}</div>
+                        <div style={{ position: 'absolute', top: 6, right: 8, fontSize: '0.6rem', color: '#7a7f9a' }}>{data.traineeNames.length}/1</div>
+                        
+                        {hasPerson ? data.traineeNames.map(name => {
+                          const color = roster.find(r => r.name === name)?.color || '#aaa';
+                          return (
+                            <div
+                              key={name}
+                              draggable
+                              onDragStart={e => { setDrag({ name, fromDay: day, fromSlot: si }); e.dataTransfer.effectAllowed = 'move'; }}
+                              onDragEnd={() => setDrag(null)}
+                              style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '5px 7px', borderRadius: 6, background: color + '22', borderLeft: `3px solid ${color}`, fontSize: '0.78rem', fontWeight: 500, cursor: 'grab', marginBottom: 3 }}
+                            >
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                <div style={{ width: 20, height: 20, borderRadius: '50%', background: color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.58rem', fontWeight: 700, color: '#fff' }}>{initials(name)}</div>
+                                {name}
+                              </div>
+                              <button
+                                onClick={() => removeFromSlot(day, si, name)}
+                                style={{ background: 'none', border: 'none', color: '#7a7f9a', cursor: 'pointer', fontSize: 13, padding: '0 2px', lineHeight: 1 }}
+                              >×</button>
+                            </div>
+                          );
+                        }) : (
+                          <div style={{ fontSize: '0.68rem', color: '#7a7f9a', textAlign: 'center', padding: '8px 0', opacity: 0.55 }}>↑ Drop trainee</div>
+                        )}
 
-    grid.appendChild(card);
-  });
+                        <div style={{ marginTop: 5, display: 'flex', alignItems: 'center', gap: 4 }}>
+                          <input
+                            type="url"
+                            placeholder="🎥 Recording URL…"
+                            value={data.recording || ''}
+                            onChange={e => updateRecording(day, si, e.target.value)}
+                            style={{ flex: 1, background: '#1e2235', border: '1px solid #2e3250', color: '#e8eaf0', padding: '4px 7px', borderRadius: 5, fontSize: '0.65rem', outline: 'none', minWidth: 0 }}
+                          />
+                          {data.recording && (
+                            <a href={data.recording} target="_blank" rel="noreferrer" style={{ color: '#00d4aa', fontSize: 14, textDecoration: 'none', flexShrink: 0 }}>▶</a>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
-  function toggleChip(day, trainee, el) {
-    const data = JSON.parse(localStorage.getItem(day)) || { trainees: [], link: "" };
-
-    if (data.trainees.includes(trainee)) {
-      data.trainees = data.trainees.filter(t => t !== trainee);
-      el.classList.remove("active");
-    } else {
-      if (data.trainees.length >= 3) return;
-      data.trainees.push(trainee);
-      el.classList.add("active");
-    }
-
-    localStorage.setItem(day, JSON.stringify(data));
-  }
-
-  function saveLink(day, link) {
-    const data = JSON.parse(localStorage.getItem(day)) || { trainees: [], link: "" };
-    data.link = link;
-    localStorage.setItem(day, JSON.stringify(data));
-  }
-</script>
-
-</body>
-</html>
+      {/* TOAST */}
+      {toast && (
+        <div style={{ position: 'fixed', bottom: 22, right: 22, background: '#21253a', border: '1px solid #2e3250', color: '#e8eaf0', padding: '11px 16px', borderRadius: 9, fontSize: '0.82rem', boxShadow: '0 8px 32px rgba(0,0,0,0.5)', zIndex: 9999 }}>
+          {toast}
+        </div>
+      )}
+    </div>
+  );
+}
