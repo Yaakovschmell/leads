@@ -1,429 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Quote Review & Hotlist</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: #f3f4f6;
-            padding: 20px;
-        }
-        .page {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            padding: 24px 32px 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-        }
-        .title-row {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 8px;
-        }
-        h1 {
-            font-size: 24px;
-            font-weight: 700;
-            text-align: center;
-        }
-        .meta-row {
-            display: flex;
-            justify-content: space-between;
-            margin: 16px 0 24px;
-            font-size: 14px;
-        }
-        .meta-item {
-            display: flex;
-            gap: 6px;
-            align-items: center;
-        }
-        .meta-item label {
-            font-weight: 600;
-        }
-        .meta-item input,
-        .meta-item select {
-            border: none;
-            border-bottom: 1px solid #ccc;
-            padding: 2px 4px;
-            font-size: 14px;
-            min-width: 140px;
-        }
-        .section-title {
-            font-size: 16px;
-            font-weight: 700;
-            margin: 20px 0 8px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 16px;
-            font-size: 13px;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 6px 8px;
-            vertical-align: top;
-        }
-        th {
-            background: #e5e7eb;
-            font-weight: 600;
-            text-align: left;
-        }
-        textarea {
-            width: 100%;
-            border: none;
-            resize: vertical;
-            min-height: 40px;
-            font-family: inherit;
-            font-size: 13px;
-        }
-        textarea:focus {
-            outline: none;
-            box-shadow: inset 0 0 0 1px #4f46e5;
-        }
-        .btn-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: flex-end;
-            margin-top: 12px;
-        }
-        button {
-            border: none;
-            border-radius: 6px;
-            padding: 8px 14px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
-        }
-        .btn-primary {
-            background: #4f46e5;
-            color: white;
-        }
-        .btn-primary:hover {
-            background: #4338ca;
-            box-shadow: 0 2px 8px rgba(79,70,229,0.35);
-            transform: translateY(-1px);
-        }
-        .btn-secondary {
-            background: #e5e7eb;
-            color: #111827;
-        }
-        .btn-secondary:hover {
-            background: #d1d5db;
-        }
-        .btn-outline {
-            background: white;
-            color: #4f46e5;
-            border: 1px solid #4f46e5;
-        }
-        .btn-outline:hover {
-            background: #eef2ff;
-        }
-        .small {
-            font-size: 11px;
-            color: #6b7280;
-            margin-top: 4px;
-        }
-        @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
-            .page {
-                box-shadow: none;
-                border-radius: 0;
-            }
-            .btn-row {
-                display: none;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Training Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 32px;
+      margin: 0;
+      font-weight: 700;
+    }
+
+    header p {
+      color: var(--muted);
+      margin-top: 8px;
+      font-size: 16px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      margin-bottom: 18px;
+      font-size: 20px;
+      text-align: center;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-size: 14px;
+      margin-bottom: 14px;
+      transition: border 0.2s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      background: var(--primary);
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background: #1e40af;
+    }
+
+    .status {
+      text-align: center;
+      font-size: 13px;
+      color: green;
+      margin-top: 10px;
+    }
+
+    .recording {
+      display: block;
+      text-align: center;
+      margin-top: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .recording:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-<div class="page">
-    <div class="title-row">
-        <h1>Daily Quote Review & Hotlist</h1>
-    </div>
 
-    <div class="meta-row">
-        <div class="meta-item">
-            <label for="reviewDate">Date:</label>
-            <input type="date" id="reviewDate">
-        </div>
-        <div class="meta-item">
-            <label for="traineeName">Trainee:</label>
-            <input type="text" id="traineeName" placeholder="Type trainee name...">
-        </div>
-        <div class="meta-item">
-            <label for="reviewerName">Reviewer:</label>
-            <input type="text" id="reviewerName" placeholder="Your name...">
-        </div>
-    </div>
+<header>
+  <h1>Weekly Training Dashboard</h1>
+  <p>Track who you trained and access session recordings</p>
+</header>
 
-    <div>
-        <div class="section-title">Quoted Leads (Quick Review)</div>
-        <table id="quotedTable">
-            <thead>
-            <tr>
-                <th style="width: 25%;">Lead Name</th>
-                <th style="width: 20%;">Trainee</th>
-                <th style="width: 35%;">What Happened (1–2 lines)</th>
-                <th style="width: 20%;">Next Step</th>
-            </tr>
-            </thead>
-            <tbody>
-            <!-- 5 starter rows -->
-            <tr>
-                <td><textarea data-field="quoted_leadName"></textarea></td>
-                <td><textarea data-field="quoted_trainee"></textarea></td>
-                <td><textarea data-field="quoted_happened"></textarea></td>
-                <td><textarea data-field="quoted_nextStep"></textarea></td>
-            </tr>
-            <tr>
-                <td><textarea data-field="quoted_leadName"></textarea></td>
-                <td><textarea data-field="quoted_trainee"></textarea></td>
-                <td><textarea data-field="quoted_happened"></textarea></td>
-                <td><textarea data-field="quoted_nextStep"></textarea></td>
-            </tr>
-            <tr>
-                <td><textarea data-field="quoted_leadName"></textarea></td>
-                <td><textarea data-field="quoted_trainee"></textarea></td>
-                <td><textarea data-field="quoted_happened"></textarea></td>
-                <td><textarea data-field="quoted_nextStep"></textarea></td>
-            </tr>
-            <tr>
-                <td><textarea data-field="quoted_leadName"></textarea></td>
-                <td><textarea data-field="quoted_trainee"></textarea></td>
-                <td><textarea data-field="quoted_happened"></textarea></td>
-                <td><textarea data-field="quoted_nextStep"></textarea></td>
-            </tr>
-            <tr>
-                <td><textarea data-field="quoted_leadName"></textarea></td>
-                <td><textarea data-field="quoted_trainee"></textarea></td>
-                <td><textarea data-field="quoted_happened"></textarea></td>
-                <td><textarea data-field="quoted_nextStep"></textarea></td>
-            </tr>
-            </tbody>
-        </table>
-        <button class="btn-outline" onclick="addQuotedRow()">+ Add Row</button>
-    </div>
-
-    <div style="margin-top: 24px;">
-        <div class="section-title">Hotlist (Priority Follow-Ups)</div>
-        <table id="hotlistTable">
-            <thead>
-            <tr>
-                <th style="width: 30%;">Lead Name</th>
-                <th style="width: 40%;">Why Hot?</th>
-                <th style="width: 30%;">Next Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td><textarea data-field="hot_leadName"></textarea></td>
-                <td><textarea data-field="hot_why"></textarea></td>
-                <td><textarea data-field="hot_next"></textarea></td>
-            </tr>
-            <tr>
-                <td><textarea data-field="hot_leadName"></textarea></td>
-                <td><textarea data-field="hot_why"></textarea></td>
-                <td><textarea data-field="hot_next"></textarea></td>
-            </tr>
-            </tbody>
-        </table>
-        <button class="btn-outline" onclick="addHotRow()">+ Add Row</button>
-    </div>
-
-    <div class="btn-row">
-        <button class="btn-secondary" onclick="clearPage()">Clear Page</button>
-        <button class="btn-secondary" onclick="loadFromStorage()">Load Saved</button>
-        <button class="btn-primary" onclick="saveToStorage()">Save (Browser)</button>
-        <button class="btn-outline" onclick="exportCSV()">Export CSV</button>
-        <button class="btn-primary" onclick="window.print()">Print / Save as PDF</button>
-    </div>
-    <div class="small">
-        Saved copies stay in this browser only. Export or print to keep a permanent record or upload to GitHub.
-    </div>
+<div class="container">
+  <div class="grid" id="grid"></div>
 </div>
 
 <script>
-    function todayISO() {
-        return new Date().toISOString().split("T")[0];
-    }
+  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+  const grid = document.getElementById("grid");
 
-    function addQuotedRow() {
-        const tbody = document.querySelector("#quotedTable tbody");
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td><textarea data-field="quoted_leadName"></textarea></td>
-            <td><textarea data-field="quoted_trainee"></textarea></td>
-            <td><textarea data-field="quoted_happened"></textarea></td>
-            <td><textarea data-field="quoted_nextStep"></textarea></td>
-        `;
-        tbody.appendChild(tr);
-    }
+  days.forEach(day => {
+    const saved = JSON.parse(localStorage.getItem(day)) || {};
 
-    function addHotRow() {
-        const tbody = document.querySelector("#hotlistTable tbody");
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td><textarea data-field="hot_leadName"></textarea></td>
-            <td><textarea data-field="hot_why"></textarea></td>
-            <td><textarea data-field="hot_next"></textarea></td>
-        `;
-        tbody.appendChild(tr);
-    }
+    const card = document.createElement("div");
+    card.className = "card";
 
-    function getKey() {
-        const date = document.getElementById("reviewDate").value || todayISO();
-        const trainee = (document.getElementById("traineeName").value || "Unknown").trim();
-        return "dqrh_" + date + "_" + trainee.toLowerCase().replace(/\s+/g, "-");
-    }
+    card.innerHTML = `
+      <h2>${day}</h2>
 
-    function saveToStorage() {
-        const data = {
-            date: document.getElementById("reviewDate").value,
-            trainee: document.getElementById("traineeName").value,
-            reviewer: document.getElementById("reviewerName").value,
-            quoted: [],
-            hotlist: []
-        };
+      <label>Trainee(s)</label>
+      <input id="${day}-trainee" placeholder="Who did you train?" value="${saved.trainee || ""}">
 
-        document.querySelectorAll("#quotedTable tbody tr").forEach(tr => {
-            const row = {
-                leadName: tr.querySelector('[data-field="quoted_leadName"]').value,
-                trainee: tr.querySelector('[data-field="quoted_trainee"]').value,
-                happened: tr.querySelector('[data-field="quoted_happened"]').value,
-                nextStep: tr.querySelector('[data-field="quoted_nextStep"]').value
-            };
-            if (row.leadName || row.happened || row.nextStep || row.trainee) {
-                data.quoted.push(row);
-            }
-        });
+      <label>Recording Link</label>
+      <input id="${day}-link" placeholder="Paste Zoom / Drive / Loom link" value="${saved.link || ""}">
 
-        document.querySelectorAll("#hotlistTable tbody tr").forEach(tr => {
-            const row = {
-                leadName: tr.querySelector('[data-field="hot_leadName"]').value,
-                why: tr.querySelector('[data-field="hot_why"]').value,
-                next: tr.querySelector('[data-field="hot_next"]').value
-            };
-            if (row.leadName || row.why || row.next) {
-                data.hotlist.push(row);
-            }
-        });
+      <button onclick="save('${day}')">Save</button>
 
-        localStorage.setItem(getKey(), JSON.stringify(data));
-        alert("Saved in this browser for this trainee + date.");
-    }
+      <div class="status" id="${day}-status"></div>
 
-    function loadFromStorage() {
-        const raw = localStorage.getItem(getKey());
-        if (!raw) {
-            alert("No saved data found for this trainee + date.");
-            return;
-        }
-        const data = JSON.parse(raw);
-        document.getElementById("reviewDate").value = data.date || todayISO();
-        document.getElementById("traineeName").value = data.trainee || "";
-        document.getElementById("reviewerName").value = data.reviewer || "";
+      ${saved.link ? `<a class="recording" href="${saved.link}" target="_blank">View Recording</a>` : ""}
+    `;
 
-        const quotedBody = document.querySelector("#quotedTable tbody");
-        quotedBody.innerHTML = "";
-        (data.quoted || []).forEach(row => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-                <td><textarea data-field="quoted_leadName">${row.leadName || ""}</textarea></td>
-                <td><textarea data-field="quoted_trainee">${row.trainee || ""}</textarea></td>
-                <td><textarea data-field="quoted_happened">${row.happened || ""}</textarea></td>
-                <td><textarea data-field="quoted_nextStep">${row.nextStep || ""}</textarea></td>
-            `;
-            quotedBody.appendChild(tr);
-        });
-        if (quotedBody.children.length === 0) {
-            addQuotedRow();
-        }
+    grid.appendChild(card);
+  });
 
-        const hotBody = document.querySelector("#hotlistTable tbody");
-        hotBody.innerHTML = "";
-        (data.hotlist || []).forEach(row => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-                <td><textarea data-field="hot_leadName">${row.leadName || ""}</textarea></td>
-                <td><textarea data-field="hot_why">${row.why || ""}</textarea></td>
-                <td><textarea data-field="hot_next">${row.next || ""}</textarea></td>
-            `;
-            hotBody.appendChild(tr);
-        });
-        if (hotBody.children.length === 0) {
-            addHotRow();
-        }
-    }
+  function save(day) {
+    const trainee = document.getElementById(`${day}-trainee`).value;
+    const link = document.getElementById(`${day}-link`).value;
 
-    function clearPage() {
-        if (!confirm("Clear everything on this page?")) return;
-        document.getElementById("reviewDate").value = todayISO();
-        document.getElementById("traineeName").value = "";
-        document.getElementById("reviewerName").value = "";
-        document.querySelectorAll("textarea").forEach(t => t.value = "");
-    }
+    localStorage.setItem(day, JSON.stringify({ trainee, link }));
 
-    function exportCSV() {
-        const date = document.getElementById("reviewDate").value || todayISO();
-        const trainee = (document.getElementById("traineeName").value || "Unknown").trim();
-        let csv = "Section,Lead Name,Trainee,What Happened / Why Hot,Next Step / Next Action\n";
+    document.getElementById(`${day}-status`).textContent = "Saved ✓";
 
-        document.querySelectorAll("#quotedTable tbody tr").forEach(tr => {
-            const leadName = tr.querySelector('[data-field="quoted_leadName"]').value;
-            const traineeName = tr.querySelector('[data-field="quoted_trainee"]').value;
-            const happened = tr.querySelector('[data-field="quoted_happened"]').value;
-            const nextStep = tr.querySelector('[data-field="quoted_nextStep"]').value;
-            if (leadName || traineeName || happened || nextStep) {
-                csv += [
-                    "Quoted",
-                    '"' + (leadName || "").replace(/"/g, '""') + '"',
-                    '"' + (traineeName || "").replace(/"/g, '""') + '"',
-                    '"' + (happened || "").replace(/"/g, '""') + '"',
-                    '"' + (nextStep || "").replace(/"/g, '""') + '"'
-                ].join(",") + "\n";
-            }
-        });
-
-        document.querySelectorAll("#hotlistTable tbody tr").forEach(tr => {
-            const leadName = tr.querySelector('[data-field="hot_leadName"]').value;
-            const why = tr.querySelector('[data-field="hot_why"]').value;
-            const next = tr.querySelector('[data-field="hot_next"]').value;
-            if (leadName || why || next) {
-                csv += [
-                    "Hotlist",
-                    '"' + (leadName || "").replace(/"/g, '""') + '"',
-                    '""',
-                    '"' + (why || "").replace(/"/g, '""') + '"',
-                    '"' + (next || "").replace(/"/g, '""') + '"'
-                ].join(",") + "\n";
-            }
-        });
-
-        const blob = new Blob([csv], { type: "text/csv" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `${date}_${trainee.replace(/\s+/g,"-")}_quotes.csv`;
-        a.click();
-        URL.revokeObjectURL(url);
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-        document.getElementById("reviewDate").value = todayISO();
-    });
+    setTimeout(() => location.reload(), 400);
+  }
 </script>
+
 </body>
 </html>
