@@ -244,6 +244,141 @@ main{padding:28px 28px 40px}
 
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px}
+
+/* ── SUMMARY BTN ── */
+.summary-btn{
+  display:flex;align-items:center;gap:7px;
+  padding:8px 16px;border-radius:10px;
+  background:var(--surface);border:1.5px solid var(--border);
+  color:var(--text);font-size:.88rem;font-weight:600;
+  cursor:pointer;transition:all .15s;font-family:inherit;
+}
+.summary-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent);transform:translateY(-1px);box-shadow:0 4px 12px rgba(91,94,244,.25)}
+
+/* ── MODAL OVERLAY ── */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.45);
+  z-index:200;display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .2s;
+  backdrop-filter:blur(3px);
+}
+.modal-overlay.open{opacity:1;pointer-events:all}
+
+.modal{
+  background:#fff;border-radius:20px;
+  width:min(820px,95vw);max-height:88vh;
+  overflow:hidden;display:flex;flex-direction:column;
+  box-shadow:0 24px 80px rgba(0,0,0,.22);
+  transform:translateY(20px) scale(.97);
+  transition:transform .25s cubic-bezier(.175,.885,.32,1.1);
+}
+.modal-overlay.open .modal{transform:translateY(0) scale(1)}
+
+.modal-header{
+  padding:22px 28px 18px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:flex-start;justify-content:space-between;
+  flex-shrink:0;
+}
+.modal-header h2{font-size:1.2rem;font-weight:700;letter-spacing:-.3px}
+.modal-header p{font-size:.82rem;color:var(--text3);margin-top:3px}
+.modal-actions{display:flex;gap:8px;align-items:center;flex-shrink:0}
+.modal-close{
+  background:var(--card);border:1px solid var(--border);
+  color:var(--text2);width:34px;height:34px;border-radius:8px;
+  cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;
+  transition:all .15s;
+}
+.modal-close:hover{background:#fee2e2;color:#dc2626;border-color:#fca5a5}
+.print-btn{
+  display:flex;align-items:center;gap:6px;
+  padding:7px 14px;border-radius:8px;
+  background:var(--accent);color:#fff;
+  border:none;font-size:.84rem;font-weight:600;
+  cursor:pointer;font-family:inherit;transition:all .15s;
+}
+.print-btn:hover{background:#4a4de0}
+
+.modal-body{padding:24px 28px;overflow-y:auto}
+
+/* summary content */
+.sum-week-header{
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:22px;
+}
+.sum-week-badge{
+  background:var(--accent-light);color:var(--accent);
+  font-size:.8rem;font-weight:700;padding:5px 12px;
+  border-radius:20px;letter-spacing:.3px;
+}
+.sum-kpis{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:12px;
+  margin-bottom:26px;
+}
+.sum-kpi{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:14px 16px;text-align:center;
+}
+.sum-kpi .kv{font-size:1.8rem;font-weight:700;letter-spacing:-.5px}
+.sum-kpi .kl{font-size:.72rem;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.7px;margin-top:3px}
+
+.sum-table{width:100%;border-collapse:collapse;font-size:.9rem}
+.sum-table th{
+  background:var(--card);padding:10px 14px;
+  text-align:left;font-size:.72rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.8px;color:var(--text3);
+  border-bottom:2px solid var(--border);
+}
+.sum-table td{
+  padding:11px 14px;border-bottom:1px solid var(--border);
+  vertical-align:middle;
+}
+.sum-table tr:last-child td{border-bottom:none}
+.sum-table tr:hover td{background:var(--card)}
+.td-day{font-weight:700;color:var(--accent);font-size:.82rem;white-space:nowrap}
+.td-name{display:flex;align-items:center;gap:8px;font-weight:600}
+.td-rec a{
+  display:inline-flex;align-items:center;gap:5px;
+  color:var(--green);font-size:.8rem;font-weight:600;
+  text-decoration:none;padding:3px 9px;
+  background:var(--green-light);border-radius:6px;
+  transition:all .15s;
+}
+.td-rec a:hover{background:var(--green);color:#fff}
+.td-empty{color:var(--text3);font-size:.82rem;font-style:italic}
+
+.sum-person-section{margin-top:28px}
+.sum-section-title{
+  font-size:.72rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:1px;color:var(--text3);margin-bottom:12px;
+}
+.sum-person-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.sum-person-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:11px;padding:12px 14px;
+  display:flex;align-items:center;gap:10px;
+}
+.sum-person-card .pcount{
+  font-size:1.4rem;font-weight:700;margin-left:auto;
+  color:var(--accent);
+}
+.sum-person-card .pname{font-size:.88rem;font-weight:600}
+.sum-person-card .psub{font-size:.72rem;color:var(--text3)}
+
+.no-data{
+  text-align:center;padding:40px 20px;color:var(--text3);
+  font-size:.95rem;
+}
+.no-data span{font-size:2.5rem;display:block;margin-bottom:12px}
+
+/* print styles */
+@media print{
+  .modal-overlay{position:static;background:none;backdrop-filter:none;display:block}
+  .modal{width:100%;max-height:none;box-shadow:none;border-radius:0}
+  .modal-header,.modal-actions,.print-btn,.modal-close{display:none!important}
+  .sum-table tr:hover td{background:none}
+  body>*:not(.modal-overlay){display:none}
+}
 </style>
 </head>
 <body>
@@ -262,11 +397,29 @@ main{padding:28px 28px 40px}
       <span id="wkLabel"></span>
       <button id="nextW">&#8250;</button>
     </div>
+    <button class="summary-btn" id="summaryBtn">📋 Weekly Summary</button>
     <div class="save-pill" id="pill">
       <span class="dot"></span><span id="pillTxt">Saved</span>
     </div>
   </div>
 </header>
+
+<!-- SUMMARY MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <h2>Weekly Summary</h2>
+        <p id="modalWeekLabel"></p>
+      </div>
+      <div class="modal-actions">
+        <button class="print-btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+        <button class="modal-close" id="modalClose">✕</button>
+      </div>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
 
 <div class="layout">
   <aside>
@@ -462,6 +615,108 @@ document.getElementById('addBtn').addEventListener('click',()=>{
 document.getElementById('nameIn').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('addBtn').click()});
 document.getElementById('prevW').addEventListener('click',()=>{offset--;render()});
 document.getElementById('nextW').addEventListener('click',()=>{offset++;render()});
+
+// ── WEEKLY SUMMARY MODAL ─────────────────────────────────────────────────────
+function openSummary(){
+  const overlay=document.getElementById('modalOverlay');
+  const body=document.getElementById('modalBody');
+  document.getElementById('modalWeekLabel').textContent=fmtWeek(offset);
+  overlay.classList.add('open');
+
+  const wk=schedule[wkKey(offset)]||{};
+  let totalSessions=0,withRec=0,filled=0;
+  const pc={};
+  const rows=[];
+
+  DAYS.forEach((day,di)=>{
+    const date=dayDate(di,offset);
+    for(let si=0;si<SLOTS;si++){
+      const d=wk[day+'-'+si];
+      const hasName=d&&d.names&&d.names.length>0;
+      rows.push({day,date,si,
+        name:hasName?d.names[0]:null,
+        rec:hasName&&d.rec?d.rec:null
+      });
+      if(hasName){
+        filled++;totalSessions++;
+        pc[d.names[0]]=(pc[d.names[0]]||0)+1;
+        if(d.rec)withRec++;
+      }
+    }
+  });
+
+  const allSlots=DAYS.length*SLOTS;
+  const pct=Math.round(filled/allSlots*100);
+
+  if(totalSessions===0){
+    body.innerHTML=`<div class="no-data"><span>📭</span>No sessions logged for this week yet.<br>Drag trainees into sessions to get started.</div>`;
+    return;
+  }
+
+  // KPIs
+  let html=`
+  <div class="sum-week-header">
+    <div class="sum-week-badge">Week of ${fmtWeek(offset)}</div>
+  </div>
+  <div class="sum-kpis">
+    <div class="sum-kpi"><div class="kv" style="color:var(--accent)">${totalSessions}</div><div class="kl">Total Sessions</div></div>
+    <div class="sum-kpi"><div class="kv" style="color:var(--green)">${pct}%</div><div class="kl">Completion</div></div>
+    <div class="sum-kpi"><div class="kv" style="color:var(--orange)">${withRec}</div><div class="kl">Recordings</div></div>
+    <div class="sum-kpi"><div class="kv" style="color:var(--pink)">${Object.keys(pc).length}</div><div class="kl">Trainees</div></div>
+  </div>`;
+
+  // Session table
+  html+=`<table class="sum-table">
+    <thead><tr>
+      <th>Day</th><th>Date</th><th>Session</th><th>Trainee</th><th>Recording</th>
+    </tr></thead><tbody>`;
+
+  let lastDay='';
+  rows.forEach(({day,date,si,name,rec})=>{
+    const dayCell=day!==lastDay?`<td class="td-day" rowspan="${SLOTS}">${day}</td>`:'';
+    if(day!==lastDay)lastDay=day;
+
+    const color=name?rColor(name):'#ccc';
+    const nameCell=name
+      ?`<div class="td-name"><div class="avatar" style="background:${color};width:24px;height:24px;font-size:.6rem">${ini(name)}</div>${name}</div>`
+      :`<span class="td-empty">— unscheduled —</span>`;
+    const recCell=rec
+      ?`<a href="${rec}" target="_blank">▶ Watch</a>`
+      :`<span class="td-empty">No link</span>`;
+
+    html+=`<tr>
+      ${dayCell}
+      <td style="color:var(--text3);font-size:.82rem">${date}</td>
+      <td style="color:var(--text2);font-weight:600">Session ${si+1}</td>
+      <td>${nameCell}</td>
+      <td class="td-rec">${recCell}</td>
+    </tr>`;
+  });
+  html+=`</tbody></table>`;
+
+  // Per-person breakdown
+  if(Object.keys(pc).length){
+    html+=`<div class="sum-person-section">
+      <div class="sum-section-title">Trainee Breakdown</div>
+      <div class="sum-person-grid">`;
+    Object.entries(pc).sort((a,b)=>b[1]-a[1]).forEach(([name,count])=>{
+      const color=rColor(name);
+      html+=`<div class="sum-person-card">
+        <div class="avatar" style="background:${color}">${ini(name)}</div>
+        <div><div class="pname">${name}</div><div class="psub">${count} session${count>1?'s':''}</div></div>
+        <div class="pcount">${count}</div>
+      </div>`;
+    });
+    html+=`</div></div>`;
+  }
+
+  body.innerHTML=html;
+}
+
+document.getElementById('summaryBtn').addEventListener('click',openSummary);
+document.getElementById('modalClose').addEventListener('click',()=>document.getElementById('modalOverlay').classList.remove('open'));
+document.getElementById('modalOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('open')});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('modalOverlay').classList.remove('open')});
 
 load();renderPool();render();
 setTimeout(()=>toast('👋 Drag names from the left panel into sessions!'),700);
