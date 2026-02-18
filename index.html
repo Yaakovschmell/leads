@@ -6,14 +6,9 @@
 <title>Training Scheduler</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-:root{
-  --bg:#1a1d24;--bg2:#21242c;--surface:#282c36;--card:#2e333e;
-  --cyan:#22d3ee;--magenta:#ec4899;--green:#10b981;--yellow:#fbbf24;
-  --text:#f8fafc;--text2:#cbd5e1;--text3:#94a3b8;--border:#3d4452;
-}
+:root{--bg:#1a1d24;--bg2:#21242c;--surface:#282c36;--card:#2e333e;--cyan:#22d3ee;--magenta:#ec4899;--green:#10b981;--yellow:#fbbf24;--text:#f8fafc;--text2:#cbd5e1;--text3:#94a3b8;--border:#3d4452}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.5}
-
 header{background:var(--bg2);border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
 .logo{display:flex;align-items:center;gap:14px}
 .logo-icon{width:42px;height:42px;background:linear-gradient(135deg,var(--cyan),var(--magenta));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px}
@@ -26,7 +21,6 @@ header{background:var(--bg2);border-bottom:1px solid var(--border);padding:16px 
 .week-nav span{font-size:.95rem;font-weight:600;min-width:170px;text-align:center}
 .btn{display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:8px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}
 .btn:hover{background:var(--cyan);color:#000;border-color:var(--cyan)}
-
 .layout{display:grid;grid-template-columns:250px 1fr;min-height:calc(100vh - 68px)}
 aside{background:var(--bg2);border-right:1px solid var(--border);padding:24px 18px;position:sticky;top:68px;height:calc(100vh - 68px);overflow-y:auto}
 aside h2{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text2);margin-bottom:14px;padding:0 6px}
@@ -42,7 +36,6 @@ aside h2{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing
 .add-section input:focus{border-color:var(--cyan)}
 .add-section button{margin-top:10px;width:100%;padding:11px;background:linear-gradient(135deg,var(--cyan),var(--magenta));color:#000;border:none;border-radius:6px;font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit}
 .add-section button:hover{filter:brightness(1.1)}
-
 main{padding:32px}
 .stats{display:flex;gap:14px;margin-bottom:26px;flex-wrap:wrap}
 .stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px 22px;min-width:140px}
@@ -70,9 +63,8 @@ main{padding:32px}
 .rec input{flex:1;background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-size:.85rem;outline:none;min-width:0;font-family:inherit}
 .rec input::placeholder{color:var(--text3)}
 .rec input:focus{border-color:var(--green)}
-.rec a{width:34px;height:34px;background:var(--green);color:#000;border-radius:6px;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:14px;flex-shrink:0;font-weight:700;transition:all .15s}
+.rec a{width:34px;height:34px;background:var(--green);color:#000;border-radius:6px;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:14px;flex-shrink:0;transition:all .15s}
 .rec a:hover{filter:brightness(1.15)}
-
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
 .modal-overlay.open{opacity:1;pointer-events:all}
 .modal{background:var(--bg2);border:1px solid var(--border);border-radius:14px;width:min(840px,95vw);max-height:88vh;overflow:hidden;display:flex;flex-direction:column;transform:translateY(20px) scale(.97);transition:transform .25s cubic-bezier(.175,.885,.32,1.1)}
@@ -110,10 +102,8 @@ main{padding:32px}
 .sum-person-card .psub{font-size:.8rem;color:var(--text3)}
 .no-data{text-align:center;padding:44px 24px;color:var(--text3);font-size:1rem}
 .no-data span{font-size:2.8rem;display:block;margin-bottom:14px}
-
 .toast{position:fixed;bottom:24px;right:24px;background:var(--card);border:1px solid var(--border);color:var(--text);padding:14px 22px;border-radius:10px;font-size:.95rem;font-weight:500;transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.175,.885,.32,1.275);z-index:9999;max-width:340px}
 .toast.show{transform:translateY(0);opacity:1}
-
 ::-webkit-scrollbar{width:8px}
 ::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px}
@@ -122,11 +112,10 @@ main{padding:32px}
 </style>
 </head>
 <body>
-
 <header>
   <div class="logo">
     <div class="logo-icon">⚡</div>
-    <div><h1>Training Scheduler</h1><p>Auto-saves locally</p></div>
+    <div><h1>Training Scheduler</h1><p>Shared • Auto-save</p></div>
   </div>
   <div class="header-right">
     <div class="week-nav">
@@ -135,12 +124,9 @@ main{padding:32px}
       <button id="nextW">›</button>
     </div>
     <button class="btn" id="summaryBtn">📊 Summary</button>
-    <button class="btn" id="exportBtn">💾 Export</button>
-    <button class="btn" id="importBtn">📁 Import</button>
-    <input type="file" id="importFile" accept=".json" style="display:none"/>
+    <button class="btn" id="setUrlBtn">🔗 Set Sync URL</button>
   </div>
 </header>
-
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <div class="modal-header">
@@ -153,7 +139,6 @@ main{padding:32px}
     <div class="modal-body" id="modalBody"></div>
   </div>
 </div>
-
 <div class="layout">
   <aside>
     <h2>Roster</h2>
@@ -169,65 +154,66 @@ main{padding:32px}
     <div class="grid" id="grid"></div>
   </main>
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script>
-const DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday'];
-const SLOTS=3;
-const COLORS=['#22d3ee','#ec4899','#10b981','#fbbf24','#8b5cf6','#f97316','#0ea5e9','#14b8a6','#a855f7','#f43f5e'];
-let offset=0,roster=[],schedule={},drag=null;
+const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
+const SLOTS = 3;
+const COLORS = ['#22d3ee','#ec4899','#10b981','#fbbf24','#8b5cf6','#f97316','#0ea5e9','#14b8a6','#a855f7','#f43f5e'];
+let offset = 0, roster = [], schedule = {}, drag = null;
+let SCRIPT_URL = localStorage.getItem('ts_script_url') || '';
 
 function ini(n){return n.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)}
 function rColor(n){return(roster.find(r=>r.name===n)||{color:'#22d3ee'}).color}
 function monday(off){const d=new Date(),day=d.getDay();d.setDate(d.getDate()-(day===0?6:day-1)+off*7);d.setHours(0,0,0,0);return d}
-function wkKey(off){return'w'+monday(off).toISOString().slice(0,10)}
-function fmtWeek(off){const m=monday(off),f=monday(off);f.setDate(f.getDate()+4);const o={month:'short',day:'numeric'};return m.toLocaleDateString('en-US',o)+' – '+f.toLocaleDateString('en-US',o)}
+function wkKey(off){return 'w'+monday(off).toISOString().slice(0,10)}
+function fmtWeek(off){const m=monday(off),f=monday(off+0);f.setDate(f.getDate()+4);const o={month:'short',day:'numeric'};return m.toLocaleDateString('en-US',o)+' – '+f.toLocaleDateString('en-US',o)}
 function dayDate(di,off){const m=monday(off);m.setDate(m.getDate()+di);return m.toLocaleDateString('en-US',{month:'short',day:'numeric'})}
-function slotData(day,si){const k=wkKey(offset),key=day+'-'+si;if(!schedule[k])schedule[k]={};if(!schedule[k][key])schedule[k][key]={names:[],rec:''};return schedule[k][key]}
+function slotData(day,si){const k=wkKey(offset);if(!schedule[k])schedule[k]={};const key=day+'-'+si;if(!schedule[k][key])schedule[k][key]={names:[],rec:''};return schedule[k][key]}
 
-function save(){localStorage.setItem('ts_roster',JSON.stringify(roster));localStorage.setItem('ts_schedule',JSON.stringify(schedule))}
-function loadLocal(){
-  try{const r=localStorage.getItem('ts_roster');if(r)roster=JSON.parse(r)}catch{}
-  try{const s=localStorage.getItem('ts_schedule');if(s)schedule=JSON.parse(s)}catch{}
-  if(!roster.length)['Tyler','Julie','Adam','Carnell','Kris','Cameron','Cynthia'].forEach((n,i)=>roster.push({name:n,color:COLORS[i]}));
+function saveLocal(){localStorage.setItem('ts_roster',JSON.stringify(roster));localStorage.setItem('ts_schedule',JSON.stringify(schedule))}
+function debounceSync(){clearTimeout(window.syncTimer);window.syncTimer=setTimeout(doSync,1200)}
+async function doSync(){
+  if(!SCRIPT_URL)return;
+  try{
+    const res=await fetch(SCRIPT_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:'save',roster,schedule}),
+      redirect:'follow'
+    });
+    if(!res.ok)throw new Error(res.status);
+    console.log('Synced');
+  }catch(e){console.error('Sync failed:',e)}
+}
+async function loadFromSheets(){
+  if(!SCRIPT_URL)return;
+  try{
+    const res=await fetch(SCRIPT_URL+'?action=load',{redirect:'follow'});
+    if(!res.ok)throw new Error(res.status);
+    const data=await res.json();
+    if(data.roster?.length)roster=data.roster;
+    if(data.schedule)schedule=data.schedule;
+    saveLocal();renderPool();render();
+    toast('✓ Loaded shared data');
+  }catch(e){
+    console.error('Load failed:',e);
+    toast('Using local data (shared sync failed)');
+  }
 }
 
-function exportData(){
-  const data={roster,schedule,exportDate:new Date().toISOString()};
-  const json=JSON.stringify(data,null,2);
-  const blob=new Blob([json],{type:'application/json'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;
-  a.download='training-schedule-'+new Date().toISOString().slice(0,10)+'.json';
-  a.click();
-  URL.revokeObjectURL(url);
-  toast('✓ Data exported! Send this file to share');
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),3500);
 }
-
-function importData(file){
-  const reader=new FileReader();
-  reader.onload=e=>{
-    try{
-      const data=JSON.parse(e.target.result);
-      if(data.roster)roster=data.roster;
-      if(data.schedule)schedule=data.schedule;
-      save();renderPool();render();
-      toast('✓ Data imported successfully!');
-    }catch(err){toast('⚠ Invalid file')}
-  };
-  reader.readAsText(file);
-}
-
-let tT;
-function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(tT);tT=setTimeout(()=>el.classList.remove('show'),3500)}
 
 function renderPool(){
   const p=document.getElementById('pool');p.innerHTML='';
   roster.forEach(({name,color})=>{
-    const el=document.createElement('div');el.className='chip';el.draggable=true;
-    el.innerHTML='<div class="avatar" style="background:'+color+'">'+ini(name)+'</div><span>'+name+'</span>';
+    const el=document.createElement('div');
+    el.className='chip';el.draggable=true;
+    el.innerHTML=`<div class="avatar" style="background:${color}">${ini(name)}</div><span>${name}</span>`;
     el.addEventListener('dragstart',e=>{drag={name,from:null};el.classList.add('dragging');e.dataTransfer.effectAllowed='move'});
     el.addEventListener('dragend',()=>el.classList.remove('dragging'));
     p.appendChild(el);
@@ -239,9 +225,9 @@ function render(){
   const grid=document.getElementById('grid');grid.innerHTML='';
   DAYS.forEach((day,di)=>{
     const col=document.createElement('div');col.className='day-col';
-    col.innerHTML='<div class="day-head"><div class="dn">'+day+'</div><div class="dd">'+dayDate(di,offset)+'</div></div><div class="slots" id="sc-'+day+'"></div>';
+    col.innerHTML=`<div class="day-head"><div class="dn">${day}</div><div class="dd">${dayDate(di,offset)}</div></div><div class="slots" id="sc-${day}"></div>`;
     grid.appendChild(col);
-    const sc=col.querySelector('#sc-'+day);
+    const sc=col.querySelector(`#sc-${day}`);
     for(let si=0;si<SLOTS;si++)sc.appendChild(mkSlot(day,si));
   });
   renderStats();
@@ -249,7 +235,7 @@ function render(){
 
 function mkSlot(day,si){
   const d=slotData(day,si);
-  const el=document.createElement('div');el.className='slot'+(d.names.length?' filled':'');
+  const el=document.createElement('div');el.className=`slot${d.names.length?' filled':''}`;
   el.addEventListener('dragover',e=>{e.preventDefault();el.classList.add('over')});
   el.addEventListener('dragleave',()=>el.classList.remove('over'));
   el.addEventListener('drop',e=>{
@@ -257,36 +243,42 @@ function mkSlot(day,si){
     const t=slotData(day,si);if(t.names.includes(drag.name))return;
     if(t.names.length>=1){toast('⚠ Session already has a trainee');return}
     if(drag.from){const s=slotData(drag.from.day,drag.from.si);s.names=s.names.filter(n=>n!==drag.name)}
-    t.names.push(drag.name);drag=null;save();render();renderPool();
+    t.names.push(drag.name);drag=null;
+    saveLocal();debounceSync();render();renderPool();
   });
   const lbl=document.createElement('div');lbl.className='slot-lbl';lbl.textContent='Session '+(si+1);
   const cnt=document.createElement('div');cnt.className='slot-cnt';cnt.textContent=d.names.length+'/1';
   el.appendChild(lbl);el.appendChild(cnt);
-  if(!d.names.length){const h=document.createElement('div');h.className='hint';h.textContent='Drop trainee here';el.appendChild(h)}
-  else d.names.forEach(name=>{
-    const c=rColor(name),row=document.createElement('div');row.className='t-row';row.draggable=true;
-    row.style.cssText='background:rgba('+parseInt(c.slice(1,3),16)+','+parseInt(c.slice(3,5),16)+','+parseInt(c.slice(5,7),16)+',0.12);border-left:4px solid '+c;
-    row.innerHTML='<div class="ti"><div class="avatar" style="background:'+c+';width:30px;height:30px;font-size:.7rem">'+ini(name)+'</div>'+name+'</div><button class="rm">×</button>';
-    row.addEventListener('dragstart',e=>{drag={name,from:{day,si}};e.dataTransfer.effectAllowed='move'});
-    row.querySelector('.rm').addEventListener('click',()=>{const s=slotData(day,si);s.names=s.names.filter(n=>n!==name);save();render();renderPool()});
-    el.appendChild(row);
-  });
+  if(!d.names.length){
+    const h=document.createElement('div');h.className='hint';h.textContent='Drop trainee here';el.appendChild(h);
+  }else{
+    d.names.forEach(name=>{
+      const c=rColor(name),row=document.createElement('div');
+      row.className='t-row';row.draggable=true;
+      row.style.cssText=`background:rgba(${parseInt(c.slice(1,3),16)},${parseInt(c.slice(3,5),16)},${parseInt(c.slice(5,7),16)},0.12);border-left:4px solid ${c}`;
+      row.innerHTML=`<div class="ti"><div class="avatar" style="background:${c};width:30px;height:30px;font-size:.7rem">${ini(name)}</div>${name}</div><button class="rm">×</button>`;
+      row.addEventListener('dragstart',e=>{drag={name,from:{day,si}};e.dataTransfer.effectAllowed='move'});
+      row.querySelector('.rm').addEventListener('click',()=>{const s=slotData(day,si);s.names=s.names.filter(n=>n!==name);saveLocal();debounceSync();render();renderPool()});
+      el.appendChild(row);
+    });
+  }
   const rec=document.createElement('div');rec.className='rec';
   const inp=document.createElement('input');inp.type='url';inp.placeholder='Recording URL...';inp.value=d.rec||'';
   const lnk=document.createElement('a');lnk.target='_blank';lnk.textContent='▶';
-  const updL=()=>{const v=inp.value.trim();lnk.href=v||'#';lnk.style.display=v?'flex':'none'};updL();
-  inp.addEventListener('input',()=>{d.rec=inp.value;save();updL()});
+  const upd=()=>{const v=inp.value.trim();lnk.href=v||'#';lnk.style.display=v?'flex':'none'};
+  upd();inp.addEventListener('input',()=>{d.rec=inp.value;saveLocal();debounceSync();upd()});
   rec.appendChild(inp);rec.appendChild(lnk);el.appendChild(rec);return el;
 }
 
 function renderStats(){
   const bar=document.getElementById('stats');bar.innerHTML='';
   const wk=schedule[wkKey(offset)]||{};let total=0,withRec=0,filled=0;const pc={};
-  DAYS.forEach(day=>{for(let si=0;si<SLOTS;si++){const d=wk[day+'-'+si];if(d&&d.names.length){filled++;d.names.forEach(n=>{pc[n]=(pc[n]||0)+1;total++});if(d.rec)withRec++}}});
+  DAYS.forEach(day=>{for(let si=0;si<SLOTS;si++){const d=wk[day+'-'+si];if(d&&d.names.length){filled++;d.names.forEach(n=>{pc[n]=(pc[n]||0)+1;total});if(d.rec)withRec++}}});
   const all=DAYS.length*SLOTS,top=Object.entries(pc).sort((a,b)=>b[1]-a[1])[0];
   [{l:'Sessions',v:total,c:'#22d3ee'},{l:'Slots Filled',v:filled+'/'+all,c:'#10b981'},{l:'Recordings',v:withRec,c:'#fbbf24'},...(top?[{l:'Top Trainee',v:top[0],c:'#ec4899'}]:[])].forEach(({l,v,c})=>{
     const s=document.createElement('div');s.className='stat';
-    s.innerHTML='<div class="sl">'+l+'</div><div class="sv" style="color:'+c+'">'+v+'</div>';bar.appendChild(s);
+    s.innerHTML=`<div class="sl">${l}</div><div class="sv" style="color:${c}">${v}</div>`;
+    bar.appendChild(s);
   });
 }
 
@@ -295,41 +287,72 @@ function openSummary(){
   document.getElementById('modalWeekLabel').textContent=fmtWeek(offset);
   overlay.classList.add('open');
   const wk=schedule[wkKey(offset)]||{};let totalSessions=0,withRec=0,filled=0;const pc={},rows=[];
-  DAYS.forEach((day,di)=>{const date=dayDate(di,offset);for(let si=0;si<SLOTS;si++){const d=wk[day+'-'+si],hasName=d&&d.names&&d.names.length>0;rows.push({day,date,si,name:hasName?d.names[0]:null,rec:hasName&&d.rec?d.rec:null});if(hasName){filled++;totalSessions++;pc[d.names[0]]=(pc[d.names[0]]||0)+1;if(d.rec)withRec++}}});
-  if(totalSessions===0){body.innerHTML='<div class="no-data"><span>📭</span>No sessions logged yet.<br>Drag trainees into sessions to get started.</div>';return}
+  DAYS.forEach((day,di)=>{const date=dayDate(di,offset);for(let si=0;si<SLOTS;si++){const d=wk[day+'-'+si],has=d&&d.names?.length>0;rows.push({day,date,si,name:has?d.names[0]:null,rec:has&&d.rec?d.rec:null});if(has){filled++;totalSessions++;pc[d.names[0]]=(pc[d.names[0]]||0)+1;if(d.rec)withRec++}}});
+  if(totalSessions===0){body.innerHTML='<div class="no-data"><span>📭</span>No sessions this week yet.<br>Drag trainees to start.</div>';return}
   const pct=Math.round(filled/(DAYS.length*SLOTS)*100);
-  let html='<div class="sum-week-badge">Week of '+fmtWeek(offset)+'</div><div class="sum-kpis"><div class="sum-kpi"><div class="kv" style="color:#22d3ee">'+totalSessions+'</div><div class="kl">Total Sessions</div></div><div class="sum-kpi"><div class="kv" style="color:#10b981">'+pct+'%</div><div class="kl">Completion</div></div><div class="sum-kpi"><div class="kv" style="color:#fbbf24">'+withRec+'</div><div class="kl">Recordings</div></div><div class="sum-kpi"><div class="kv" style="color:#ec4899">'+Object.keys(pc).length+'</div><div class="kl">Trainees</div></div></div><table class="sum-table"><thead><tr><th>Day</th><th>Date</th><th>Session</th><th>Trainee</th><th>Recording</th></tr></thead><tbody>';
-  let lastDay='';
-  rows.forEach(({day,date,si,name,rec})=>{
-    const dc=day!==lastDay?'<td class="td-day" rowspan="'+SLOTS+'">'+day+'</td>':'';if(day!==lastDay)lastDay=day;
+  let html=`<div class="sum-week-badge">Week of ${fmtWeek(offset)}</div><div class="sum-kpis">`;
+  html+=`<div class="sum-kpi"><div class="kv" style="color:#22d3ee">${totalSessions}</div><div class="kl">Total Sessions</div></div>`;
+  html+=`<div class="sum-kpi"><div class="kv" style="color:#10b981">${pct}%</div><div class="kl">Completion</div></div>`;
+  html+=`<div class="sum-kpi"><div class="kv" style="color:#fbbf24">${withRec}</div><div class="kl">Recordings</div></div>`;
+  html+=`<div class="sum-kpi"><div class="kv" style="color:#ec4899">${Object.keys(pc).length}</div><div class="kl">Trainees</div></div></div>`;
+  html+='<table class="sum-table"><thead><tr><th>Day</th><th>Date</th><th>Session</th><th>Trainee</th><th>Recording</th></tr></thead><tbody>';
+  let lastDay='';rows.forEach(({day,date,si,name,rec})=>{
+    const dc=day!==lastDay?`<td class="td-day" rowspan="${SLOTS}">${day}</td>`:'';if(day!==lastDay)lastDay=day;
     const color=name?rColor(name):'#94a3b8';
-    const nc=name?'<div class="td-name"><div class="avatar" style="background:'+color+';width:26px;height:26px;font-size:.65rem">'+ini(name)+'</div>'+name+'</div>':'<span class="td-empty">— unscheduled —</span>';
-    const rc=rec?'<a href="'+rec+'" target="_blank">▶ Watch</a>':'<span class="td-empty">No link</span>';
-    html+='<tr>'+dc+'<td style="color:#cbd5e1">'+date+'</td><td style="font-weight:600">Session '+(si+1)+'</td><td>'+nc+'</td><td class="td-rec">'+rc+'</td></tr>';
+    const nc=name?`<div class="td-name"><div class="avatar" style="background:${color};width:26px;height:26px;font-size:.65rem">${ini(name)}</div>${name}</div>`:'<span class="td-empty">— unscheduled —</span>';
+    const rc=rec?`<a href="${rec}" target="_blank">▶ Watch</a>`:'<span class="td-empty">No link</span>';
+    html+=`<tr>${dc}<td style="color:#cbd5e1">${date}</td><td style="font-weight:600">Session ${si+1}</td><td>${nc}</td><td class="td-rec">${rc}</td></tr>`;
   });
   html+='</tbody></table>';
-  if(Object.keys(pc).length){html+='<div class="sum-person-section"><div class="sum-section-title">Trainee Breakdown</div><div class="sum-person-grid">';Object.entries(pc).sort((a,b)=>b[1]-a[1]).forEach(([name,count])=>{const color=rColor(name);html+='<div class="sum-person-card"><div class="avatar" style="background:'+color+'">'+ini(name)+'</div><div><div class="pname">'+name+'</div><div class="psub">'+count+' session'+(count>1?'s':'')+'</div></div><div class="pcount">'+count+'</div></div>'});html+='</div></div>'}
+  if(Object.keys(pc).length){
+    html+='<div class="sum-person-section"><div class="sum-section-title">Trainee Breakdown</div><div class="sum-person-grid">';
+    Object.entries(pc).sort((a,b)=>b[1]-a[1]).forEach(([name,count])=>{
+      const color=rColor(name);
+      html+=`<div class="sum-person-card"><div class="avatar" style="background:${color}">${ini(name)}</div><div><div class="pname">${name}</div><div class="psub">${count} session${count>1?'s':''}</div></div><div class="pcount">${count}</div></div>`;
+    });html+='</div></div>';
+  }
   body.innerHTML=html;
 }
 
+// Event listeners
 document.getElementById('summaryBtn').addEventListener('click',openSummary);
-document.getElementById('exportBtn').addEventListener('click',exportData);
-document.getElementById('importBtn').addEventListener('click',()=>document.getElementById('importFile').click());
-document.getElementById('importFile').addEventListener('change',e=>{if(e.target.files[0])importData(e.target.files[0])});
 document.getElementById('modalClose').addEventListener('click',()=>document.getElementById('modalOverlay').classList.remove('open'));
 document.getElementById('modalOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('open')});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('modalOverlay').classList.remove('open')});
 document.getElementById('addBtn').addEventListener('click',()=>{
   const inp=document.getElementById('nameIn'),name=inp.value.trim();if(!name)return;
   if(roster.find(r=>r.name.toLowerCase()===name.toLowerCase())){toast('⚠ Already in roster');return}
-  roster.push({name,color:COLORS[roster.length%COLORS.length]});inp.value='';save();renderPool();toast('✓ '+name+' added to roster');
+  roster.push({name,color:COLORS[roster.length%COLORS.length]});inp.value='';
+  saveLocal();debounceSync();renderPool();toast('✓ Added '+name);
 });
 document.getElementById('nameIn').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('addBtn').click()});
 document.getElementById('prevW').addEventListener('click',()=>{offset--;render()});
 document.getElementById('nextW').addEventListener('click',()=>{offset++;render()});
+document.getElementById('setUrlBtn').addEventListener('click',()=>{
+  const url=prompt('Paste your Google Apps Script /exec URL:',SCRIPT_URL);
+  if(url&&url.includes('script.google.com')&&url.endsWith('/exec')){
+    SCRIPT_URL=url.trim();
+    localStorage.setItem('ts_script_url',SCRIPT_URL);
+    loadFromSheets();
+  }else if(url){
+    toast('⚠ Invalid URL — must end with /exec');
+  }
+});
 
-loadLocal();renderPool();render();
-setTimeout(()=>toast('👋 All changes auto-save. Click Export to share with your boss!'),1500);
+// Load and init
+function boot(){
+  try{
+    const r=localStorage.getItem('ts_roster');if(r)roster=JSON.parse(r);
+    const s=localStorage.getItem('ts_schedule');if(s)schedule=JSON.parse(s);
+  }catch{}
+  if(!roster.length){
+    ['Tyler','Julie','Adam','Carnell','Kris','Cameron','Cynthia'].forEach((n,i)=>roster.push({name:n,color:COLORS[i]}));
+  }
+  renderPool();render();
+  if(SCRIPT_URL)loadFromSheets();
+  setTimeout(()=>toast('Changes auto-save • Use "Set Sync URL" for shared access'),2000);
+}
+boot();
 </script>
 </body>
 </html>
