@@ -6,13 +6,12 @@
 <title>Training Scheduler</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 
-<!-- Firebase SDK -->
+<!-- Firebase SDK (modular, v12.9.0) -->
 <script type="module">
-  // Import Firebase modules
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
   import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 
-  // Your Firebase configuration (exactly what you were given)
+  // Your Firebase configuration
   const firebaseConfig = {
     apiKey: "AIzaSyCPgkOysIRXzw_yvMnSomcrkIxstp_TD88",
     authDomain: "trainingscheduler-ecfd4.firebaseapp.com",
@@ -28,29 +27,38 @@
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-  // Shared data reference in the database
+  // Shared data path
   const dataRef = ref(db, 'schedulerData');
 
-  // Listen for changes in real-time (sync from any device)
+  // Real-time listener: load and update when data changes
   onValue(dataRef, (snapshot) => {
     const data = snapshot.val();
+    console.log('Firebase data received:', data); // ← debug log
     if (data) {
       roster = data.roster || roster;
       schedule = data.schedule || schedule;
       renderPool();
       render();
-      toast('✓ Data synced from cloud');
+      toast('✓ Synced from cloud');
     }
+  }, (error) => {
+    console.error('Firebase listener error:', error);
+    toast('⚠ Sync error – check console');
   });
 
-  // Function to save current data to Firebase
+  // Save function to Firebase
   function saveToFirebase() {
     set(dataRef, { roster, schedule })
-      .then(() => console.log('Saved to Firebase'))
-      .catch(err => console.error('Firebase save error:', err));
+      .then(() => {
+        console.log('Saved to Firebase successfully');
+        toast('✓ Saved to cloud');
+      })
+      .catch(err => {
+        console.error('Firebase save error:', err);
+        toast('⚠ Save failed – check console');
+      });
   }
 
-  // Make it available globally so we can call it from your code
   window.saveToFirebase = saveToFirebase;
 </script>
 
@@ -205,7 +213,7 @@ main{padding:32px}
 <div class="toast" id="toast"></div>
 
 <script>
-// Your existing JavaScript variables and functions
+// App variables and functions
 const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
 const SLOTS = 3;
 const COLORS = ['#22d3ee','#ec4899','#10b981','#fbbf24','#8b5cf6','#f97316','#0ea5e9','#14b8a6','#a855f7','#f43f5e'];
@@ -221,7 +229,6 @@ function slotData(day,si){const k=wkKey(offset);if(!schedule[k])schedule[k]={};c
 
 function saveLocal(){localStorage.setItem('ts_roster',JSON.stringify(roster));localStorage.setItem('ts_schedule',JSON.stringify(schedule))}
 
-// Sync to Firebase after every local save
 function save() {
   saveLocal();
   if (window.saveToFirebase) window.saveToFirebase();
@@ -323,6 +330,7 @@ function openSummary(){
   body.innerHTML=html;
 }
 
+// Event listeners
 document.getElementById('summaryBtn').addEventListener('click',openSummary);
 document.getElementById('modalClose').addEventListener('click',()=>document.getElementById('modalOverlay').classList.remove('open'));
 document.getElementById('modalOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('open')});
@@ -331,12 +339,13 @@ document.getElementById('addBtn').addEventListener('click',()=>{
   const inp=document.getElementById('nameIn'),name=inp.value.trim();if(!name)return;
   if(roster.find(r=>r.name.toLowerCase()===name.toLowerCase())){toast('⚠ Already in roster');return}
   roster.push({name,color:COLORS[roster.length%COLORS.length]});inp.value='';
-  save();renderPool();toast('✓ '+name+' added to roster');
+  save();renderPool();toast('✓ '+name+' added');
 });
 document.getElementById('nameIn').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('addBtn').click()});
 document.getElementById('prevW').addEventListener('click',()=>{offset--;render()});
 document.getElementById('nextW').addEventListener('click',()=>{offset++;render()});
 
+// Boot
 function boot(){
   try{
     const r=localStorage.getItem('ts_roster');if(r)roster=JSON.parse(r);
@@ -344,11 +353,11 @@ function boot(){
   }catch{}
   if(!roster.length)['Tyler','Julie','Adam','Carnell','Kris','Cameron','Cynthia'].forEach((n,i)=>roster.push({name:n,color:COLORS[i]}));
   renderPool();render();
-  // Push local data to Firebase on first load (if any)
+  // Push local data to Firebase on load (if any)
   setTimeout(() => {
     if (window.saveToFirebase) window.saveToFirebase();
     toast('Connected to shared storage – changes sync across devices!');
-  }, 2000);
+  }, 1000);
 }
 boot();
 </script>
