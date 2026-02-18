@@ -93,13 +93,13 @@ aside h2{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing
 .add-section input:focus{border-color:var(--cyan)}
 .add-section button{margin-top:10px;width:100%;padding:11px;background:linear-gradient(135deg,var(--cyan),var(--magenta));color:#000;border:none;border-radius:6px;font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit}
 .add-section button:hover{filter:brightness(1.1)}
-main{padding:32px}
+main{padding:32px;overflow-x:auto}  /* ← Added: allow horizontal scroll in main */
 .stats{display:flex;gap:14px;margin-bottom:26px;flex-wrap:wrap}
 .stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px 22px;min-width:140px}
 .stat .sl{font-size:.8rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
 .stat .sv{font-size:1.9rem;font-weight:700;margin-top:4px}
-.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;min-width:800px}
-.day-col{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.grid{display:grid;grid-template-columns:repeat(5, minmax(280px, 1fr));gap:16px;min-width:1400px}  /* ← Changed: fixed min width per column + wider grid */
+.day-col{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;min-width:280px}  /* ← Ensure each day column has enough space */
 .day-head{padding:16px 18px;border-bottom:1px solid var(--border);background:var(--surface)}
 .day-head .dn{font-size:.9rem;font-weight:700;text-transform:uppercase;letter-spacing:1px}
 .day-head .dd{font-size:.85rem;color:var(--text3);margin-top:3px}
@@ -165,6 +165,10 @@ main{padding:32px}
 ::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px}
 ::-webkit-scrollbar-thumb:hover{background:var(--text3)}
+@media (max-width: 1200px) {
+  main {padding:16px;overflow-x:auto}
+  .grid {grid-template-columns:repeat(5, minmax(260px, 1fr)); min-width:1300px}
+}
 @media print{.modal-overlay{position:static;background:none;display:block}.modal{width:100%;max-height:none;border-radius:0}.modal-actions,.modal-close{display:none!important}body>*:not(.modal-overlay){display:none}}
 </style>
 </head>
